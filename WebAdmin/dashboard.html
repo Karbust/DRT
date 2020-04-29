@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Dashboard</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="css/mdb.min.css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="grey lighten-3">
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="border-right" id="sidebar-wrapper">
+
+            <div class="sidebar-heading">
+                <a class="logo-wrapper waves-effect">
+                    <img src="imagens/logo_muv.svg" class="img-fluid" alt="">
+                </a>
+            </div>
+
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action waves-effect rounded active">
+                    <i class="fas fa-location-arrow mr-3"></i>Dashboard
+                </a>
+                <a href="#" class="list-group-item list-group-item-action waves-effect rounded">
+                    <i class="fas fa-map mr-3"></i>Registar Viagem
+                </a>
+                <a href="#" class="list-group-item list-group-item-action waves-effect rounded">
+                    <i class="fas fa-user mr-3"></i>Registar Cliente
+                </a>
+                <a href="#" class="list-group-item list-group-item-action waves-effect rounded">
+                    <i class="fas fa-car mr-3"></i>Registar Veículo
+                </a>
+                <a href="#" class="list-group-item list-group-item-action waves-effect rounded">
+                    <i class="fas fa-user-tie mr-3"></i>Registar Motorista
+                </a>
+            </div>
+
+        </div>
+        <!-- Sidebar -->
+
+        <div id="page-content-wrapper">
+            <!-- Navbar -->
+            <nav class="navbar fixed-top navbar-expand-lg navbar-light gold scrolling-navbar">
+                <!--<div class="align-content-center logo"></div>-->
+                <div class="container-fluid">
+
+                    <div id="content">
+                        <button type="button" id="menu-toggle" class="border rounded waves-effect btn-outline-grey">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                    </div>
+
+                    <!-- Collapse -->
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Links -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                        <!-- Left -->
+                        <ul class="navbar-nav mr-auto">
+
+                        </ul>
+
+                        <!-- Right -->
+                        <ul class="navbar-nav nav-flex-icons">
+                            <li class="nav-item">
+                                <a class="nav-link border rounded waves-effect btn-outline-grey"
+                                   target="_blank">
+                                    <i class="fas fa-sign-out-alt"></i>Logout
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                </div>
+            </nav>
+            <!-- Navbar -->
+
+            <main id="mainContainer" class="pt-5">
+                <div class="container-fluid mt-5">
+
+                    <!-- Heading -->
+                    <div class="card mb-4 wow fadeIn">
+
+                        <!--Card content-->
+                        <div class="card-body d-sm-flex justify-content-between">
+
+                            <h4 class="mb-2 mb-sm-0 pt-1">
+                                <a href="https://mdbootstrap.com/docs/jquery/" target="_blank">Home Page</a>
+                                <span>/</span>
+                                <span>Dashboard</span>
+                            </h4>
+
+                            <form class="d-flex justify-content-center">
+                                <!-- Default input -->
+                                <input type="search" placeholder="Type your query" aria-label="Search" class="form-control">
+                                <button class="btn btn-primary btn-sm my-0 p" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                    <!-- Heading -->
+
+
+                </div>
+            </main>
+
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+            $(this).toggleClass('active');
+        });
+    </script>
+</body>
+</html>
