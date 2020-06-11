@@ -1,0 +1,99 @@
+{
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ],
+                "module-directory": [
+                    "node_modules",
+                    "src/"
+                ]
+            }
+        }
+    },
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "react-app",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "js": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "import"
+    ],
+    "rules": {
+        "no-unused-vars": "warn",
+        "no-unused-expressions": "warn",
+        "object-curly-spacing": [2, "always"],
+        "semi": [2, "never"],
+        "eol-last": "error",
+        "curly": "error",
+        "no-unexpected-multiline": "warn",
+        "no-underscore-dangle": "off",
+        "sort-keys": "off",
+        "default-case": "warn",
+        "camelcase": "off",
+        "no-undef": "off",
+        "arrow-body-style": "off",
+        "no-mixed-operators": [
+            "error",
+            {
+                "allowSamePrecedence": true
+            }
+        ],
+        "quote-props": [
+            "warn",
+            "consistent"
+        ],
+        "func-names": [
+            "warn",
+            "as-needed"
+        ],
+        "multiline-ternary": [
+            "error",
+            "always-multiline"
+        ],
+        "object-curly-newline": [
+            "error",
+            {
+                "multiline": true,
+                "minProperties": 5,
+                "consistent": true
+            }
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "react/prop-types": ["off"],
+        /* react-hooks */
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    }
+}
