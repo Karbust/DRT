@@ -1,0 +1,1724 @@
+[
+    {
+        "NR_PAIS": 1,
+        "NOME": "Afeganistão",
+        "SIGLA2": "AF",
+        "SIGLA3": "AFG",
+        "CODIGO": "004"
+    },
+    {
+        "NR_PAIS": 2,
+        "NOME": "África do Sul",
+        "SIGLA2": "ZA",
+        "SIGLA3": "ZAF",
+        "CODIGO": "710"
+    },
+    {
+        "NR_PAIS": 3,
+        "NOME": "Albânia",
+        "SIGLA2": "AL",
+        "SIGLA3": "ALB",
+        "CODIGO": "008"
+    },
+    {
+        "NR_PAIS": 4,
+        "NOME": "Alemanha",
+        "SIGLA2": "DE",
+        "SIGLA3": "DEU",
+        "CODIGO": "276"
+    },
+    {
+        "NR_PAIS": 5,
+        "NOME": "Andorra",
+        "SIGLA2": "AD",
+        "SIGLA3": "AND",
+        "CODIGO": "020"
+    },
+    {
+        "NR_PAIS": 6,
+        "NOME": "Angola",
+        "SIGLA2": "AO",
+        "SIGLA3": "AGO",
+        "CODIGO": "024"
+    },
+    {
+        "NR_PAIS": 7,
+        "NOME": "Anguilla",
+        "SIGLA2": "AI",
+        "SIGLA3": "AIA",
+        "CODIGO": "660"
+    },
+    {
+        "NR_PAIS": 8,
+        "NOME": "Antártida",
+        "SIGLA2": "AQ",
+        "SIGLA3": "ATA",
+        "CODIGO": "010"
+    },
+    {
+        "NR_PAIS": 9,
+        "NOME": "Antígua e Barbuda",
+        "SIGLA2": "AG",
+        "SIGLA3": "ATG",
+        "CODIGO": "028"
+    },
+    {
+        "NR_PAIS": 10,
+        "NOME": "Antilhas Holandesas",
+        "SIGLA2": "AN",
+        "SIGLA3": "ANT",
+        "CODIGO": "530"
+    },
+    {
+        "NR_PAIS": 11,
+        "NOME": "Arábia Saudita",
+        "SIGLA2": "SA",
+        "SIGLA3": "SAU",
+        "CODIGO": "682"
+    },
+    {
+        "NR_PAIS": 12,
+        "NOME": "Argélia",
+        "SIGLA2": "DZ",
+        "SIGLA3": "DZA",
+        "CODIGO": "012"
+    },
+    {
+        "NR_PAIS": 13,
+        "NOME": "Argentina",
+        "SIGLA2": "AR",
+        "SIGLA3": "ARG",
+        "CODIGO": "032"
+    },
+    {
+        "NR_PAIS": 14,
+        "NOME": "Armênia",
+        "SIGLA2": "AM",
+        "SIGLA3": "ARM",
+        "CODIGO": "51"
+    },
+    {
+        "NR_PAIS": 15,
+        "NOME": "Aruba",
+        "SIGLA2": "AW",
+        "SIGLA3": "ABW",
+        "CODIGO": "533"
+    },
+    {
+        "NR_PAIS": 16,
+        "NOME": "Austrália",
+        "SIGLA2": "AU",
+        "SIGLA3": "AUS",
+        "CODIGO": "036"
+    },
+    {
+        "NR_PAIS": 17,
+        "NOME": "Áustria",
+        "SIGLA2": "AT",
+        "SIGLA3": "AUT",
+        "CODIGO": "040"
+    },
+    {
+        "NR_PAIS": 18,
+        "NOME": "Azerbaijão",
+        "SIGLA2": "AZ  ",
+        "SIGLA3": "AZE",
+        "CODIGO": "31"
+    },
+    {
+        "NR_PAIS": 19,
+        "NOME": "Bahamas",
+        "SIGLA2": "BS",
+        "SIGLA3": "BHS",
+        "CODIGO": "044"
+    },
+    {
+        "NR_PAIS": 20,
+        "NOME": "Bahrein",
+        "SIGLA2": "BH",
+        "SIGLA3": "BHR",
+        "CODIGO": "048"
+    },
+    {
+        "NR_PAIS": 21,
+        "NOME": "Bangladesh",
+        "SIGLA2": "BD",
+        "SIGLA3": "BGD",
+        "CODIGO": "050"
+    },
+    {
+        "NR_PAIS": 22,
+        "NOME": "Barbados",
+        "SIGLA2": "BB",
+        "SIGLA3": "BRB",
+        "CODIGO": "052"
+    },
+    {
+        "NR_PAIS": 23,
+        "NOME": "Belarus",
+        "SIGLA2": "BY",
+        "SIGLA3": "BLR",
+        "CODIGO": "112"
+    },
+    {
+        "NR_PAIS": 24,
+        "NOME": "Bélgica",
+        "SIGLA2": "BE",
+        "SIGLA3": "BEL",
+        "CODIGO": "056"
+    },
+    {
+        "NR_PAIS": 25,
+        "NOME": "Belize",
+        "SIGLA2": "BZ",
+        "SIGLA3": "BLZ",
+        "CODIGO": "084"
+    },
+    {
+        "NR_PAIS": 26,
+        "NOME": "Benin",
+        "SIGLA2": "BJ",
+        "SIGLA3": "BEN",
+        "CODIGO": "204"
+    },
+    {
+        "NR_PAIS": 27,
+        "NOME": "Bermudas",
+        "SIGLA2": "BM",
+        "SIGLA3": "BMU",
+        "CODIGO": "060"
+    },
+    {
+        "NR_PAIS": 28,
+        "NOME": "Bolívia",
+        "SIGLA2": "BO",
+        "SIGLA3": "BOL",
+        "CODIGO": "068"
+    },
+    {
+        "NR_PAIS": 29,
+        "NOME": "Bósnia-Herzegóvina",
+        "SIGLA2": "BA",
+        "SIGLA3": "BIH",
+        "CODIGO": "070"
+    },
+    {
+        "NR_PAIS": 30,
+        "NOME": "Botsuana",
+        "SIGLA2": "BW",
+        "SIGLA3": "BWA",
+        "CODIGO": "072"
+    },
+    {
+        "NR_PAIS": 31,
+        "NOME": "Brasil",
+        "SIGLA2": "BR",
+        "SIGLA3": "BRA",
+        "CODIGO": "076"
+    },
+    {
+        "NR_PAIS": 32,
+        "NOME": "Brunei",
+        "SIGLA2": "BN",
+        "SIGLA3": "BRN",
+        "CODIGO": "096"
+    },
+    {
+        "NR_PAIS": 33,
+        "NOME": "Bulgária",
+        "SIGLA2": "BG",
+        "SIGLA3": "BGR",
+        "CODIGO": "100"
+    },
+    {
+        "NR_PAIS": 34,
+        "NOME": "Burkina Fasso",
+        "SIGLA2": "BF",
+        "SIGLA3": "BFA",
+        "CODIGO": "854"
+    },
+    {
+        "NR_PAIS": 35,
+        "NOME": "Burundi",
+        "SIGLA2": "BI",
+        "SIGLA3": "BDI",
+        "CODIGO": "108"
+    },
+    {
+        "NR_PAIS": 36,
+        "NOME": "Butão",
+        "SIGLA2": "BT",
+        "SIGLA3": "BTN",
+        "CODIGO": "064"
+    },
+    {
+        "NR_PAIS": 37,
+        "NOME": "Cabo Verde",
+        "SIGLA2": "CV",
+        "SIGLA3": "CPV",
+        "CODIGO": "132"
+    },
+    {
+        "NR_PAIS": 38,
+        "NOME": "Camarões",
+        "SIGLA2": "CM",
+        "SIGLA3": "CMR",
+        "CODIGO": "120"
+    },
+    {
+        "NR_PAIS": 39,
+        "NOME": "Camboja",
+        "SIGLA2": "KH",
+        "SIGLA3": "KHM",
+        "CODIGO": "116"
+    },
+    {
+        "NR_PAIS": 40,
+        "NOME": "Canadá",
+        "SIGLA2": "CA",
+        "SIGLA3": "CAN",
+        "CODIGO": "124"
+    },
+    {
+        "NR_PAIS": 41,
+        "NOME": "Cazaquistão",
+        "SIGLA2": "KZ",
+        "SIGLA3": "KAZ",
+        "CODIGO": "398"
+    },
+    {
+        "NR_PAIS": 42,
+        "NOME": "Chade",
+        "SIGLA2": "TD",
+        "SIGLA3": "TCD",
+        "CODIGO": "148"
+    },
+    {
+        "NR_PAIS": 43,
+        "NOME": "Chile",
+        "SIGLA2": "CL",
+        "SIGLA3": "CHL",
+        "CODIGO": "152"
+    },
+    {
+        "NR_PAIS": 44,
+        "NOME": "China",
+        "SIGLA2": "CN",
+        "SIGLA3": "CHN",
+        "CODIGO": "156"
+    },
+    {
+        "NR_PAIS": 45,
+        "NOME": "Chipre",
+        "SIGLA2": "CY",
+        "SIGLA3": "CYP",
+        "CODIGO": "196"
+    },
+    {
+        "NR_PAIS": 46,
+        "NOME": "Cingapura",
+        "SIGLA2": "SG",
+        "SIGLA3": "SGP",
+        "CODIGO": "702"
+    },
+    {
+        "NR_PAIS": 47,
+        "NOME": "Colômbia",
+        "SIGLA2": "CO",
+        "SIGLA3": "COL",
+        "CODIGO": "170"
+    },
+    {
+        "NR_PAIS": 48,
+        "NOME": "Congo",
+        "SIGLA2": "CG",
+        "SIGLA3": "COG",
+        "CODIGO": "178"
+    },
+    {
+        "NR_PAIS": 49,
+        "NOME": "Coréia do Norte",
+        "SIGLA2": "KP",
+        "SIGLA3": "PRK",
+        "CODIGO": "408"
+    },
+    {
+        "NR_PAIS": 50,
+        "NOME": "Coréia do Sul",
+        "SIGLA2": "KR",
+        "SIGLA3": "KOR",
+        "CODIGO": "410"
+    },
+    {
+        "NR_PAIS": 51,
+        "NOME": "Costa do Marfim",
+        "SIGLA2": "CI",
+        "SIGLA3": "CIV",
+        "CODIGO": "384"
+    },
+    {
+        "NR_PAIS": 52,
+        "NOME": "Costa Rica",
+        "SIGLA2": "CR",
+        "SIGLA3": "CRI",
+        "CODIGO": "188"
+    },
+    {
+        "NR_PAIS": 53,
+        "NOME": "Croácia (Hrvatska)",
+        "SIGLA2": "HR",
+        "SIGLA3": "HRV",
+        "CODIGO": "191"
+    },
+    {
+        "NR_PAIS": 54,
+        "NOME": "Cuba",
+        "SIGLA2": "CU",
+        "SIGLA3": "CUB",
+        "CODIGO": "192"
+    },
+    {
+        "NR_PAIS": 55,
+        "NOME": "Dinamarca",
+        "SIGLA2": "DK",
+        "SIGLA3": "DNK",
+        "CODIGO": "208"
+    },
+    {
+        "NR_PAIS": 56,
+        "NOME": "Djibuti",
+        "SIGLA2": "DJ",
+        "SIGLA3": "DJI",
+        "CODIGO": "262"
+    },
+    {
+        "NR_PAIS": 57,
+        "NOME": "Dominica",
+        "SIGLA2": "DM",
+        "SIGLA3": "DMA",
+        "CODIGO": "212"
+    },
+    {
+        "NR_PAIS": 58,
+        "NOME": "Egito",
+        "SIGLA2": "EG",
+        "SIGLA3": "EGY",
+        "CODIGO": "818"
+    },
+    {
+        "NR_PAIS": 59,
+        "NOME": "El Salvador",
+        "SIGLA2": "SV",
+        "SIGLA3": "SLV",
+        "CODIGO": "222"
+    },
+    {
+        "NR_PAIS": 60,
+        "NOME": "Emirados Árabes Unidos",
+        "SIGLA2": "AE",
+        "SIGLA3": "ARE",
+        "CODIGO": "784"
+    },
+    {
+        "NR_PAIS": 61,
+        "NOME": "Equador",
+        "SIGLA2": "EC",
+        "SIGLA3": "ECU",
+        "CODIGO": "218"
+    },
+    {
+        "NR_PAIS": 62,
+        "NOME": "Eritréia",
+        "SIGLA2": "ER",
+        "SIGLA3": "ERI",
+        "CODIGO": "232"
+    },
+    {
+        "NR_PAIS": 63,
+        "NOME": "Eslováquia",
+        "SIGLA2": "SK",
+        "SIGLA3": "SVK",
+        "CODIGO": "703"
+    },
+    {
+        "NR_PAIS": 64,
+        "NOME": "Eslovênia",
+        "SIGLA2": "SI",
+        "SIGLA3": "SVN",
+        "CODIGO": "705"
+    },
+    {
+        "NR_PAIS": 65,
+        "NOME": "Espanha",
+        "SIGLA2": "ES",
+        "SIGLA3": "ESP",
+        "CODIGO": "724"
+    },
+    {
+        "NR_PAIS": 66,
+        "NOME": "Estados Unidos",
+        "SIGLA2": "US",
+        "SIGLA3": "USA",
+        "CODIGO": "840"
+    },
+    {
+        "NR_PAIS": 67,
+        "NOME": "Estônia",
+        "SIGLA2": "EE",
+        "SIGLA3": "EST",
+        "CODIGO": "233"
+    },
+    {
+        "NR_PAIS": 68,
+        "NOME": "Etiópia",
+        "SIGLA2": "ET",
+        "SIGLA3": "ETH",
+        "CODIGO": "231"
+    },
+    {
+        "NR_PAIS": 69,
+        "NOME": "Fiji",
+        "SIGLA2": "FJ",
+        "SIGLA3": "FJI",
+        "CODIGO": "242"
+    },
+    {
+        "NR_PAIS": 70,
+        "NOME": "Filipinas",
+        "SIGLA2": "PH",
+        "SIGLA3": "PHL",
+        "CODIGO": "608"
+    },
+    {
+        "NR_PAIS": 71,
+        "NOME": "Finlândia",
+        "SIGLA2": "FI",
+        "SIGLA3": "FIN",
+        "CODIGO": "246"
+    },
+    {
+        "NR_PAIS": 72,
+        "NOME": "França",
+        "SIGLA2": "FR",
+        "SIGLA3": "FRA",
+        "CODIGO": "250"
+    },
+    {
+        "NR_PAIS": 73,
+        "NOME": "Gabão",
+        "SIGLA2": "GA",
+        "SIGLA3": "GAB",
+        "CODIGO": "266"
+    },
+    {
+        "NR_PAIS": 74,
+        "NOME": "Gâmbia",
+        "SIGLA2": "GM",
+        "SIGLA3": "GMB",
+        "CODIGO": "270"
+    },
+    {
+        "NR_PAIS": 75,
+        "NOME": "Gana",
+        "SIGLA2": "GH",
+        "SIGLA3": "GHA",
+        "CODIGO": "288"
+    },
+    {
+        "NR_PAIS": 76,
+        "NOME": "Geórgia",
+        "SIGLA2": "GE",
+        "SIGLA3": "GEO",
+        "CODIGO": "268"
+    },
+    {
+        "NR_PAIS": 77,
+        "NOME": "Gibraltar",
+        "SIGLA2": "GI",
+        "SIGLA3": "GIB",
+        "CODIGO": "292"
+    },
+    {
+        "NR_PAIS": 78,
+        "NOME": "Grã-Bretanha (Reino Unido, UK)",
+        "SIGLA2": "GB",
+        "SIGLA3": "GBR",
+        "CODIGO": "826"
+    },
+    {
+        "NR_PAIS": 79,
+        "NOME": "Granada",
+        "SIGLA2": "GD",
+        "SIGLA3": "GRD",
+        "CODIGO": "308"
+    },
+    {
+        "NR_PAIS": 80,
+        "NOME": "Grécia",
+        "SIGLA2": "GR",
+        "SIGLA3": "GRC",
+        "CODIGO": "300"
+    },
+    {
+        "NR_PAIS": 81,
+        "NOME": "Groelândia",
+        "SIGLA2": "GL",
+        "SIGLA3": "GRL",
+        "CODIGO": "304"
+    },
+    {
+        "NR_PAIS": 82,
+        "NOME": "Guadalupe",
+        "SIGLA2": "GP",
+        "SIGLA3": "GLP",
+        "CODIGO": "312"
+    },
+    {
+        "NR_PAIS": 83,
+        "NOME": "Guam (Território dos Estados Unidos)",
+        "SIGLA2": "GU",
+        "SIGLA3": "GUM",
+        "CODIGO": "316"
+    },
+    {
+        "NR_PAIS": 84,
+        "NOME": "Guatemala",
+        "SIGLA2": "GT",
+        "SIGLA3": "GTM",
+        "CODIGO": "320"
+    },
+    {
+        "NR_PAIS": 85,
+        "NOME": "Guernsey",
+        "SIGLA2": "G",
+        "SIGLA3": "GGY",
+        "CODIGO": "832"
+    },
+    {
+        "NR_PAIS": 86,
+        "NOME": "Guiana",
+        "SIGLA2": "GY",
+        "SIGLA3": "GUY",
+        "CODIGO": "328"
+    },
+    {
+        "NR_PAIS": 87,
+        "NOME": "Guiana Francesa",
+        "SIGLA2": "GF",
+        "SIGLA3": "GUF",
+        "CODIGO": "254"
+    },
+    {
+        "NR_PAIS": 88,
+        "NOME": "Guiné",
+        "SIGLA2": "GN",
+        "SIGLA3": "GIN",
+        "CODIGO": "324"
+    },
+    {
+        "NR_PAIS": 89,
+        "NOME": "Guiné Equatorial",
+        "SIGLA2": "GQ",
+        "SIGLA3": "GNQ",
+        "CODIGO": "226"
+    },
+    {
+        "NR_PAIS": 90,
+        "NOME": "Guiné-Bissau",
+        "SIGLA2": "GW",
+        "SIGLA3": "GNB",
+        "CODIGO": "624"
+    },
+    {
+        "NR_PAIS": 91,
+        "NOME": "Haiti",
+        "SIGLA2": "HT",
+        "SIGLA3": "HTI",
+        "CODIGO": "332"
+    },
+    {
+        "NR_PAIS": 92,
+        "NOME": "Holanda",
+        "SIGLA2": "NL",
+        "SIGLA3": "NLD",
+        "CODIGO": "528"
+    },
+    {
+        "NR_PAIS": 93,
+        "NOME": "Honduras",
+        "SIGLA2": "HN",
+        "SIGLA3": "HND",
+        "CODIGO": "340"
+    },
+    {
+        "NR_PAIS": 94,
+        "NOME": "Hong Kong",
+        "SIGLA2": "HK",
+        "SIGLA3": "HKG",
+        "CODIGO": "344"
+    },
+    {
+        "NR_PAIS": 95,
+        "NOME": "Hungria",
+        "SIGLA2": "HU",
+        "SIGLA3": "HUN",
+        "CODIGO": "348"
+    },
+    {
+        "NR_PAIS": 96,
+        "NOME": "Iêmen",
+        "SIGLA2": "YE",
+        "SIGLA3": "YEM",
+        "CODIGO": "887"
+    },
+    {
+        "NR_PAIS": 97,
+        "NOME": "Ilha Bouvet (Território da Noruega)",
+        "SIGLA2": "BV",
+        "SIGLA3": "BVT",
+        "CODIGO": "074"
+    },
+    {
+        "NR_PAIS": 98,
+        "NOME": "Ilha do Homem",
+        "SIGLA2": "IM",
+        "SIGLA3": "IMN",
+        "CODIGO": "833"
+    },
+    {
+        "NR_PAIS": 99,
+        "NOME": "Ilha Natal",
+        "SIGLA2": "CX",
+        "SIGLA3": "CXR",
+        "CODIGO": "162"
+    },
+    {
+        "NR_PAIS": 100,
+        "NOME": "Ilha Pitcairn",
+        "SIGLA2": "PN",
+        "SIGLA3": "PCN",
+        "CODIGO": "612"
+    },
+    {
+        "NR_PAIS": 101,
+        "NOME": "Ilha Reunião",
+        "SIGLA2": "RE",
+        "SIGLA3": "REU",
+        "CODIGO": "638"
+    },
+    {
+        "NR_PAIS": 102,
+        "NOME": "Ilhas Aland",
+        "SIGLA2": "AX",
+        "SIGLA3": "ALA",
+        "CODIGO": "248"
+    },
+    {
+        "NR_PAIS": 103,
+        "NOME": "Ilhas Cayman",
+        "SIGLA2": "KY",
+        "SIGLA3": "CYM",
+        "CODIGO": "136"
+    },
+    {
+        "NR_PAIS": 104,
+        "NOME": "Ilhas Cocos",
+        "SIGLA2": "CC",
+        "SIGLA3": "CCK",
+        "CODIGO": "166"
+    },
+    {
+        "NR_PAIS": 105,
+        "NOME": "Ilhas Comores",
+        "SIGLA2": "KM",
+        "SIGLA3": "COM",
+        "CODIGO": "174"
+    },
+    {
+        "NR_PAIS": 106,
+        "NOME": "Ilhas Cook",
+        "SIGLA2": "CK",
+        "SIGLA3": "COK",
+        "CODIGO": "184"
+    },
+    {
+        "NR_PAIS": 107,
+        "NOME": "Ilhas Faroes",
+        "SIGLA2": "FO",
+        "SIGLA3": "FRO",
+        "CODIGO": "234"
+    },
+    {
+        "NR_PAIS": 108,
+        "NOME": "Ilhas Falkland (Malvinas)",
+        "SIGLA2": "FK",
+        "SIGLA3": "FLK",
+        "CODIGO": "238"
+    },
+    {
+        "NR_PAIS": 109,
+        "NOME": "Ilhas Geórgia do Sul e Sandwich do Sul",
+        "SIGLA2": "GS",
+        "SIGLA3": "SGS",
+        "CODIGO": "239"
+    },
+    {
+        "NR_PAIS": 110,
+        "NOME": "Ilhas Heard e McDonald (Território da Austrália)",
+        "SIGLA2": "HM",
+        "SIGLA3": "HMD",
+        "CODIGO": "334"
+    },
+    {
+        "NR_PAIS": 111,
+        "NOME": "Ilhas Marianas do Norte",
+        "SIGLA2": "MP",
+        "SIGLA3": "MNP",
+        "CODIGO": "580"
+    },
+    {
+        "NR_PAIS": 112,
+        "NOME": "Ilhas Marshall",
+        "SIGLA2": "MH",
+        "SIGLA3": "MHL",
+        "CODIGO": "584"
+    },
+    {
+        "NR_PAIS": 113,
+        "NOME": "Ilhas Menores dos Estados Unidos",
+        "SIGLA2": "UM",
+        "SIGLA3": "UMI",
+        "CODIGO": "581"
+    },
+    {
+        "NR_PAIS": 114,
+        "NOME": "Ilhas Norfolk",
+        "SIGLA2": "NF",
+        "SIGLA3": "NFK",
+        "CODIGO": "574"
+    },
+    {
+        "NR_PAIS": 115,
+        "NOME": "Ilhas Seychelles",
+        "SIGLA2": "SC",
+        "SIGLA3": "SYC",
+        "CODIGO": "690"
+    },
+    {
+        "NR_PAIS": 116,
+        "NOME": "Ilhas Solomão",
+        "SIGLA2": "SB",
+        "SIGLA3": "SLB",
+        "CODIGO": "090"
+    },
+    {
+        "NR_PAIS": 117,
+        "NOME": "Ilhas Svalbard e Jan Mayen",
+        "SIGLA2": "SJ",
+        "SIGLA3": "SJM",
+        "CODIGO": "744"
+    },
+    {
+        "NR_PAIS": 118,
+        "NOME": "Ilhas Tokelau",
+        "SIGLA2": "TK",
+        "SIGLA3": "TKL",
+        "CODIGO": "772"
+    },
+    {
+        "NR_PAIS": 119,
+        "NOME": "Ilhas Turks e Caicos",
+        "SIGLA2": "TC",
+        "SIGLA3": "TCA",
+        "CODIGO": "796"
+    },
+    {
+        "NR_PAIS": 120,
+        "NOME": "Ilhas Virgens (Estados Unidos)",
+        "SIGLA2": "VI",
+        "SIGLA3": "VIR",
+        "CODIGO": "850"
+    },
+    {
+        "NR_PAIS": 121,
+        "NOME": "Ilhas Virgens (Inglaterra)",
+        "SIGLA2": "VG",
+        "SIGLA3": "VGB",
+        "CODIGO": "092"
+    },
+    {
+        "NR_PAIS": 122,
+        "NOME": "Ilhas Wallis e Futuna",
+        "SIGLA2": "WF",
+        "SIGLA3": "WLF",
+        "CODIGO": "876"
+    },
+    {
+        "NR_PAIS": 123,
+        "NOME": "índia",
+        "SIGLA2": "IN",
+        "SIGLA3": "IND",
+        "CODIGO": "356"
+    },
+    {
+        "NR_PAIS": 124,
+        "NOME": "Indonésia",
+        "SIGLA2": "ID",
+        "SIGLA3": "IDN",
+        "CODIGO": "360"
+    },
+    {
+        "NR_PAIS": 125,
+        "NOME": "Irã",
+        "SIGLA2": "IR",
+        "SIGLA3": "IRN",
+        "CODIGO": "364"
+    },
+    {
+        "NR_PAIS": 126,
+        "NOME": "Iraque",
+        "SIGLA2": "IQ",
+        "SIGLA3": "IRQ",
+        "CODIGO": "368"
+    },
+    {
+        "NR_PAIS": 127,
+        "NOME": "Irlanda",
+        "SIGLA2": "IE",
+        "SIGLA3": "IRL",
+        "CODIGO": "372"
+    },
+    {
+        "NR_PAIS": 128,
+        "NOME": "Islândia",
+        "SIGLA2": "IS",
+        "SIGLA3": "ISL",
+        "CODIGO": "352"
+    },
+    {
+        "NR_PAIS": 129,
+        "NOME": "Israel",
+        "SIGLA2": "IL",
+        "SIGLA3": "ISR",
+        "CODIGO": "376"
+    },
+    {
+        "NR_PAIS": 130,
+        "NOME": "Itália",
+        "SIGLA2": "IT",
+        "SIGLA3": "ITA",
+        "CODIGO": "380"
+    },
+    {
+        "NR_PAIS": 131,
+        "NOME": "Jamaica",
+        "SIGLA2": "JM",
+        "SIGLA3": "JAM",
+        "CODIGO": "388"
+    },
+    {
+        "NR_PAIS": 132,
+        "NOME": "Japão",
+        "SIGLA2": "JP",
+        "SIGLA3": "JPN",
+        "CODIGO": "392"
+    },
+    {
+        "NR_PAIS": 133,
+        "NOME": "Jersey",
+        "SIGLA2": "JE",
+        "SIGLA3": "JEY",
+        "CODIGO": "832"
+    },
+    {
+        "NR_PAIS": 134,
+        "NOME": "Jordânia",
+        "SIGLA2": "JO",
+        "SIGLA3": "JOR",
+        "CODIGO": "400"
+    },
+    {
+        "NR_PAIS": 135,
+        "NOME": "Kênia",
+        "SIGLA2": "KE",
+        "SIGLA3": "KEN",
+        "CODIGO": "404"
+    },
+    {
+        "NR_PAIS": 136,
+        "NOME": "Kiribati",
+        "SIGLA2": "KI",
+        "SIGLA3": "KIR",
+        "CODIGO": "296"
+    },
+    {
+        "NR_PAIS": 137,
+        "NOME": "Kuait",
+        "SIGLA2": "KW",
+        "SIGLA3": "KWT",
+        "CODIGO": "414"
+    },
+    {
+        "NR_PAIS": 138,
+        "NOME": "Laos",
+        "SIGLA2": "LA",
+        "SIGLA3": "LAO",
+        "CODIGO": "418"
+    },
+    {
+        "NR_PAIS": 139,
+        "NOME": "Látvia",
+        "SIGLA2": "LV",
+        "SIGLA3": "LVA",
+        "CODIGO": "428"
+    },
+    {
+        "NR_PAIS": 140,
+        "NOME": "Lesoto",
+        "SIGLA2": "LS",
+        "SIGLA3": "LSO",
+        "CODIGO": "426"
+    },
+    {
+        "NR_PAIS": 141,
+        "NOME": "Líbano",
+        "SIGLA2": "LB",
+        "SIGLA3": "LBN",
+        "CODIGO": "422"
+    },
+    {
+        "NR_PAIS": 142,
+        "NOME": "Libéria",
+        "SIGLA2": "LR",
+        "SIGLA3": "LBR",
+        "CODIGO": "430"
+    },
+    {
+        "NR_PAIS": 143,
+        "NOME": "Líbia",
+        "SIGLA2": "LY",
+        "SIGLA3": "LBY",
+        "CODIGO": "434"
+    },
+    {
+        "NR_PAIS": 144,
+        "NOME": "Liechtenstein",
+        "SIGLA2": "LI",
+        "SIGLA3": "LIE",
+        "CODIGO": "438"
+    },
+    {
+        "NR_PAIS": 145,
+        "NOME": "Lituânia",
+        "SIGLA2": "LT",
+        "SIGLA3": "LTU",
+        "CODIGO": "440"
+    },
+    {
+        "NR_PAIS": 146,
+        "NOME": "Luxemburgo",
+        "SIGLA2": "LU",
+        "SIGLA3": "LUX",
+        "CODIGO": "442"
+    },
+    {
+        "NR_PAIS": 147,
+        "NOME": "Macau",
+        "SIGLA2": "MO",
+        "SIGLA3": "MAC",
+        "CODIGO": "446"
+    },
+    {
+        "NR_PAIS": 148,
+        "NOME": "Macedônia (República Yugoslava)",
+        "SIGLA2": "MK",
+        "SIGLA3": "MKD",
+        "CODIGO": "807"
+    },
+    {
+        "NR_PAIS": 149,
+        "NOME": "Madagascar",
+        "SIGLA2": "MG",
+        "SIGLA3": "MDG",
+        "CODIGO": "450"
+    },
+    {
+        "NR_PAIS": 150,
+        "NOME": "Malásia",
+        "SIGLA2": "MY",
+        "SIGLA3": "MYS",
+        "CODIGO": "458"
+    },
+    {
+        "NR_PAIS": 151,
+        "NOME": "Malaui",
+        "SIGLA2": "MW",
+        "SIGLA3": "MWI",
+        "CODIGO": "454"
+    },
+    {
+        "NR_PAIS": 152,
+        "NOME": "Maldivas",
+        "SIGLA2": "MV",
+        "SIGLA3": "MDV",
+        "CODIGO": "462"
+    },
+    {
+        "NR_PAIS": 153,
+        "NOME": "Mali",
+        "SIGLA2": "ML",
+        "SIGLA3": "MLI",
+        "CODIGO": "466"
+    },
+    {
+        "NR_PAIS": 154,
+        "NOME": "Malta",
+        "SIGLA2": "MT",
+        "SIGLA3": "MLT",
+        "CODIGO": "470"
+    },
+    {
+        "NR_PAIS": 155,
+        "NOME": "Marrocos",
+        "SIGLA2": "MA",
+        "SIGLA3": "MAR",
+        "CODIGO": "504"
+    },
+    {
+        "NR_PAIS": 156,
+        "NOME": "Martinica",
+        "SIGLA2": "MQ",
+        "SIGLA3": "MTQ",
+        "CODIGO": "474"
+    },
+    {
+        "NR_PAIS": 157,
+        "NOME": "Maurício",
+        "SIGLA2": "MU",
+        "SIGLA3": "MUS",
+        "CODIGO": "480"
+    },
+    {
+        "NR_PAIS": 158,
+        "NOME": "Mauritânia",
+        "SIGLA2": "MR",
+        "SIGLA3": "MRT",
+        "CODIGO": "478"
+    },
+    {
+        "NR_PAIS": 159,
+        "NOME": "Mayotte",
+        "SIGLA2": "YT",
+        "SIGLA3": "MYT",
+        "CODIGO": "175"
+    },
+    {
+        "NR_PAIS": 160,
+        "NOME": "México",
+        "SIGLA2": "MX",
+        "SIGLA3": "MEX",
+        "CODIGO": "484"
+    },
+    {
+        "NR_PAIS": 161,
+        "NOME": "Micronésia",
+        "SIGLA2": "FM",
+        "SIGLA3": "FSM",
+        "CODIGO": "583"
+    },
+    {
+        "NR_PAIS": 162,
+        "NOME": "Moçambique",
+        "SIGLA2": "MZ",
+        "SIGLA3": "MOZ",
+        "CODIGO": "508"
+    },
+    {
+        "NR_PAIS": 163,
+        "NOME": "Moldova",
+        "SIGLA2": "MD",
+        "SIGLA3": "MDA",
+        "CODIGO": "498"
+    },
+    {
+        "NR_PAIS": 164,
+        "NOME": "Mônaco",
+        "SIGLA2": "MC",
+        "SIGLA3": "MCO",
+        "CODIGO": "492"
+    },
+    {
+        "NR_PAIS": 165,
+        "NOME": "Mongólia",
+        "SIGLA2": "MN",
+        "SIGLA3": "MNG",
+        "CODIGO": "496"
+    },
+    {
+        "NR_PAIS": 166,
+        "NOME": "Montenegro",
+        "SIGLA2": "ME",
+        "SIGLA3": "MNE",
+        "CODIGO": "499"
+    },
+    {
+        "NR_PAIS": 167,
+        "NOME": "Montserrat",
+        "SIGLA2": "MS",
+        "SIGLA3": "MSR",
+        "CODIGO": "500"
+    },
+    {
+        "NR_PAIS": 168,
+        "NOME": "Myanma",
+        "SIGLA2": "MM",
+        "SIGLA3": "MMR",
+        "CODIGO": "104"
+    },
+    {
+        "NR_PAIS": 169,
+        "NOME": "Namíbia",
+        "SIGLA2": "NA",
+        "SIGLA3": "NAM",
+        "CODIGO": "516"
+    },
+    {
+        "NR_PAIS": 170,
+        "NOME": "Nauru",
+        "SIGLA2": "NR",
+        "SIGLA3": "NRU",
+        "CODIGO": "520"
+    },
+    {
+        "NR_PAIS": 171,
+        "NOME": "Nepal",
+        "SIGLA2": "NP",
+        "SIGLA3": "NPL",
+        "CODIGO": "524"
+    },
+    {
+        "NR_PAIS": 172,
+        "NOME": "Nicarágua",
+        "SIGLA2": "NI",
+        "SIGLA3": "NIC",
+        "CODIGO": "558"
+    },
+    {
+        "NR_PAIS": 173,
+        "NOME": "Níger",
+        "SIGLA2": "NE",
+        "SIGLA3": "NER",
+        "CODIGO": "562"
+    },
+    {
+        "NR_PAIS": 174,
+        "NOME": "Nigéria",
+        "SIGLA2": "NG",
+        "SIGLA3": "NGA",
+        "CODIGO": "566"
+    },
+    {
+        "NR_PAIS": 175,
+        "NOME": "Niue",
+        "SIGLA2": "NU",
+        "SIGLA3": "NIU",
+        "CODIGO": "570"
+    },
+    {
+        "NR_PAIS": 176,
+        "NOME": "Noruega",
+        "SIGLA2": "NO",
+        "SIGLA3": "NOR",
+        "CODIGO": "578"
+    },
+    {
+        "NR_PAIS": 177,
+        "NOME": "Nova Caledônia",
+        "SIGLA2": "NC",
+        "SIGLA3": "NCL",
+        "CODIGO": "540"
+    },
+    {
+        "NR_PAIS": 178,
+        "NOME": "Nova Zelândia",
+        "SIGLA2": "NZ",
+        "SIGLA3": "NZL",
+        "CODIGO": "554"
+    },
+    {
+        "NR_PAIS": 179,
+        "NOME": "Omã",
+        "SIGLA2": "OM",
+        "SIGLA3": "OMN",
+        "CODIGO": "512"
+    },
+    {
+        "NR_PAIS": 180,
+        "NOME": "Palau",
+        "SIGLA2": "PW",
+        "SIGLA3": "PLW",
+        "CODIGO": "585"
+    },
+    {
+        "NR_PAIS": 181,
+        "NOME": "Panamá",
+        "SIGLA2": "PA",
+        "SIGLA3": "PAN",
+        "CODIGO": "591"
+    },
+    {
+        "NR_PAIS": 182,
+        "NOME": "Papua-Nova Guiné",
+        "SIGLA2": "PG",
+        "SIGLA3": "PNG",
+        "CODIGO": "598"
+    },
+    {
+        "NR_PAIS": 183,
+        "NOME": "Paquistão",
+        "SIGLA2": "PK",
+        "SIGLA3": "PAK",
+        "CODIGO": "586"
+    },
+    {
+        "NR_PAIS": 184,
+        "NOME": "Paraguai",
+        "SIGLA2": "PY",
+        "SIGLA3": "PRY",
+        "CODIGO": "600"
+    },
+    {
+        "NR_PAIS": 185,
+        "NOME": "Peru",
+        "SIGLA2": "PE",
+        "SIGLA3": "PER",
+        "CODIGO": "604"
+    },
+    {
+        "NR_PAIS": 186,
+        "NOME": "Polinésia Francesa",
+        "SIGLA2": "PF",
+        "SIGLA3": "PYF",
+        "CODIGO": "258"
+    },
+    {
+        "NR_PAIS": 187,
+        "NOME": "Polônia",
+        "SIGLA2": "PL",
+        "SIGLA3": "POL",
+        "CODIGO": "616"
+    },
+    {
+        "NR_PAIS": 188,
+        "NOME": "Porto Rico",
+        "SIGLA2": "PR",
+        "SIGLA3": "PRI",
+        "CODIGO": "630"
+    },
+    {
+        "NR_PAIS": 189,
+        "NOME": "Portugal",
+        "SIGLA2": "PT",
+        "SIGLA3": "PRT",
+        "CODIGO": "620"
+    },
+    {
+        "NR_PAIS": 190,
+        "NOME": "Qatar",
+        "SIGLA2": "QA",
+        "SIGLA3": "QAT",
+        "CODIGO": "634"
+    },
+    {
+        "NR_PAIS": 191,
+        "NOME": "Quirguistão",
+        "SIGLA2": "KG",
+        "SIGLA3": "KGZ",
+        "CODIGO": "417"
+    },
+    {
+        "NR_PAIS": 192,
+        "NOME": "República Centro-Africana",
+        "SIGLA2": "CF",
+        "SIGLA3": "CAF",
+        "CODIGO": "140"
+    },
+    {
+        "NR_PAIS": 193,
+        "NOME": "República Democrática do Congo",
+        "SIGLA2": "CD",
+        "SIGLA3": "COD",
+        "CODIGO": "180"
+    },
+    {
+        "NR_PAIS": 194,
+        "NOME": "República Dominicana",
+        "SIGLA2": "DO",
+        "SIGLA3": "DOM",
+        "CODIGO": "214"
+    },
+    {
+        "NR_PAIS": 195,
+        "NOME": "República Tcheca",
+        "SIGLA2": "CZ",
+        "SIGLA3": "CZE",
+        "CODIGO": "203"
+    },
+    {
+        "NR_PAIS": 196,
+        "NOME": "Romênia",
+        "SIGLA2": "RO",
+        "SIGLA3": "ROM",
+        "CODIGO": "642"
+    },
+    {
+        "NR_PAIS": 197,
+        "NOME": "Ruanda",
+        "SIGLA2": "RW",
+        "SIGLA3": "RWA",
+        "CODIGO": "646"
+    },
+    {
+        "NR_PAIS": 198,
+        "NOME": "Rússia (antiga URSS) - Federação Russa",
+        "SIGLA2": "RU",
+        "SIGLA3": "RUS",
+        "CODIGO": "643"
+    },
+    {
+        "NR_PAIS": 199,
+        "NOME": "Saara Ocidental",
+        "SIGLA2": "EH",
+        "SIGLA3": "ESH",
+        "CODIGO": "732"
+    },
+    {
+        "NR_PAIS": 200,
+        "NOME": "Saint Vincente e Granadinas",
+        "SIGLA2": "VC",
+        "SIGLA3": "VCT",
+        "CODIGO": "670"
+    },
+    {
+        "NR_PAIS": 201,
+        "NOME": "Samoa Americana",
+        "SIGLA2": "AS",
+        "SIGLA3": "ASM",
+        "CODIGO": "016"
+    },
+    {
+        "NR_PAIS": 202,
+        "NOME": "Samoa Ocidental",
+        "SIGLA2": "WS",
+        "SIGLA3": "WSM",
+        "CODIGO": "882"
+    },
+    {
+        "NR_PAIS": 203,
+        "NOME": "San Marino",
+        "SIGLA2": "SM",
+        "SIGLA3": "SMR",
+        "CODIGO": "674"
+    },
+    {
+        "NR_PAIS": 204,
+        "NOME": "Santa Helena",
+        "SIGLA2": "SH",
+        "SIGLA3": "SHN",
+        "CODIGO": "654"
+    },
+    {
+        "NR_PAIS": 205,
+        "NOME": "Santa Lúcia",
+        "SIGLA2": "LC",
+        "SIGLA3": "LCA",
+        "CODIGO": "662"
+    },
+    {
+        "NR_PAIS": 206,
+        "NOME": "São Bartolomeu",
+        "SIGLA2": "BL",
+        "SIGLA3": "BLM",
+        "CODIGO": "652"
+    },
+    {
+        "NR_PAIS": 207,
+        "NOME": "São Cristóvão e Névis",
+        "SIGLA2": "KN",
+        "SIGLA3": "KNA",
+        "CODIGO": "659"
+    },
+    {
+        "NR_PAIS": 208,
+        "NOME": "São Martim",
+        "SIGLA2": "MF",
+        "SIGLA3": "MAF",
+        "CODIGO": "663"
+    },
+    {
+        "NR_PAIS": 209,
+        "NOME": "São Tomé e Príncipe",
+        "SIGLA2": "ST",
+        "SIGLA3": "STP",
+        "CODIGO": "678"
+    },
+    {
+        "NR_PAIS": 210,
+        "NOME": "Senegal",
+        "SIGLA2": "SN",
+        "SIGLA3": "SEN",
+        "CODIGO": "686"
+    },
+    {
+        "NR_PAIS": 211,
+        "NOME": "Serra Leoa",
+        "SIGLA2": "SL",
+        "SIGLA3": "SLE",
+        "CODIGO": "694"
+    },
+    {
+        "NR_PAIS": 212,
+        "NOME": "Sérvia",
+        "SIGLA2": "RS",
+        "SIGLA3": "SRB",
+        "CODIGO": "688"
+    },
+    {
+        "NR_PAIS": 213,
+        "NOME": "Síria",
+        "SIGLA2": "SY",
+        "SIGLA3": "SYR",
+        "CODIGO": "760"
+    },
+    {
+        "NR_PAIS": 214,
+        "NOME": "Somália",
+        "SIGLA2": "SO",
+        "SIGLA3": "SOM",
+        "CODIGO": "706"
+    },
+    {
+        "NR_PAIS": 215,
+        "NOME": "Sri Lanka",
+        "SIGLA2": "LK",
+        "SIGLA3": "LKA",
+        "CODIGO": "144"
+    },
+    {
+        "NR_PAIS": 216,
+        "NOME": "St. Pierre and Miquelon",
+        "SIGLA2": "PM",
+        "SIGLA3": "SPM",
+        "CODIGO": "666"
+    },
+    {
+        "NR_PAIS": 217,
+        "NOME": "Suazilândia",
+        "SIGLA2": "SZ",
+        "SIGLA3": "SWZ",
+        "CODIGO": "748"
+    },
+    {
+        "NR_PAIS": 218,
+        "NOME": "Sudão",
+        "SIGLA2": "SD",
+        "SIGLA3": "SDN",
+        "CODIGO": "736"
+    },
+    {
+        "NR_PAIS": 219,
+        "NOME": "Suécia",
+        "SIGLA2": "SE",
+        "SIGLA3": "SWE",
+        "CODIGO": "752"
+    },
+    {
+        "NR_PAIS": 220,
+        "NOME": "Suíça",
+        "SIGLA2": "CH",
+        "SIGLA3": "CHE",
+        "CODIGO": "756"
+    },
+    {
+        "NR_PAIS": 221,
+        "NOME": "Suriname",
+        "SIGLA2": "SR",
+        "SIGLA3": "SUR",
+        "CODIGO": "740"
+    },
+    {
+        "NR_PAIS": 222,
+        "NOME": "Tadjiquistão",
+        "SIGLA2": "TJ",
+        "SIGLA3": "TJK",
+        "CODIGO": "762"
+    },
+    {
+        "NR_PAIS": 223,
+        "NOME": "Tailândia",
+        "SIGLA2": "TH",
+        "SIGLA3": "THA",
+        "CODIGO": "764"
+    },
+    {
+        "NR_PAIS": 224,
+        "NOME": "Taiwan",
+        "SIGLA2": "TW",
+        "SIGLA3": "TWN",
+        "CODIGO": "158"
+    },
+    {
+        "NR_PAIS": 225,
+        "NOME": "Tanzânia",
+        "SIGLA2": "TZ",
+        "SIGLA3": "TZA",
+        "CODIGO": "834"
+    },
+    {
+        "NR_PAIS": 226,
+        "NOME": "Território Britânico do Oceano índico",
+        "SIGLA2": "IO",
+        "SIGLA3": "IOT",
+        "CODIGO": "086"
+    },
+    {
+        "NR_PAIS": 227,
+        "NOME": "Territórios do Sul da França",
+        "SIGLA2": "TF",
+        "SIGLA3": "ATF",
+        "CODIGO": "260"
+    },
+    {
+        "NR_PAIS": 228,
+        "NOME": "Territórios Palestinos Ocupados",
+        "SIGLA2": "PS",
+        "SIGLA3": "PSE",
+        "CODIGO": "275"
+    },
+    {
+        "NR_PAIS": 229,
+        "NOME": "Timor Leste",
+        "SIGLA2": "TP",
+        "SIGLA3": "TMP",
+        "CODIGO": "626"
+    },
+    {
+        "NR_PAIS": 230,
+        "NOME": "Togo",
+        "SIGLA2": "TG",
+        "SIGLA3": "TGO",
+        "CODIGO": "768"
+    },
+    {
+        "NR_PAIS": 231,
+        "NOME": "Tonga",
+        "SIGLA2": "TO",
+        "SIGLA3": "TON",
+        "CODIGO": "776"
+    },
+    {
+        "NR_PAIS": 232,
+        "NOME": "Trinidad and Tobago",
+        "SIGLA2": "TT",
+        "SIGLA3": "TTO",
+        "CODIGO": "780"
+    },
+    {
+        "NR_PAIS": 233,
+        "NOME": "Tunísia",
+        "SIGLA2": "TN",
+        "SIGLA3": "TUN",
+        "CODIGO": "788"
+    },
+    {
+        "NR_PAIS": 234,
+        "NOME": "Turcomenistão",
+        "SIGLA2": "TM",
+        "SIGLA3": "TKM",
+        "CODIGO": "795"
+    },
+    {
+        "NR_PAIS": 235,
+        "NOME": "Turquia",
+        "SIGLA2": "TR",
+        "SIGLA3": "TUR",
+        "CODIGO": "792"
+    },
+    {
+        "NR_PAIS": 236,
+        "NOME": "Tuvalu",
+        "SIGLA2": "TV",
+        "SIGLA3": "TUV",
+        "CODIGO": "798"
+    },
+    {
+        "NR_PAIS": 237,
+        "NOME": "Ucrânia",
+        "SIGLA2": "UA",
+        "SIGLA3": "UKR",
+        "CODIGO": "804"
+    },
+    {
+        "NR_PAIS": 238,
+        "NOME": "Uganda",
+        "SIGLA2": "UG",
+        "SIGLA3": "UGA",
+        "CODIGO": "800"
+    },
+    {
+        "NR_PAIS": 239,
+        "NOME": "Uruguai",
+        "SIGLA2": "UY",
+        "SIGLA3": "URY",
+        "CODIGO": "858"
+    },
+    {
+        "NR_PAIS": 240,
+        "NOME": "Uzbequistão",
+        "SIGLA2": "UZ",
+        "SIGLA3": "UZB",
+        "CODIGO": "860"
+    },
+    {
+        "NR_PAIS": 241,
+        "NOME": "Vanuatu",
+        "SIGLA2": "VU",
+        "SIGLA3": "VUT",
+        "CODIGO": "548"
+    },
+    {
+        "NR_PAIS": 242,
+        "NOME": "Vaticano",
+        "SIGLA2": "VA",
+        "SIGLA3": "VAT",
+        "CODIGO": "336"
+    },
+    {
+        "NR_PAIS": 243,
+        "NOME": "Venezuela",
+        "SIGLA2": "VE",
+        "SIGLA3": "VEN",
+        "CODIGO": "862"
+    },
+    {
+        "NR_PAIS": 244,
+        "NOME": "Vietnã",
+        "SIGLA2": "VN",
+        "SIGLA3": "VNM",
+        "CODIGO": "704"
+    },
+    {
+        "NR_PAIS": 245,
+        "NOME": "Zâmbia",
+        "SIGLA2": "ZM",
+        "SIGLA3": "ZMB",
+        "CODIGO": "894"
+    },
+    {
+        "NR_PAIS": 246,
+        "NOME": "Zimbábue",
+        "SIGLA2": "ZW",
+        "SIGLA3": "ZWE",
+        "CODIGO": "716"
+    }
+]

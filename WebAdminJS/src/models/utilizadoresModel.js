@@ -1,11 +1,10 @@
 var Sequelize = require('sequelize'),
     sequelize = require('../config/database'),
-    bcrypt = require('bcrypt');
+    bcrypt = require('bcrypt'),
+    TiposUtilizadores = require('./TiposUtilizadoresModel'),
+    Paises = require('./Paises')
 
-var Freguesias = require('./Freguesias');
-var TiposUtilizadores = require('./TiposUtilizadoresModel');
-
-var UtilizadoresModel = sequelize.define('UTILIZADORES',{
+var UtilizadoresModel = sequelize.define('UTILIZADORES', {
     NR_UTILIZADOR: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -13,90 +12,115 @@ var UtilizadoresModel = sequelize.define('UTILIZADORES',{
     },
     NOME_UTILIZADOR: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
     },
     DATA_NASCIMENTO: Sequelize.DATEONLY,
     N_CC: {
         type: Sequelize.STRING,
-        allowNull: false
-    },
-    N_CC_COMPROVATIVO: {
-        type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
     N_SEGSOCIAL: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
-    NIF:  {
+    NIF: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        unique: true,
     },
-    N_TELEMOVEL:  {
+    N_TELEMOVEL: {
         type: Sequelize.INTEGER,
-        allowNull: true
+        allowNull: false,
     },
-    N_TELEFONE:  {
+    N_TELEFONE: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: true,
     },
-    GENERO:  {
-        type: Sequelize.ENUM('Masculino', 'Feminino'),
-        allowNull: false
+    GENERO: {
+        type: Sequelize.ENUM('M', 'F', 'O'),
+        allowNull: false,
     },
     MORADA_UTILIZADOR: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+    },
+    COD_POSTAL: {
+        type: Sequelize.STRING,
+        allowNull: false,
     },
     FREGUESIA: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    NACIONALIDADE: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
-            model: Freguesias,
-            key: 'NR_FREGUESIA'
-        }
+        references: {
+            model: Paises,
+            key: 'NR_PAIS',
+        },
+    },
+    N_CC_COMPROVATIVO: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    MORADA_COMPROVATIVO: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    CARTA_CONDUCAO_COMPROVATIVO: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        unique: true,
     },
     TIPO_UTILIZADOR: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references:{
+        references: {
             model: TiposUtilizadores,
-            key: 'NR_TIPO_UTILIZADOR'
-        }
+            key: 'NR_TIPO_UTILIZADOR',
+        },
     },
     DATA_CRIACAO_CONTA: {
         type: Sequelize.DATE,
-        allowNull: false
+        allowNull: false,
     },
     EMAIL: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     },
-    LOGIN_USER:  {
+    LOGIN_USER: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
     },
-    PASSWORD:  {
+    PASSWORD: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
     },
-},{
+    VALIDADO: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    }
+}, {
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
     timestamps: false,
-});
+    hooks: {
+        beforeCreate: (user, options) => {
+            return bcrypt.hash(user.PASSWORD, 10)
+                .then(hash => {
+                    user.PASSWORD = hash
+                })
+                .catch(err => {
+                    throw new Error()
+                })
+        },
+    },
+})
 
-UtilizadoresModel.beforeCreate((user, options) => {
-    return bcrypt.hash(user.password, 10)
-        .then(hash => {
-            user.password = hash;
-        })
-        .catch(err => {
-            throw new Error();
-        });
-});
 
-
-
-module.exports = UtilizadoresModel;
+module.exports = UtilizadoresModel

@@ -5,8 +5,7 @@ import {
     Box,
     Breadcrumbs,
     Link,
-    Button,
-    CircularProgress, Grid,
+    Grid,
 } from '@material-ui/core'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
@@ -16,11 +15,15 @@ import { Formik } from 'formik'
 import { FormRegistarViagem } from '../components/formRegistarViagem'
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import { RotaGoogleMap } from '../components/rotaGoogleMap'
+import { backendUrl } from '../configs'
 
 export default function RegistarViagem() {
     const classes = useStyles()
 
+    const [motoristas, setMotoristas] = useState([])
     const [localidades, setLocalidades] = useState([])
+    const [origem, setOrigem] = useState(null)
+    const [destino, setDestino] = useState(null)
     const [origemMaps, setOrigemMaps] = useState({
         lat: 0,
         lng: 0,
@@ -38,26 +41,47 @@ export default function RegistarViagem() {
     })
 
     const handleChangeOrigem = (event) => {
-        const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
-        setOrigemMaps({
-            lat: localidade_selecionada.LATITUDE,
-            lng: localidade_selecionada.LONGITUDE,
-        })
+        // const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
+        if(origem !== null) {
+            if (event.NR_LOCALIDADE !== origem.NR_LOCALIDADE) {
+                setOrigem(event)
+            }
+        } else {
+            setOrigem(event)
+        }
+        /*setOrigemMaps({
+            lat: event.LATITUDE,
+            lng: event.LONGITUDE,
+        })*/
     }
     const handleChangeDestino = (event) => {
-        const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
+        // const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
+        if(destino !== null) {
+            if (event.NR_LOCALIDADE !== destino.NR_LOCALIDADE) {
+                setDestino(event)
+            }
+        } else {
+            setDestino(event)
+        }
         setDestinoMaps({
-            lat: localidade_selecionada.LATITUDE,
-            lng: localidade_selecionada.LONGITUDE,
+            lat: event.LATITUDE,
+            lng: event.LONGITUDE,
         })
     }
 
     useEffect(() => {
         axios
-            .get('http://localhost:5000/localidades/list', { headers: authHeader() })
+            .get(backendUrl + 'api/localidades', { headers: authHeader() })
             .then(res => {
                 if (res.data.success) {
                     setLocalidades(res.data.data)
+                }
+            })
+        axios
+            .get(backendUrl + 'user/motoristas', { headers: authHeader() })
+            .then(res => {
+                if (res.data.success) {
+                    setMotoristas(res.data.data)
                 }
             })
     }, [])
@@ -108,12 +132,14 @@ export default function RegistarViagem() {
                                 validateOnBlur={false}
                                 validateOnChange={false}
                                 initialValues={{
-                                    origem: '',
-                                    destino: '',
+                                    origem: 0,
+                                    destino: 0,
                                     passageiros: '',
+                                    motivo: '',
                                     datahora_ida: null,
                                     datahora_volta: null,
                                     ncc: '',
+                                    motorista: 0,
                                     observacoes: '',
                                     distancia: 0,
                                 }}
@@ -129,6 +155,7 @@ export default function RegistarViagem() {
                                         }}>
                                             <FormRegistarViagem classes={classes}
                                                 localidades={localidades}
+                                                motoristas={motoristas}
                                                 distDur={distDur}
                                                 callbackOrigem={handleChangeOrigem}
                                                 callbackDestino={handleChangeDestino}/>
@@ -139,7 +166,7 @@ export default function RegistarViagem() {
                         </Grid>
                         <Grid item sm={6} xs={12}>
                             <LoadScript
-                                googleMapsApiKey="AIzaSyCjX2Bhd023B83EgYkUr1wyqZfUUIWIKgE">
+                                /*googleMapsApiKey="AIzaSyCjX2Bhd023B83EgYkUr1wyqZfUUIWIKgE"*/>
                                 <GoogleMap
                                     mapContainerStyle={{
                                         width: '100%',
@@ -151,8 +178,8 @@ export default function RegistarViagem() {
                                     }}
                                     zoom={10}
                                 >
-                                    <RotaGoogleMap destino={destinoMaps}
-                                        origem={origemMaps}
+                                    <RotaGoogleMap destino={destino}
+                                        origem={origem}
                                         onRouteReceived={setDistDur}/>
                                 </GoogleMap>
                             </LoadScript>

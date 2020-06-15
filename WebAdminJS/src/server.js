@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -22,8 +23,9 @@ app.use((req, res, next) => {
 });
 
 const users = require('./routes/userRoute')
+const viagens = require('./routes/viagensRoutes')
 const emails = require('./routes/emailRouters')
-const localidades = require('./routes/localidadesRoute')
+const api = require('./routes/apiRoutes')
 
 app.use('/mail', emails);
 
@@ -31,7 +33,9 @@ app.use('/public', express.static('src/public'));
 
 app.use('/user', users);
 
-app.use('/localidades', localidades);
+app.use('/viagens', viagens);
+
+app.use('/api', api);
 
 //router.get('/testdata', filmes.testdata);
 

@@ -1,6 +1,6 @@
 let Sequelize = require('sequelize'),
-  sequelize = require('../config/database'),
-  fs = require('fs');
+    sequelize = require('../config/database'),
+    fs = require('fs')
 
 var Localidades = sequelize.define('LOCALIDADES', {
   NR_LOCALIDADE: {

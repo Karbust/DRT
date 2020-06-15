@@ -1,0 +1,30 @@
+[
+  {
+    "NR_TIPO_UTILIZADOR": "1",
+    "DESCRICAO": "Administrador"
+  },
+  {
+    "NR_TIPO_UTILIZADOR": "2",
+    "DESCRICAO": "Administrativo"
+  },
+  {
+    "NR_TIPO_UTILIZADOR": "3",
+    "DESCRICAO": "Administrador Operador"
+  },
+  {
+    "NR_TIPO_UTILIZADOR": "4",
+    "DESCRICAO": "Telefonista"
+  },
+  {
+    "NR_TIPO_UTILIZADOR": "5",
+    "DESCRICAO": "Motorista"
+  },
+  {
+    "NR_TIPO_UTILIZADOR": "6",
+    "DESCRICAO": "Administrativo Operador"
+  },
+  {
+    "NR_TIPO_UTILIZADOR": "7",
+    "DESCRICAO": "Cidadão"
+  }
+]

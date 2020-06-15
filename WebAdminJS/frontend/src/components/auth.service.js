@@ -1,10 +1,11 @@
 import axios from 'axios'
 import authHeader from './auth-header'
+import { backendUrl } from '../configs'
 
 class AuthService {
     login (username, password, remember) {
         return axios
-            .post('http://localhost:5000/user/login', { username, password, remember })
+            .post(backendUrl + 'user/login', { username, password, remember })
             .then(res => {
                 if (res.data.token) {
                     localStorage.setItem('user', JSON.stringify(res.data))
@@ -18,7 +19,7 @@ class AuthService {
         if (JSON.parse(localStorage.getItem('user'))) {
             const token = authHeader()
             return axios
-                .post('http://localhost:5000/user/verifylogin', { token })
+                .post(backendUrl + 'user/verificar_login', { token })
                 .then(res => {
                     if (!res.data.success) {
                         this.logout()

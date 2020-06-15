@@ -8,7 +8,9 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
     const [response, setResponse] = useState(null)
 
     useEffect(() => {
-        setResponse(null)
+        if(destino !== null || origem !== null) {
+            setResponse(null)
+        }
     }, [destino, origem])
 
     const directionsCallback = (result, status) => {
@@ -29,14 +31,14 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
         <>
             {
                 (
-                    destino !== '' &&
-                    origem !== ''
+                    destino !== null &&
+                    origem !== null
                 ) && (
                     <DirectionsService
                         // required
                         options={{
-                            destination: destino,
-                            origin: origem,
+                            destination: { lat: destino.LATITUDE, lng: destino.LONGITUDE },
+                            origin: { lat: origem.LATITUDE, lng: origem.LONGITUDE },
                             travelMode: 'DRIVING',
                             provideRouteAlternatives: false,
                             region: 'PT',

@@ -6,17 +6,25 @@ import {
     withStyles,
 } from '@material-ui/core'
 import { amber } from '@material-ui/core/colors'
+import { ptPT } from '@material-ui/core/locale'
 import React from 'react'
 
-const drawerWidth = 240
+const drawerWidth = 280
 
 export const muiTheme = createMuiTheme({
     palette: {
         primary: {
             main: amber.A400
         },
+    },
+    overrides: {
+        MuiListItem: {
+            '&.Mui-selected': {
+                backgroundColor: amber['A400']
+            }
+        }
     }
-})
+}, ptPT)
 
 export const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,9 +45,9 @@ export const useStyles = makeStyles((theme) => ({
     dashboard: {
         display: 'flex'
     },
-    gold: {
+    /*gold: {
         backgroundColor: amber['A400']
-    },
+    },*/
     button: {
         marginLeft: theme.spacing(2),
         background: 'linear-gradient(45deg, #FFB554 30%, #FFD400 90%)',
@@ -122,6 +130,9 @@ export const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen
         })
+    },
+    nested: {
+        paddingLeft: theme.spacing(4),
     },
     menuButton2: {
         marginRight: 36

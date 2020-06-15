@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Button,
     Typography,
@@ -19,6 +19,7 @@ import { FormDadosConta } from '../components/formDadosConta'
 import { FormDadosPessoais } from '../components/formDadosPessoais'
 import { FormDocumentos } from '../components/formDocumentos'
 import { useStyles } from '../components/MuiStyles'
+import { backendUrl } from '../configs'
 
 function getSteps () {
     return ['Detalhes Pessoais', 'Detalhes da Conta', 'Documentos']
@@ -29,21 +30,45 @@ export default function RegistarMotorista () {
 
     // const [message, setMessage] = React.useState('')
     const [activeStep, setActiveStep] = useState(0)
+    const [nacionalidades, setNacionalidades] = useState([])
+    const [localidades, setLocalidades] = useState([])
 
     const steps = getSteps()
     const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
     const handleBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1)
     const handleReset = () => setActiveStep(0)
 
+    useEffect(() => {
+        axios
+            .get(backendUrl + 'api/nacionalidades'/*, { headers: authHeader() }*/)
+            .then(res => {
+                if (res.data.success) {
+                    setNacionalidades(res.data.data)
+                }
+            })
+        axios
+            .get(backendUrl + 'api/localidades'/*, { headers: authHeader() }*/)
+            .then(res => {
+                if (res.data.success) {
+                    setLocalidades(res.data.data)
+                }
+            })
+    }, [])
+
     const onFormikSubmit = (values, formikActions) => {
     // setMessage('')
         formikActions.setSubmitting(true)
-        console.log(values)
+        let formData = new FormData()
+        const { files, ...remaining_values } = values
+        Object.keys(remaining_values).forEach(key => formData.append(key, remaining_values[key]))
+        for(let i = 0; i < files.length; i++){
+            formData.append('files', files[i])
+        }
         return axios
-            .post('http://localhost:5000/user/testes', values)
+            .post(backendUrl + 'user/register', formData)
             .then(() => {
                 formikActions.setSubmitting(false)
-                setActiveStep(3)
+                //setActiveStep(3)
             }, (reason) => {
                 throw new Error('Utilizador Inválido')
             })
@@ -52,7 +77,7 @@ export default function RegistarMotorista () {
     const getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <FormDadosPessoais classes={classes}/>
+                return <FormDadosPessoais classes={classes} nacionalidades={nacionalidades} localidades={localidades}/>
             case 1:
                 return <FormDadosConta classes={classes}/>
             case 2:
@@ -123,19 +148,20 @@ export default function RegistarMotorista () {
                                     validateOnChange={false}
                                     initialValues={{
                                         nome: 'teste',
-                                        datanascimento: '04-06-2019',
+                                        datanascimento: '2019-06-04',
                                         genero: 'M',
-                                        ncc: '123',
+                                        ncc: '',
                                         nss: '123',
-                                        nif: '123',
+                                        nif: '',
                                         telemovel: '123',
                                         telefone: '123',
-                                        nacionalidade: 'teste',
+                                        nacionalidade: 189,
                                         morada: 'teste',
                                         codpostal: 'teste',
                                         localidade: '123',
-                                        email: 'testes@testes.pt',
+                                        email: '',
                                         utilizador: 'teste',
+                                        tipo_utilizador: 5,
                                         files: null
                                     }}
                                 >
@@ -146,7 +172,6 @@ export default function RegistarMotorista () {
                                         errors: formErrors
                                     }) => {
                                         /* console.log(formErrors)
-                                        console.log(values)
                                         console.log(isValid) */
                                         return (
                                             <>
@@ -154,7 +179,9 @@ export default function RegistarMotorista () {
                                                     event.preventDefault()
                                                     submitForm()
                                                 }}>
-                                                    {getStepContent(activeStep)}
+                                                    {
+                                                        getStepContent(activeStep)
+                                                    }
                                                 </form>
                                                 <Box component="div" align={'right'} mt={5}>
                                                     <Button disabled={!isValid || activeStep === 0}

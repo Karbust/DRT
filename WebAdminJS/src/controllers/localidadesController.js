@@ -1,25 +1,26 @@
 let Localidades = require('../models/Localidades'),
-  sequelize = require('../config/database'),
-  config = require('../config/config');
+    sequelize = require('../config/database'),
+    config = require('../config/config')
 
 const controllers = {}
 sequelize.sync()
 
 controllers.list = async (req, res) => {
-  const data = await Localidades.findAll({
-    where: {
-      ATIVO: true
-    },
-    order: [
-      ['LOCALIDADE', 'ASC']
-    ]
-  }).then(function(data){
-    return data;
-  }).catch(error => {
-    return error;
-  });
-
-  res.json({success : true, data : data});
+    await Localidades.findAll({
+        where: {
+            ATIVO: true,
+        },
+        order: [
+            ['LOCALIDADE', 'ASC'],
+        ],
+    }).then(function(data) {
+        return res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(error => {
+        return res.json({ success: false })
+    })
 }
 
-module.exports = controllers;
+module.exports = controllers

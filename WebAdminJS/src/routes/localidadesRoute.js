@@ -4,6 +4,6 @@ let express = require('express'),
 
 //importar os controladores
 const localidadesController = require('../controllers/localidadesController')
-router.get('/list', middleware.checkToken, localidadesController.list);
+router.get('/list', /*middleware.checkToken,*/ localidadesController.list);
 
 module.exports = router;

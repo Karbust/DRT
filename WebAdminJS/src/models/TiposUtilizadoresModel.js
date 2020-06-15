@@ -1,5 +1,6 @@
-var Sequelize = require('sequelize');
-var sequelize = require('../config/database');
+let Sequelize = require('sequelize'),
+    sequelize = require('../config/database'),
+    fs = require('fs')
 
 var TiposUtilizadoresModel = sequelize.define('TIPOS_UTILIZADORES',{
     NR_TIPO_UTILIZADOR:{
@@ -7,10 +8,20 @@ var TiposUtilizadoresModel = sequelize.define('TIPOS_UTILIZADORES',{
         primaryKey: true,
         autoIncrement: true,
     },
-    DESCRICAO: Sequelize.STRING
+    DESCRICAO: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
 },{
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
     timestamps: false,
-});
+})
 
-module.exports = TiposUtilizadoresModel;
+let ficheiro = JSON.parse(fs.readFileSync(__dirname + '/../tipos_utilizadores.json', {
+    encoding: 'utf8',
+    flag: 'r',
+}))
+
+TiposUtilizadoresModel.sync().then(() => TiposUtilizadoresModel.bulkCreate(ficheiro), { ignoreDuplicates: true })
+
+module.exports = TiposUtilizadoresModel

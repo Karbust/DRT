@@ -5,16 +5,18 @@ import {
     Box,
     Grid,
     MenuItem,
-    TextField
+    TextField,
 } from '@material-ui/core'
-import { ThemeProvider } from '@material-ui/styles'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment'
+import validator from 'validator'
+import { validateNCC, validateNSS, validateNIF } from './functions'
 
-// eslint-disable-next-line react/prop-types
-export const FormDadosPessoais = ({ classes }) => {
-    const { setFieldValue } = useFormikContext()
+export const FormDadosPessoais = ({
+    classes, nacionalidades
+}) => {
+    const { setFieldValue, validateField } = useFormikContext()
 
     return (
         <Box ml={10} mr={10}>
@@ -27,12 +29,12 @@ export const FormDadosPessoais = ({ classes }) => {
                                 type="text"
                                 label="Nome Completo"
                                 placeholder={'Nome Completo'}
-                                variant="outlined" className={classes.textField}
+                                variant="outlined"
+                                className={classes.textField}
                                 error={Boolean(errors.nome)}
                                 helperText={errors.nome}
-                                onBlur={(event) => {
-                                    validateField(event.currentTarget.name)
-                                }}/>
+                                onBlur={(event) => validateField(event.currentTarget.name)}
+                            />
                         )}
                     </Field>
                 </Grid>
@@ -41,9 +43,11 @@ export const FormDadosPessoais = ({ classes }) => {
                         utils={MomentUtils} locale={'pt'}>
                         <Field name="datanascimento">
                             {({ field, form: { errors } }) => (
-                                <DatePicker {...field} required disableFuture fullWidth
+                                <DatePicker {...field} required disableFuture
+                                    fullWidth
                                     openTo="year"
-                                    id="datanascimento" format="YYYY-MM-DD"
+                                    id="datanascimento"
+                                    format="YYYY-MM-DD"
                                     label="Data de Nascimento"
                                     views={['year', 'month', 'date']}
                                     placeholder={'Data de Nascimento'}
@@ -59,7 +63,8 @@ export const FormDadosPessoais = ({ classes }) => {
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field name="genero">
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="genero" select
+                            <TextField {...field} required fullWidth id="genero"
+                                select
                                 label="Género"
                                 placeholder={'Género'} variant="outlined"
                                 className={classes.textField}>
@@ -72,62 +77,80 @@ export const FormDadosPessoais = ({ classes }) => {
                 </Grid>
 
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="ncc">
+                    <Field name="ncc"
+                        validate={(ncc) => validateNCC(ncc) ? undefined : 'NCC inválido'}>
                         {({ field, form: { errors } }) => (
                             <TextField {...field} required fullWidth id="ncc"
                                 type="text"
                                 label="Número do Cartão de Cidadão"
                                 placeholder={'Número do Cartão de Cidadão'}
                                 variant="outlined"
-                                className={classes.textField}/>
+                                className={classes.textField}
+                                error={Boolean(errors.ncc)}
+                                onBlur={(event) => validateField(event.currentTarget.name)}
+                                onChange={(event) => setFieldValue(event.currentTarget.name, event.target.value.toUpperCase())}
+                            />
                         )}
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="nss">
+                    <Field name="nss"
+                        validate={(nss) => validateNSS(nss) ? undefined : 'NSS inválido'}>
                         {({ field, form: { errors } }) => (
                             <TextField {...field} required fullWidth id="nss"
                                 type="text"
                                 label="Número da Segurança Social"
                                 placeholder={'Número da Segurança Social'}
                                 variant="outlined"
-                                className={classes.textField}/>
+                                className={classes.textField}
+                                error={Boolean(errors.nss)}
+                                onBlur={(event) => validateField(event.currentTarget.name)}
+                            />
                         )}
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="nif">
+                    <Field name="nif"
+                        validate={(nif) => validateNIF(nif) ? undefined : 'NIF Inválido'}>
                         {({ field, form: { errors } }) => (
                             <TextField {...field} required fullWidth id="nif"
                                 type="text"
                                 label="Número de Identificação Fiscal"
                                 placeholder={'Número de Identificação Fiscal'}
                                 variant="outlined"
-                                className={classes.textField}/>
+                                className={classes.textField}
+                                error={Boolean(errors.nif)}
+                                onBlur={(event) => validateField(event.currentTarget.name)}
+                            />
                         )}
                     </Field>
                 </Grid>
 
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field name="telemovel"
-                        validate={(telemovel) => telemovel.length !== 0 ? undefined : 'Telemóvel inválido'}>
+                        validate={(telemovel) => validator.isMobilePhone(telemovel, 'pt-PT') ? undefined : 'Telemóvel inválido'}>
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="telemovel"
+                            <TextField {...field} required fullWidth
+                                id="telemovel"
                                 type="text"
-                                label="Telemóvel" placeholder={'Telemóvel'}
+                                label="Telemóvel"
+                                placeholder={'Telemóvel'}
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.telemovel)}
-                                helperText={errors.telemovel}/>
+                                onBlur={(event) => validateField(event.currentTarget.name)}
+                            />
                         )}
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field name="telefone">
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} fullWidth id="telefone" type="text"
+                            <TextField {...field} fullWidth id="telefone"
+                                type="text"
                                 label="Telefone"
-                                placeholder={'Telefone'} variant="outlined"
+                                placeholder={'Telefone'}
+                                variant="outlined"
                                 className={classes.textField}/>
                         )}
                     </Field>
@@ -135,12 +158,23 @@ export const FormDadosPessoais = ({ classes }) => {
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field name="nacionalidade">
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="nacionalidade"
-                                type="text"
+                            <TextField {...field} required fullWidth
+                                id="nacionalidade" select
                                 label="Nacionalidade"
                                 placeholder={'Nacionalidade'}
                                 variant="outlined"
-                                className={classes.textField}/>
+                                className={classes.textField}
+                                onChange={(event) => {
+                                    setFieldValue('nacionalidade', event.target.value)
+                                }}
+                            >
+                                {
+                                    nacionalidades.map((size, key) => (
+                                        <MenuItem key={key}
+                                            value={size.NR_PAIS}>{size.NOME}</MenuItem>
+                                    ))
+                                }
+                            </TextField>
                         )}
                     </Field>
                 </Grid>
@@ -158,7 +192,8 @@ export const FormDadosPessoais = ({ classes }) => {
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field name="codpostal">
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="codpostal"
+                            <TextField {...field} required fullWidth
+                                id="codpostal"
                                 type="text"
                                 label="Código Postal"
                                 placeholder={'Código Postal'}
@@ -170,9 +205,11 @@ export const FormDadosPessoais = ({ classes }) => {
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field name="localidade">
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="localidade"
+                            <TextField {...field} required fullWidth
+                                id="localidade"
                                 type="text"
-                                label="Localidade" placeholder={'Localidade'}
+                                label="Localidade"
+                                placeholder={'Localidade'}
                                 variant="outlined"
                                 className={classes.textField}/>
                         )}
