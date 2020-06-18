@@ -16,7 +16,6 @@ import {
     TableHead,
     TableRow,
     Paper,
-    Button,
     TablePagination,
     TableFooter,
     IconButton,
@@ -27,7 +26,6 @@ import {
 import { Link as RouterLink } from 'react-router-dom'
 import { useStyles } from '../components/MuiStyles'
 import moment from 'moment'
-import { useConfirm } from 'material-ui-confirm'
 
 function TablePaginationActions(props) {
     const classes = useStyles()
