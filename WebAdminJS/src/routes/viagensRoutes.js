@@ -4,6 +4,9 @@ let express = require('express'),
 
 const viagensController = require('../controllers/viagensController')
 
-router.post('/testes', viagensController.testes);
+router.post('/historicoviagens', middleware.checkToken, viagensController.historicoViagens);
+router.post('/registopedidoviagem', middleware.checkToken, viagensController.registoPedidoViagem);
+router.get('/pedidosviagem', middleware.checkToken, viagensController.pedidoViagem);
+router.post('/classificacaoviagem', middleware.checkToken, viagensController.classificacaoViagem);
 
 module.exports = router;

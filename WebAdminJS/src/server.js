@@ -1,8 +1,15 @@
 let express = require('express'),
     router = express.Router(),
     cors = require('cors'),
-    bodyParser = require('body-parser');
-    jwt = require('./middleware/jwt');
+    sequelize = require('./config/database'),
+    bodyParser = require('body-parser'),
+    Utilizadores = require('./models/utilizadoresModel'),
+    Validacoes = require('./models/Validacoes'),
+    Verificacoes = require('./models/Verificacoes')
+
+/*Utilizadores.hasMany(Validacoes)
+Validacoes.belongsTo(Utilizadores)*/
+
 
 const app = express();
 const port = process.env.PORT || 5000;

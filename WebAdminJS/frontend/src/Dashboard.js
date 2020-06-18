@@ -3,7 +3,7 @@ import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-    faUserTie, faUserPlus, faUserCheck, faUsers, faUserCog, faHeadset, faUserShield
+    faUserTie, faUserPlus, faUserCheck, faUsers, faUserCog, faHeadset, faUserShield, faUserTimes
 } from '@fortawesome/free-solid-svg-icons'
 import {
     useTheme,
@@ -22,14 +22,15 @@ import {
 } from '@material-ui/core'
 import {
     Menu,
+    History,
     ChevronLeft,
     ChevronRight,
+    Map,
     MapTwoTone,
-    Person,
+    MapOutlined,
     DirectionsCar,
     NearMe,
     ExitToApp,
-    PeopleAlt,
     ExpandLess,
     ExpandMore
 } from '@material-ui/icons'
@@ -41,7 +42,10 @@ import RegistarVeiculo from './views_dashboard/RegistarVeiculo'
 import RegistarViagem from './views_dashboard/RegistarViagem'
 import DashboardView from './views_dashboard/DashboardView'
 import ValidarRegistos from './views_dashboard/ValidarRegistos'
+import PedidosViagem from './views_dashboard/PedidosViagem'
+import HistoricoViagens from './views_dashboard/HistoricoViagens'
 import clsx from 'clsx'
+import RegistosNaoValidados from './views_dashboard/RegistosNaoValidados'
 
 export default function Dashboard () {
     const theme = useTheme()
@@ -124,20 +128,25 @@ export default function Dashboard () {
                             <List component="div" disablePadding>
                                 <ListItem button key="Registar Viagem" component={NavLink} className={classes.nested}
                                     to={`${url}/Viagens/RegistarViagem`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
-                                    <ListItemIcon><MapTwoTone/></ListItemIcon>
+                                    <ListItemIcon><MapOutlined/></ListItemIcon>
                                     <ListItemText primary="Registar Viagem"/>
                                 </ListItem>
                                 <ListItem button key="Pedidos de Viagem" component={NavLink} className={classes.nested}
                                     to={`${url}/Viagens/PedidosViagem`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
-                                    <ListItemIcon><MapTwoTone/></ListItemIcon>
+                                    <ListItemIcon><Map/></ListItemIcon>
                                     <ListItemText primary="Pedidos Viagem"/>
+                                </ListItem>
+                                <ListItem button key="Histórico Viagens" component={NavLink} className={classes.nested}
+                                    to={`${url}/Viagens/HistoricoViagens`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
+                                    <ListItemIcon><History/></ListItemIcon>
+                                    <ListItemText primary="Histórico Viagens"/>
                                 </ListItem>
                             </List>
                         </Collapse>
 
                         <ListItem button onClick={handleClickUsers}>
                             <ListItemIcon>
-                                <Icon component={FontAwesomeIcon} icon={faUsers} fontSize='small'/>
+                                <Icon component={FontAwesomeIcon} icon={faUsers}/>
                             </ListItemIcon>
                             <ListItemText primary="Utilizadores" />
                             {openNestedUsers ? <ExpandLess /> : <ExpandMore />}
@@ -149,6 +158,12 @@ export default function Dashboard () {
                                     exact>
                                     <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserCheck} fontSize='small'/></ListItemIcon>
                                     <ListItemText primary="Validar Registo Cliente"/>
+                                </ListItem>
+                                <ListItem button key="Registos Não Validados" component={NavLink} className={classes.nested}
+                                    to={`${url}/Utilizadores/RegistosNaoValidados`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                    exact>
+                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserTimes} fontSize='small'/></ListItemIcon>
+                                    <ListItemText primary="Registos Não Validados"/>
                                 </ListItem>
                                 <ListItem button key="Registar Cliente" component={NavLink} className={classes.nested}
                                     to={`${url}/Utilizadores/RegistarCliente`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
@@ -208,10 +223,12 @@ export default function Dashboard () {
 
                         <Route exact path={`${path}/Viagens`} component={DashboardView}/>
                         <Route exact path={`${path}/Viagens/RegistarViagem`} component={RegistarViagem}/>
-                        <Route exact path={`${path}/Viagens/PedidosViagem`} component={DashboardView}/>
+                        <Route exact path={`${path}/Viagens/PedidosViagem`} component={PedidosViagem}/>
+                        <Route exact path={`${path}/Viagens/HistoricoViagens`} component={HistoricoViagens}/>
 
                         <Route exact path={`${path}/Utilizadores`} component={DashboardView}/>
                         <Route exact path={`${path}/Utilizadores/ValidarRegistoCliente`} component={ValidarRegistos}/>
+                        <Route exact path={`${path}/Utilizadores/RegistosNaoValidados`} component={RegistosNaoValidados}/>
                         <Route exact path={`${path}/Utilizadores/RegistarCliente`} component={RegistarCliente}/>
                         <Route exact path={`${path}/Utilizadores/RegistarMotorista`} component={RegistarMotorista}/>
                         <Route exact path={`${path}/Utilizadores/RegistarAdministrador`} component={RegistarCliente}/>

@@ -5,11 +5,16 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { muiTheme } from './components/MuiStyles'
 import ThemeProvider from '@material-ui/styles/ThemeProvider'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { ConfirmProvider } from 'material-ui-confirm'
 
 ReactDOM.render(
     <React.Fragment>
         <ThemeProvider theme={muiTheme}>
-            <App />
+            <CssBaseline />
+            <ConfirmProvider>
+                <App />
+            </ConfirmProvider>
         </ThemeProvider>
     </React.Fragment>,
     document.getElementById('root')

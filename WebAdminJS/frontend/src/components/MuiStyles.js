@@ -18,6 +18,17 @@ export const muiTheme = createMuiTheme({
         },
     },
     overrides: {
+        MuiCssBaseline: {
+            '@global': {
+                '*': {
+                    'scrollbar-width': 'thin',
+                },
+                '*::-webkit-scrollbar': {
+                    width: '0px',
+                    height: '0px',
+                }
+            }
+        },
         MuiListItem: {
             '&.Mui-selected': {
                 backgroundColor: amber['A400']
@@ -183,6 +194,41 @@ export const useStyles = makeStyles((theme) => ({
         display: 'none',
         visibility: 'hidden'
     },
+
+    TablePagination: {
+        flexShrink: 0,
+        marginLeft: theme.spacing(2.5),
+    },
+
+    GridListRoot: {
+        width: '100%',
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
+    },
+    GridList: {
+        transform: 'translateZ(0)',
+    },
+    GridListTitle: {
+        color: theme.palette.primary.light,
+    },
+    GridListTitleBar: {
+        background:
+            'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+    },
+
+    imagemDialogAppBar: {
+        position: 'relative',
+    },
+
+    toolbarImagem: theme.mixins.toolbar,
+
+    inputPosition: {
+        width: '100%',
+        position: 'relative'
+    }
 }))
 
 export const GoldCheckbox = withStyles({

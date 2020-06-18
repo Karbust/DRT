@@ -45,11 +45,11 @@ export const FormRegistarViagem = ({
     }, [setFieldValue, distDur.distanciaValue])
 
     useEffect(() => {
-        if (values.ncc.length === 5 && values.ncc !== prefix) {
+        if (values.nrcliente.length === 5 && values.nrcliente !== prefix) {
             setLoading(true)
-            setPrefix(values.ncc)
+            setPrefix(values.nrcliente)
             axios
-                .post(backendUrl + 'user/listarncc', { cc: values.ncc }, { headers: authHeader() })
+                .post(backendUrl + 'user/listarncc', { cc: values.nrcliente }, { headers: authHeader() })
                 .then(res => {
                     if (res.data.success) {
                         setLoading(false)
@@ -57,7 +57,7 @@ export const FormRegistarViagem = ({
                     }
                 })
         }
-    }, [values.ncc, prefix])
+    }, [values.nrcliente, prefix])
 
     return (
         <Box mb={2}>
@@ -278,52 +278,16 @@ export const FormRegistarViagem = ({
                     </MuiPickersUtilsProvider>
                 </Grid>
                 <Grid item md={6} sm={12} xs={12}>
-                    <Field name="ncc"
-                        validate={(ncc) => validateNCC(ncc) ? undefined : 'NCC inválido'}>
+                    <Field name="nrcliente"
+                        validate={(nrcliente) => nrcliente ? undefined : 'Campo obrigatório'}>
                         {({ field, form: { errors } }) => (
-                            <Autocomplete
-                                id="ncc"
-                                options={numerosccs}
-                                getOptionLabel={option => {
-                                    if (!option.N_CC) {
-                                        return ''
-                                    }
-                                    return option.N_CC
-                                }}
-                                loading={loading}
-                                loadingText={'A procurar...'}
-                                noOptionsText={values.ncc.length < 5 ? 'Insira mais de 3 carateres...' : 'Não foram encontrados resultados.'}
-                                renderInput={(params) =>
-                                    <TextField {...field} {...params} required
-                                        label="Número Cartão de Cidadão"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        error={Boolean(errors.ncc)}
-                                        onBlur={(event) => validateField(event.currentTarget.name)}
-                                    />
-                                }
-                                onInputChange={(event, newValue, reason) => {
-                                    if (reason === 'input') {
-                                        if (newValue.length < 5) {
-                                            setNumeroscc([])
-                                            setPrefix('')
-                                        }
-                                        setFieldValue('ncc', newValue)
-                                    } else if (reason === 'reset') {
-                                        setNumeroscc([])
-                                        setPrefix('')
-                                        setFieldValue('ncc', '')
-                                    }
-                                }}
-                                filterOptions={filterOptions}
-                                onChange={(event, newValue, reason) => {
-                                    if (reason === 'select-option') {
-                                        setFieldValue('ncc', newValue.N_CC)
-                                    } else if (reason === 'clear') {
-                                        setNumeroscc([])
-                                        setFieldValue('ncc', '')
-                                    }
-                                }}
+                            <TextField {...field} required fullWidth
+                                label="Número Cliente"
+                                variant="outlined"
+                                className={classes.textField}
+                                error={Boolean(errors.nrcliente)}
+                                helperText={errors.nrcliente}
+                                onBlur={(event) => validateField(event.currentTarget.name)}
                             />
                         )}
                     </Field>

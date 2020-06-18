@@ -105,7 +105,7 @@ export default function RegistarViagem() {
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
                         <Typography variant={'h4'}>
-                            RegistarViagem
+                            Registar Viagem
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
@@ -119,7 +119,7 @@ export default function RegistarViagem() {
                                 </Link>
                                 <Link color="textPrimary" component={RouterLink}
                                     to='/Dashboard/RegistarViagem'
-                                    aria-current="page">RegistarViagem</Link>
+                                    aria-current="page">Registar Viagem</Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
@@ -138,7 +138,7 @@ export default function RegistarViagem() {
                                     motivo: '',
                                     datahora_ida: null,
                                     datahora_volta: null,
-                                    ncc: '',
+                                    nrcliente: '',
                                     motorista: 0,
                                     observacoes: '',
                                     distancia: 0,

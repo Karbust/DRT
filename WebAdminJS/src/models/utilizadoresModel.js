@@ -9,6 +9,7 @@ var UtilizadoresModel = sequelize.define('UTILIZADORES', {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        initialAutoIncrement: '10000'
     },
     NOME_UTILIZADOR: {
         type: Sequelize.STRING,
@@ -84,10 +85,6 @@ var UtilizadoresModel = sequelize.define('UTILIZADORES', {
             key: 'NR_TIPO_UTILIZADOR',
         },
     },
-    DATA_CRIACAO_CONTA: {
-        type: Sequelize.DATE,
-        allowNull: false,
-    },
     EMAIL: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -105,10 +102,23 @@ var UtilizadoresModel = sequelize.define('UTILIZADORES', {
     VALIDADO: {
         type: Sequelize.BOOLEAN,
         allowNull: false
-    }
+    },
+    VERIFICADO: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false
+    },
+    TOKEN: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    DATA_ENVIO_MAIL: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
 }, {
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
-    timestamps: false,
+    paranoid: true,
+    timestamps: true,
     hooks: {
         beforeCreate: (user, options) => {
             return bcrypt.hash(user.PASSWORD, 10)
@@ -121,6 +131,5 @@ var UtilizadoresModel = sequelize.define('UTILIZADORES', {
         },
     },
 })
-
 
 module.exports = UtilizadoresModel

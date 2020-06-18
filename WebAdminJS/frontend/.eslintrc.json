@@ -72,10 +72,7 @@
             "warn",
             "as-needed"
         ],
-        "multiline-ternary": [
-            "error",
-            "always-multiline"
-        ],
+        "multiline-ternary": "off",
         "object-curly-newline": [
             "error",
             {
