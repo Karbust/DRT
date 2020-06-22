@@ -32,6 +32,7 @@ export const FormDocumentos = () => {
                             showPreviews={true}
                             showFileNamesInPreview={true}
                             showPreviewsInDropzone={false}
+                            showAlerts={true}
                             useChipsForPreview={true}
                             previewText={'Ficheiros:'}
                             onChange={(file) => {

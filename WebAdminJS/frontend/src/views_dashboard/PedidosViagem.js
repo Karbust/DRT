@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import PropTypes from 'prop-types'
 import { backendUrl } from '../configs'
 import authHeader from '../components/auth-header'
 import {
@@ -19,88 +18,110 @@ import {
     Button,
     TablePagination,
     TableFooter,
-    IconButton,
+    Chip,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    CircularProgress,
+    useMediaQuery, Slide, Snackbar,
 } from '@material-ui/core'
 import {
-    NavigateNext, FirstPage, LastPage, KeyboardArrowRight, KeyboardArrowLeft,
+    NavigateNext,
 } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
-import { useStyles } from '../components/MuiStyles'
+import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
 import moment from 'moment'
 import { useConfirm } from 'material-ui-confirm'
-
-function TablePaginationActions(props) {
-    const classes = useStyles()
-    const theme = useTheme()
-    const { count, page, rowsPerPage, onChangePage } = props
-
-    const handleFirstPageButtonClick = (event) => {
-        onChangePage(event, 0)
-    }
-
-    const handleBackButtonClick = (event) => {
-        onChangePage(event, page - 1)
-    }
-
-    const handleNextButtonClick = (event) => {
-        onChangePage(event, page + 1)
-    }
-
-    const handleLastPageButtonClick = (event) => {
-        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
-    }
-
-    return (
-        <div className={classes.TablePagination}>
-            <IconButton
-                onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
-                aria-label="first page"
-            >
-                {theme.direction === 'rtl' ? <LastPage/> : <FirstPage/>}
-            </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0}
-                aria-label="previous page">
-                {theme.direction === 'rtl' ? <KeyboardArrowRight/> :
-                    <KeyboardArrowLeft/>}
-            </IconButton>
-            <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft/> :
-                    <KeyboardArrowRight/>}
-            </IconButton>
-            <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
-            >
-                {theme.direction === 'rtl' ? <FirstPage/> : <LastPage/>}
-            </IconButton>
-        </div>
-    )
-}
-
-TablePaginationActions.propTypes = {
-    count: PropTypes.number.isRequired,
-    onChangePage: PropTypes.func.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-}
+import { Formik } from 'formik'
+import { FormPedidosViagem } from '../components/formPedidosViagem'
+import { Alert } from '@material-ui/lab'
 
 export default function PedidosViagem() {
     const classes = useStyles()
     const theme = useTheme()
-    const confirm = useConfirm()
 
+    const [localidades, setLocalidades] = useState([])
+    const [motoristas, setMotoristas] = useState([])
     const [viagens, setViagens] = useState([])
-    const [currentViagem, setCurrentViagem] = useState({ user: [], key: null })
-    const [isSubmittingDelete, setIsSubmittingDelete] = useState(false)
+    const [currentViagem, setCurrentViagem] = useState({ viagem: [], key: null })
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(10)
     const [update, setUpdate] = React.useState(false)
+    const [open, setOpen] = React.useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [message, setMessage] = useState('')
+    const [severidade, setSeveridade] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
+    const handleClickOpen = (key) => {
+        console.log(viagens[key])
+        setCurrentViagem({ viagem: viagens[key], key: key })
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpenAlert(false)
+    }
+
+    const onFormikSubmit= (values, formikActions) => {
+        console.log(values)
+        /*setCurrentViagem({ user: viagens[key], key: key })
+        setIsSubmitting(true)
+        axios
+            .post(backendUrl + 'user/verificarconta', { viagem: currentViagem.NR_VIAGEM }, { headers: authHeader() })
+            .then(res => {
+                if (res.data.success) {
+                    viagens[key].VERIFICADO = true
+                    setIsSubmitting(false)
+                }
+            })*/
+    }
+
+    useEffect(() => {
+        axios
+            .get(backendUrl + 'api/localidades', { headers: authHeader() })
+            .then(res => {
+                if (res.data.success) {
+                    setLocalidades(res.data.data)
+                } else {
+                    setMessage('Ocorreu um erro ao obter a lista de localidades.')
+                    setSeveridade('error')
+                    setOpenAlert(true)
+                }
+            })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao obter a lista de localidades ao servidor.')
+                setSeveridade('error')
+                setOpenAlert(true)
+            })
+        axios
+            .get(backendUrl + 'user/motoristas', { headers: authHeader() })
+            .then(res => {
+                if (res.data.success) {
+                    setMotoristas(res.data.data)
+                } else {
+                    setMessage('Ocorreu um erro ao pedir a lista de motoristas.')
+                    setSeveridade('error')
+                    setOpenAlert(true)
+                }
+            })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao pedir a lista de motoristas ao servidor.')
+                setSeveridade('error')
+                setOpenAlert(true)
+            })
+    }, [])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
@@ -110,33 +131,6 @@ export default function PedidosViagem() {
         setPage(0)
     }
 
-    const handleClickApagar = (key) => {
-        setCurrentViagem({ user: viagens[key], key: key })
-        setIsSubmittingDelete(true)
-        confirm({
-            title: 'Apagar',
-            description: 'Apagar a conta vai fazer com que seja permanentemente removida da base de dados. Deseja continuar?',
-            confirmationText: 'Apagar',
-            confirmationButtonProps: {
-                variant: 'outlined',
-                disabled: isSubmittingDelete
-            },
-            cancellationText: 'Cancelar',
-            cancellationButtonProps: {
-                variant: 'outlined',
-            },
-        }).then(() => {
-            axios
-                .post(backendUrl + 'user/apagarregistonaovalidado', { user: currentViagem.user.NR_UTILIZADOR }, { headers: authHeader() })
-                .then(res => {
-                    if (res.data.success) {
-                        setIsSubmittingDelete(false)
-                        setUpdate(true)
-                    }
-                })
-        })
-    }
-
     useEffect(() => {
         axios
             .get(backendUrl + 'viagens/pedidosviagem', { headers: authHeader() })
@@ -144,13 +138,29 @@ export default function PedidosViagem() {
                 if (res.data.success) {
                     setViagens(res.data.data)
                     setUpdate(false)
+                } else {
+                    setMessage('Ocorreu um erro ao obter a lista de viagens.')
+                    setSeveridade('error')
+                    setOpenAlert(true)
                 }
+            })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao pedir a lista de viagens ao servidor.')
+                setSeveridade('error')
+                setOpenAlert(true)
             })
     }, [update])
 
     return (
         <>
             <div className={classes.root}>
+                <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}
+                    TransitionComponent={Slide}>
+                    <Alert onClose={handleCloseAlert} severity={severidade}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
                         <Typography variant={'h4'}>
@@ -173,6 +183,77 @@ export default function PedidosViagem() {
                         </Typography>
                     </Box>
                 </Box>
+                <Dialog
+                    fullScreen={fullScreen}
+                    fullWidth={true}
+                    maxWidth="md"
+                    open={open}
+                    scroll="paper"
+                    TransitionComponent={Transition}
+                    onClose={handleClose}
+                    aria-labelledby="responsive-dialog-title"
+                >
+                    <DialogTitle id="responsive-dialog-title">Validação de Conta de Utilizador</DialogTitle>
+
+                    <Formik
+                        onSubmit={onFormikSubmit}
+                        validateOnBlur={false}
+                        validateOnChange={false}
+                        initialValues={{
+                            origem: currentViagem.viagem.ORIGEM,
+                            destino: currentViagem.viagem.DESTINO,
+                            passageiros: currentViagem.viagem.PASSAGEIROS,
+                            motivo: currentViagem.viagem.MOTIVO,
+                            datahora_ida: currentViagem.viagem.DATAHORA_IDA,
+                            datahora_volta: currentViagem.viagem.DATAHORA_VOLTA,
+                            nrcliente: currentViagem.viagem.NR_CLIENTE_PEDIDO,
+                            observacoes: currentViagem.viagem.OBSERVACOES,
+                            distancia: currentViagem.viagem.DISTANCIA,
+                            duracao: currentViagem.viagem.DURACAO,
+                            custo: currentViagem.viagem.CUSTO || '',
+                            motorista: currentViagem.viagem.MOTORISTA,
+                        }}
+                    >
+                        {({
+                            submitForm,
+                            isValid,
+                            errors: formErrors,
+                        }) => {
+                            return (
+                                <>
+                                    <DialogContent dividers>
+                                        <form onSubmit={(event) => {
+                                            event.preventDefault()
+                                            submitForm()
+                                        }}>
+                                            <FormPedidosViagem
+                                                localidades={localidades}
+                                                motoristas={motoristas}
+                                                currentViagem={currentViagem}
+                                            />
+                                        </form>
+                                    </DialogContent>
+                                    <DialogActions>
+                                        <Button onClick={handleClose}
+                                            variant="outlined" color="primary"
+                                            disabled={isSubmitting}
+                                        >
+                                            Cancelar
+                                        </Button>
+                                        <StyledButton onClick={submitForm} color="primary"
+                                            style={{ width: '115px' }}
+                                            disabled={!isValid || isSubmitting}
+                                        >
+                                            {isSubmitting && (
+                                                <CircularProgress color={'inherit'}/>)}
+                                            {!isSubmitting && 'Guardar'}
+                                        </StyledButton>
+                                    </DialogActions>
+                                </>
+                            )
+                        }}
+                    </Formik>
+                </Dialog>
                 <Box mb={2}>
                     <TableContainer component={Paper}>
                         <Table className={classes.root}
@@ -180,7 +261,7 @@ export default function PedidosViagem() {
                         >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Número de Viagem</TableCell>
+                                    <TableCell># Viagem</TableCell>
                                     <TableCell>Origem</TableCell>
                                     <TableCell>Destino</TableCell>
                                     <TableCell>Data/Hora Ida</TableCell>
@@ -203,25 +284,31 @@ export default function PedidosViagem() {
                                         <TableCell component="th" scope="row">
                                             {row.NR_VIAGEM_PEDIDO}
                                         </TableCell>
-                                        <TableCell>{row.ORIGEM}</TableCell>
-                                        <TableCell>{row.DESTINO}</TableCell>
+                                        <TableCell>{row.Origem.LOCALIDADE}</TableCell>
+                                        <TableCell>{row.Destino.LOCALIDADE}</TableCell>
                                         <TableCell>{moment(row.DATAHORA_IDA).format('YYYY-MM-DD HH:mm')}</TableCell>
-                                        <TableCell>{moment(row.DATAHORA_VOLTA).format('YYYY-MM-DD HH:mm')}</TableCell>
+                                        <TableCell>{!row.DATAHORA_VOLTA ? '-' : moment(row.DATAHORA_VOLTA).format('YYYY-MM-DD HH:mm')}</TableCell>
                                         <TableCell>{row.PASSAGEIROS}</TableCell>
-                                        <TableCell>{row.MOTIVO}</TableCell>
-                                        <TableCell>{(row.DISTANCIA/1000).toFixed(2)}</TableCell>
-                                        <TableCell>{row.CUSTO}</TableCell>
-                                        <TableCell>{row.MOTORISTA}</TableCell>
-                                        <TableCell>{row.ESTADO}</TableCell>
                                         <TableCell>
-
+                                            { row.MOTIVO === 'L' && 'LAZER' }
+                                            { row.MOTIVO === 'T' && 'TRABALHO' }
+                                            { row.MOTIVO === 'SNU' && 'SAÚDE NÃO URGENTE' }
+                                        </TableCell>
+                                        <TableCell>{(row.DISTANCIA/1000).toFixed(2)} Km</TableCell>
+                                        <TableCell>{!row.CUSTO ? '-' : row.CUSTO }</TableCell>
+                                        <TableCell>{!row.MOTORISTA ? '-' : row.MOTORISTA}</TableCell>
+                                        <TableCell>
+                                            {row.ESTADO === 'PEDIDO' && <Chip style={{ backgroundColor: theme.palette.info.main }} size="small" label={row.ESTADO} />}
+                                            {row.ESTADO === 'PENDENTE' && <Chip style={{ backgroundColor: theme.palette.info2.main }}  size="small" label={row.ESTADO} />}
+                                        </TableCell>
+                                        <TableCell>
                                             <Button variant="contained"
                                                 color="primary"
                                                 disableElevation
-                                                onClick={() => handleClickApagar(key)}
+                                                onClick={() => handleClickOpen(key)}
                                                 style={{ marginRight: theme.spacing(3) }}
                                             >
-                                                Apagar
+                                                EDITAR
                                             </Button>
                                         </TableCell>
 
@@ -235,7 +322,7 @@ export default function PedidosViagem() {
                                             label: 'Todos',
                                             value: -1,
                                         }]}
-                                        colSpan={5}
+                                        colSpan={12}
                                         count={viagens.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}

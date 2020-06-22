@@ -1,7 +1,8 @@
 var Sequelize = require('sequelize'),
     sequelize = require('../config/database'),
     Localidades = require('./Localidades'),
-    Utilizadores = require('./utilizadoresModel')
+    Utilizadores = require('./Utilizadores'),
+    { Viaturas } = require('./Viaturas')
 
 var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
     NR_VIAGEM_PEDIDO: {
@@ -39,7 +40,7 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
     },
     DATAHORA_VOLTA: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
     },
     NR_CLIENTE_PEDIDO: {
         type: Sequelize.INTEGER,
@@ -57,6 +58,10 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
+    DURACAO: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
     CUSTO: {
         type: Sequelize.DECIMAL(10,2),
         allowNull: true
@@ -67,6 +72,14 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
         references: {
             model: Utilizadores,
             key: 'NR_UTILIZADOR',
+        },
+    },
+    VIATURA: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+            model: Viaturas,
+            key: 'NR_VIATURA',
         },
     },
     ESTADO: {

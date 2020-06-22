@@ -28,7 +28,8 @@
     },
     "parserOptions": {
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "js": true
         },
         "ecmaVersion": 11,
         "sourceType": "module"
@@ -37,7 +38,48 @@
         "import"
     ],
     "rules": {
-        "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
-        "import/prefer-default-export": "off"
+        "no-unused-vars": "warn",
+        "no-unused-expressions": "warn",
+        "object-curly-spacing": [2, "always"],
+        "semi": [2, "never"],
+        "eol-last": "error",
+        "curly": "error",
+        "no-unexpected-multiline": "warn",
+        "no-underscore-dangle": "off",
+        "sort-keys": "off",
+        "default-case": "warn",
+        "camelcase": "off",
+        "no-undef": "off",
+        "arrow-body-style": "off",
+        "no-mixed-operators": [
+            "error",
+            {
+                "allowSamePrecedence": true
+            }
+        ],
+        "quote-props": [
+            "warn",
+            "consistent"
+        ],
+        "func-names": [
+            "warn",
+            "as-needed"
+        ],
+        "multiline-ternary": "off",
+        "object-curly-newline": [
+            "error",
+            {
+                "multiline": true,
+                "minProperties": 5,
+                "consistent": true
+            }
+        ],
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ]
     }
 }

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import PropTypes from 'prop-types'
 import { backendUrl } from '../configs'
 import authHeader from '../components/auth-header'
 import {
     useTheme,
-    Slide,
     Box,
     Breadcrumbs,
     Link,
@@ -37,7 +35,7 @@ import {
     Tooltip,
 } from '@material-ui/core'
 import {
-    NavigateNext, FirstPage, LastPage, KeyboardArrowRight, KeyboardArrowLeft,
+    NavigateNext,
     Close,
 } from '@material-ui/icons'
 import {
@@ -46,74 +44,9 @@ import {
     TOUCH_ACTIVATION,
 } from 'react-image-magnifiers'
 import { Link as RouterLink } from 'react-router-dom'
-import { useStyles, StyledButton } from '../components/MuiStyles'
+import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
 import moment from 'moment'
 import { useConfirm } from 'material-ui-confirm'
-
-function TablePaginationActions(props) {
-    const classes = useStyles()
-    const theme = useTheme()
-    const { count, page, rowsPerPage, onChangePage } = props
-
-    const handleFirstPageButtonClick = (event) => {
-        onChangePage(event, 0)
-    }
-
-    const handleBackButtonClick = (event) => {
-        onChangePage(event, page - 1)
-    }
-
-    const handleNextButtonClick = (event) => {
-        onChangePage(event, page + 1)
-    }
-
-    const handleLastPageButtonClick = (event) => {
-        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
-    }
-
-    return (
-        <div className={classes.TablePagination}>
-            <IconButton
-                onClick={handleFirstPageButtonClick}
-                disabled={page === 0}
-                aria-label="first page"
-            >
-                {theme.direction === 'rtl' ? <LastPage/> : <FirstPage/>}
-            </IconButton>
-            <IconButton onClick={handleBackButtonClick} disabled={page === 0}
-                aria-label="previous page">
-                {theme.direction === 'rtl' ? <KeyboardArrowRight/> :
-                    <KeyboardArrowLeft/>}
-            </IconButton>
-            <IconButton
-                onClick={handleNextButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="next page"
-            >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft/> :
-                    <KeyboardArrowRight/>}
-            </IconButton>
-            <IconButton
-                onClick={handleLastPageButtonClick}
-                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-                aria-label="last page"
-            >
-                {theme.direction === 'rtl' ? <FirstPage/> : <LastPage/>}
-            </IconButton>
-        </div>
-    )
-}
-
-TablePaginationActions.propTypes = {
-    count: PropTypes.number.isRequired,
-    onChangePage: PropTypes.func.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-}
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />
-})
 
 export default function ValidarRegistos() {
     const classes = useStyles()

@@ -1,13 +1,23 @@
 import {
     Button,
     Checkbox,
-    createMuiTheme,
-    makeStyles,
+    createMuiTheme, IconButton,
+    makeStyles, Slide, useTheme,
     withStyles,
 } from '@material-ui/core'
-import { amber } from '@material-ui/core/colors'
+import {
+    amber, cyan, red, green, yellow, lightBlue, teal
+} from '@material-ui/core/colors'
 import { ptPT } from '@material-ui/core/locale'
 import React from 'react'
+import {
+    FirstPage,
+    KeyboardArrowLeft,
+    KeyboardArrowRight,
+    LastPage,
+} from '@material-ui/icons'
+import PropTypes from 'prop-types'
+import { borderColor } from '@material-ui/system'
 
 const drawerWidth = 280
 
@@ -16,8 +26,48 @@ export const muiTheme = createMuiTheme({
         primary: {
             main: amber.A400
         },
+        success: {
+            main: green['500'],
+        },
+        warning: {
+            main: yellow['500'],
+        },
+        error: {
+            main: red['500'],
+        },
+        info: {
+            main: lightBlue['500']
+        },
+        info2: {
+            main: teal['500']
+        },
+        info3: {
+            main: cyan['400']
+        },
     },
     overrides: {
+        MuiOutlinedInput: {
+            root: {
+                '&:hover:not($disabled):not($focused):not($error) $notchedOutline': {
+                    "borderColor": '#FFD400',
+                    // Reset on touch devices, it doesn't add specificity
+                    '@media (hover: none)': {
+                        borderColor,
+                    },
+                },
+            }
+        },
+        MuiInput: {
+            underline: {
+                '&:hover:not($disabled):not($focused):not($error):before': {
+                    "borderBottomColor": '#FFD400',
+                    // Reset on touch devices, it doesn't add specificity
+                    '@media (hover: none)': {
+                        borderColor,
+                    },
+                },
+            },
+        },
         MuiCssBaseline: {
             '@global': {
                 '*': {
@@ -41,14 +91,14 @@ export const useStyles = makeStyles((theme) => ({
     root: {
         "height": 180,
         "width": '100%',
-        '& .MuiOutlinedInput-root': {
+        /*'& .MuiOutlinedInput-root': {
             '&:hover fieldset': {
                 borderColor: '#FFD400'
             },
             '&.Mui-focused fieldset': {
                 borderColor: amber.A400
             }
-        }
+        }*/
     },
     login: {
         flexGrow: 1
@@ -80,6 +130,18 @@ export const useStyles = makeStyles((theme) => ({
         color: 'white',
         padding: '0 30px',
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)'
+    },
+    button3: {
+        background: 'linear-gradient(45deg, #FFB554 30%, #FFD400 90%)',
+        borderRadius: 3,
+        border: 0,
+        color: 'white',
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(2),
+        marginTop: theme.spacing(0),
+        width: '100%'
     },
     instructions: {
         marginTop: theme.spacing(1),
@@ -256,3 +318,68 @@ export const StyledButton = withStyles({
         textTransform: 'maximize'
     }
 })(Button)
+
+export const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />
+})
+
+export const TablePaginationActions = (props) => {
+    const classes = useStyles()
+    const theme = useTheme()
+    const { count, page, rowsPerPage, onChangePage } = props
+
+    const handleFirstPageButtonClick = (event) => {
+        onChangePage(event, 0)
+    }
+
+    const handleBackButtonClick = (event) => {
+        onChangePage(event, page - 1)
+    }
+
+    const handleNextButtonClick = (event) => {
+        onChangePage(event, page + 1)
+    }
+
+    const handleLastPageButtonClick = (event) => {
+        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1))
+    }
+
+    return (
+        <div className={classes.TablePagination}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPage/> : <FirstPage/>}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0}
+                aria-label="previous page">
+                {theme.direction === 'rtl' ? <KeyboardArrowRight/> :
+                    <KeyboardArrowLeft/>}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft/> :
+                    <KeyboardArrowRight/>}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPage/> : <LastPage/>}
+            </IconButton>
+        </div>
+    )
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+}

@@ -8,8 +8,11 @@ import {
     Stepper,
     Step,
     StepLabel,
-    CircularProgress
+    CircularProgress,
+    Snackbar,
+    Slide,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
 import 'moment/locale/pt'
@@ -32,6 +35,17 @@ export default function RegistarCliente () {
     const [activeStep, setActiveStep] = useState(0)
     const [nacionalidades, setNacionalidades] = useState([])
     const [localidades, setLocalidades] = useState([])
+    const [message, setMessage] = useState('')
+    const [severidade, setSeveridade] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpenAlert(false)
+    }
 
     const steps = getSteps()
     const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -66,11 +80,23 @@ export default function RegistarCliente () {
         }
         return axios
             .post(backendUrl + 'user/register', formData)
-            .then(() => {
-                formikActions.setSubmitting(false)
-                //setActiveStep(3)
-            }, (reason) => {
-                throw new Error('Utilizador Inválido')
+            .then((data) => {
+                if(data.data.success) {
+                    setActiveStep(3)
+                    formikActions.setSubmitting(false)
+                    formikActions.resetForm()
+                    setMessage(data.data.message)
+                    setSeveridade('success')
+                    setOpenAlert(true)
+                } else {
+                    setMessage(data.data.message)
+                    setSeveridade('error')
+                    setOpenAlert(true)
+                }
+            }).catch(() => {
+                setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                setSeveridade('error')
+                setOpenAlert(true)
             })
     }
 
@@ -101,6 +127,13 @@ export default function RegistarCliente () {
     return (
         <>
             <div className={classes.root}>
+                <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}
+                    TransitionComponent={Slide}>
+                    <Alert onClose={handleCloseAlert} severity={severidade}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
                         <Typography variant={'h4'}>
@@ -147,20 +180,20 @@ export default function RegistarCliente () {
                                     validateOnBlur={false}
                                     validateOnChange={false}
                                     initialValues={{
-                                        nome: 'teste',
-                                        datanascimento: new Date(),
-                                        genero: 'M',
-                                        ncc: '123',
-                                        nss: '123',
-                                        nif: '123',
-                                        telemovel: '123',
-                                        telefone: '123',
-                                        nacionalidade: 189,
-                                        morada: 'teste',
-                                        codpostal: 'teste',
-                                        localidade: '123',
-                                        email: 'testes@testes.pt',
-                                        utilizador: 'teste',
+                                        nome: '',
+                                        datanascimento: null,
+                                        genero: '',
+                                        ncc: '',
+                                        nss: '',
+                                        nif: '',
+                                        telemovel: '',
+                                        telefone: '',
+                                        nacionalidade: 0,
+                                        morada: '',
+                                        codpostal: '',
+                                        localidade: '',
+                                        email: '',
+                                        utilizador: '',
                                         tipo_utilizador: 7,
                                         files: null
                                     }}

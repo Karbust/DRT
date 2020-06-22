@@ -1,0 +1,1190 @@
+[
+	{
+		"NR_MARCA": 1,
+		"NOME_MODELO": "500"
+	},
+	{
+		"NR_MARCA": 2,
+		"NOME_MODELO": "Giulietta"
+	},
+	{
+		"NR_MARCA": 2,
+		"NOME_MODELO": "Giulia"
+	},
+	{
+		"NR_MARCA": 2,
+		"NOME_MODELO": "Stelvio"
+	},
+	{
+		"NR_MARCA": 3,
+		"NOME_MODELO": "A110"
+	},
+	{
+		"NR_MARCA": 4,
+		"NOME_MODELO": "Vantage"
+	},
+	{
+		"NR_MARCA": 4,
+		"NOME_MODELO": "Db11"
+	},
+	{
+		"NR_MARCA": 4,
+		"NOME_MODELO": "Dbs Superleggera"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A1"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A3 Geração 4"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A3 Geração 3"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Q2"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Q3"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A4"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Tt"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A5"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Q3-Sportback"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Q5"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A6"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A4-Allroad"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A7"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "E-Tron"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "E-Tron-Sportback"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Q7"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A6-Allroad-Quattro"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Q8"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "A8"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "Sq7"
+	},
+	{
+		"NR_MARCA": 5,
+		"NOME_MODELO": "R8"
+	},
+	{
+		"NR_MARCA": 6,
+		"NOME_MODELO": "Bentley Bentayga"
+	},
+	{
+		"NR_MARCA": 6,
+		"NOME_MODELO": "Bentley Continental Gt"
+	},
+	{
+		"NR_MARCA": 6,
+		"NOME_MODELO": "Bentley Flying Spur"
+	},
+	{
+		"NR_MARCA": 6,
+		"NOME_MODELO": "Bentley Mulsanne"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 2 Active Tourer"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 1"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 2 Gran Tourer"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 2 Geração 2"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 2 Geração 1"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X1"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X2"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "I3"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 3 Geração 7"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 4"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Z4"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 3 Geração 6"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X3"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 5"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X4"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 6"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X5"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X6"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 8"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "X7"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "Série 7"
+	},
+	{
+		"NR_MARCA": 7,
+		"NOME_MODELO": "I8"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C1"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C3"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C3-Aircross"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C4-Cactus"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "Berlingo"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C-Elysee"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C5-Aircross"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "C-Zero"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "Grand-C4-Spacetourer"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "Jumpy"
+	},
+	{
+		"NR_MARCA": 8,
+		"NOME_MODELO": "Spacetourer"
+	},
+	{
+		"NR_MARCA": 9,
+		"NOME_MODELO": "Ateca"
+	},
+	{
+		"NR_MARCA": 10,
+		"NOME_MODELO": "Sandero"
+	},
+	{
+		"NR_MARCA": 10,
+		"NOME_MODELO": "Logan-Mcv"
+	},
+	{
+		"NR_MARCA": 10,
+		"NOME_MODELO": "Logan"
+	},
+	{
+		"NR_MARCA": 10,
+		"NOME_MODELO": "Lodgy"
+	},
+	{
+		"NR_MARCA": 10,
+		"NOME_MODELO": "Duster"
+	},
+	{
+		"NR_MARCA": 10,
+		"NOME_MODELO": "Dokker"
+	},
+	{
+		"NR_MARCA": 11,
+		"NOME_MODELO": "3 Crossback"
+	},
+	{
+		"NR_MARCA": 11,
+		"NOME_MODELO": "7 Crossback"
+	},
+	{
+		"NR_MARCA": 12,
+		"NOME_MODELO": "Portofino"
+	},
+	{
+		"NR_MARCA": 12,
+		"NOME_MODELO": "488"
+	},
+	{
+		"NR_MARCA": 12,
+		"NOME_MODELO": "Gtc4"
+	},
+	{
+		"NR_MARCA": 12,
+		"NOME_MODELO": "812"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "Panda"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "500 Geração 2"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "Tipo"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "500l"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "500x"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "500l-Wagon"
+	},
+	{
+		"NR_MARCA": 13,
+		"NOME_MODELO": "500 Geração 3"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Tourneo-Courier"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Fiesta"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Ecosport"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Puma"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Focus"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Tourneo-Connect"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Kuga"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Grand-Tourneo-Connect"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Mondeo"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "S-Max"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Galaxy"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Tourneo-Custom"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Mustang"
+	},
+	{
+		"NR_MARCA": 14,
+		"NOME_MODELO": "Explorer"
+	},
+	{
+		"NR_MARCA": 15,
+		"NOME_MODELO": "Jazz"
+	},
+	{
+		"NR_MARCA": 15,
+		"NOME_MODELO": "Civic"
+	},
+	{
+		"NR_MARCA": 15,
+		"NOME_MODELO": "Hr-V"
+	},
+	{
+		"NR_MARCA": 15,
+		"NOME_MODELO": "Honda-E"
+	},
+	{
+		"NR_MARCA": 15,
+		"NOME_MODELO": "Cr-V"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "I10 Geracao 2"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "I10 Geracao 3"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "I20"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "Kauai"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "I30"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "Tucson"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "Ioniq"
+	},
+	{
+		"NR_MARCA": 16,
+		"NOME_MODELO": "Santa-Fe"
+	},
+	{
+		"NR_MARCA": 17,
+		"NOME_MODELO": "Xe Specs"
+	},
+	{
+		"NR_MARCA": 17,
+		"NOME_MODELO": "E-Pace"
+	},
+	{
+		"NR_MARCA": 17,
+		"NOME_MODELO": "Xf Specs"
+	},
+	{
+		"NR_MARCA": 17,
+		"NOME_MODELO": "F-Pace Specs"
+	},
+	{
+		"NR_MARCA": 17,
+		"NOME_MODELO": "F-Type"
+	},
+	{
+		"NR_MARCA": 17,
+		"NOME_MODELO": "I-Pace"
+	},
+	{
+		"NR_MARCA": 18,
+		"NOME_MODELO": "Renegade"
+	},
+	{
+		"NR_MARCA": 18,
+		"NOME_MODELO": "Compass"
+	},
+	{
+		"NR_MARCA": 18,
+		"NOME_MODELO": "Cherokee"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Picanto"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Rio"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Stonic"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Ceed"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Ceed-Sportswagon"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Xceed"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Proceed"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Sportage"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Niro"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Soul"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Optima"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Stinger"
+	},
+	{
+		"NR_MARCA": 19,
+		"NOME_MODELO": "Sorento"
+	},
+	{
+		"NR_MARCA": 20,
+		"NOME_MODELO": "Huracan Specs"
+	},
+	{
+		"NR_MARCA": 20,
+		"NOME_MODELO": "Urus Specs"
+	},
+	{
+		"NR_MARCA": 20,
+		"NOME_MODELO": "Aventador Specs"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Discovery-Sport"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Range-Rover-Evoque"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Range-Rover-Velar"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Defender"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Discovery"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Range-Rover-Sport"
+	},
+	{
+		"NR_MARCA": 21,
+		"NOME_MODELO": "Range-Rover"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Ct"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Ux"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Is"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Nx"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Rc"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Es"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Rx"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Lc"
+	},
+	{
+		"NR_MARCA": 22,
+		"NOME_MODELO": "Ls"
+	},
+	{
+		"NR_MARCA": 23,
+		"NOME_MODELO": "Ghibli"
+	},
+	{
+		"NR_MARCA": 23,
+		"NOME_MODELO": "Levante"
+	},
+	{
+		"NR_MARCA": 23,
+		"NOME_MODELO": "Quattroporte"
+	},
+	{
+		"NR_MARCA": 23,
+		"NOME_MODELO": "Granturismo"
+	},
+	{
+		"NR_MARCA": 23,
+		"NOME_MODELO": "Grancabrio"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Mazda2"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Mazda3"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Cx-3"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Cx-30"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Mx-5"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Cx-5"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Mx-30"
+	},
+	{
+		"NR_MARCA": 24,
+		"NOME_MODELO": "Mazda6"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-A"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-B Geração 3"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-Cla"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-B Geração 2"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Gla"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Glb"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-C"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-E"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Glc-Suv"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Glc-Coupe"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-V"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Eqc"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Gle"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Cls"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Gle-Coupe"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Amg-Gt"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Gls"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-S"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-Sl"
+	},
+	{
+		"NR_MARCA": 25,
+		"NOME_MODELO": "Classe-G"
+	},
+	{
+		"NR_MARCA": 26,
+		"NOME_MODELO": "Mini"
+	},
+	{
+		"NR_MARCA": 26,
+		"NOME_MODELO": "Clubman"
+	},
+	{
+		"NR_MARCA": 26,
+		"NOME_MODELO": "Countryman"
+	},
+	{
+		"NR_MARCA": 27,
+		"NOME_MODELO": "Space-Star"
+	},
+	{
+		"NR_MARCA": 27,
+		"NOME_MODELO": "Asx"
+	},
+	{
+		"NR_MARCA": 27,
+		"NOME_MODELO": "Eclipse-Cross"
+	},
+	{
+		"NR_MARCA": 27,
+		"NOME_MODELO": "Outlander"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "Micra"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "Juke"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "Qashqai Specs"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "X-Trail Specs"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "Leaf Specs"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "Evalia Specs"
+	},
+	{
+		"NR_MARCA": 28,
+		"NOME_MODELO": "Gt-R Specs"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Corsa"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Crossland-X"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Combo-Life"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Astra"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Grandland-X"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Insignia"
+	},
+	{
+		"NR_MARCA": 29,
+		"NOME_MODELO": "Zafira-Life"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "108"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "208"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "2008"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "308"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "Rifter"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "Ion"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "3008"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "5008"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "508 Geração 2"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "Traveller"
+	},
+	{
+		"NR_MARCA": 30,
+		"NOME_MODELO": "508 Geração 1"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "718"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "Macan"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "Cayenne"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "Cayenne-Coupe"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "Taycan"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "Panamera"
+	},
+	{
+		"NR_MARCA": 31,
+		"NOME_MODELO": "911"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Captur"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Clio Geração 4"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Clio Geração 5"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Espace"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Grand-Scenic"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Kadjar"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Kangoo"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Koleos"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Megane"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Scenic"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Talisman"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Twingo"
+	},
+	{
+		"NR_MARCA": 32,
+		"NOME_MODELO": "Zoe"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Ibiza"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Arona"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Leon Geração 4"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Leon Geração 3"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Ateca"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Tarraco"
+	},
+	{
+		"NR_MARCA": 33,
+		"NOME_MODELO": "Alhambra"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Fabia"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Kamiq"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Karoq"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Kodiaq"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Octavia"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Scala"
+	},
+	{
+		"NR_MARCA": 34,
+		"NOME_MODELO": "Superb"
+	},
+	{
+		"NR_MARCA": 35,
+		"NOME_MODELO": "Forfour"
+	},
+	{
+		"NR_MARCA": 35,
+		"NOME_MODELO": "Fortwo"
+	},
+	{
+		"NR_MARCA": 36,
+		"NOME_MODELO": "Ignis"
+	},
+	{
+		"NR_MARCA": 36,
+		"NOME_MODELO": "S-Cross"
+	},
+	{
+		"NR_MARCA": 36,
+		"NOME_MODELO": "Swift"
+	},
+	{
+		"NR_MARCA": 36,
+		"NOME_MODELO": "Vitara"
+	},
+	{
+		"NR_MARCA": 37,
+		"NOME_MODELO": "Model-3"
+	},
+	{
+		"NR_MARCA": 37,
+		"NOME_MODELO": "Model-S"
+	},
+	{
+		"NR_MARCA": 37,
+		"NOME_MODELO": "Model-X"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Aygo"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Yaris"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Proace-City-Verso"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Corolla"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "C-Hr"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Proace-Verso"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Prius-Plus"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Rav4"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Prius"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Gt86"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Camry"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Gr-Supra"
+	},
+	{
+		"NR_MARCA": 38,
+		"NOME_MODELO": "Land-Cruiser"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Up"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Polo"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "T-Cross"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Golf Geração 8"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "T-Roc"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Golf Geração 7"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Passat"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Tiguan"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Touran"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Tiguan-Allspace"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Arteon"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Sharan"
+	},
+	{
+		"NR_MARCA": 39,
+		"NOME_MODELO": "Touareg"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "Xc40"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "V60"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "S60"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "Xc60"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "S90"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "V60 Cross Country"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "V90"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "V90 Cross Country"
+	},
+	{
+		"NR_MARCA": 40,
+		"NOME_MODELO": "Xc90"
+	}
+]

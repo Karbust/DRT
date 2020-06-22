@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize'),
     sequelize = require('../config/database'),
-    Utilizadores = require('./utilizadoresModel')
+    Utilizadores = require('./Utilizadores')
 
 var Validacoes = sequelize.define('VALIDACOES', {
     NR_VALIDACAO: {

@@ -1,3 +1,11 @@
+export const Role = {
+    Administrador: 1,
+    Administrativo: 2,
+    AdministradorOperador: 3,
+    Telefonista: 4,
+    AdministrativoOperador: 6
+}
+
 export const getNumberFromChar = (letter) => {
     switch (letter) {
         case '0' : return 0

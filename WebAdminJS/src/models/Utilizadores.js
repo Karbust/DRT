@@ -1,10 +1,24 @@
 var Sequelize = require('sequelize'),
     sequelize = require('../config/database'),
     bcrypt = require('bcrypt'),
-    TiposUtilizadores = require('./TiposUtilizadoresModel'),
     Paises = require('./Paises')
 
-var UtilizadoresModel = sequelize.define('UTILIZADORES', {
+var TiposUtilizadores = sequelize.define('TIPOS_UTILIZADORES',{
+    NR_TIPO_UTILIZADOR:{
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    DESCRICAO: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+},{
+    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    timestamps: false,
+})
+
+var Utilizadores = sequelize.define('UTILIZADORES', {
     NR_UTILIZADOR: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -120,16 +134,90 @@ var UtilizadoresModel = sequelize.define('UTILIZADORES', {
     paranoid: true,
     timestamps: true,
     hooks: {
-        beforeCreate: (user, options) => {
+        beforeCreate: (user) => {
             return bcrypt.hash(user.PASSWORD, 10)
                 .then(hash => {
                     user.PASSWORD = hash
                 })
-                .catch(err => {
+                .catch(() => {
                     throw new Error()
                 })
         },
     },
 })
 
-module.exports = UtilizadoresModel
+var Verificacoes = sequelize.define('VERIFICACOES', {
+    NR_VERIFICACAO: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    NR_VERIFICADO: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    TOKEN: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    DATA_HORA_VERIFICACAO: {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
+    VALIDADO: {
+        type: Sequelize.ENUM('EMAIL', 'PAINEL'),
+        allowNull: false
+    },
+    NR_VERIFICADOR: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+}, {
+    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    timestamps: false
+})
+
+var Validacoes = sequelize.define('VALIDACOES', {
+    NR_VALIDACAO: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    NR_VALIDADO: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    NR_VALIDADOR: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    DATA_HORA_VALIDACAO: {
+        type: Sequelize.DATE,
+        allowNull: false
+    },
+    ESTADO: {
+        type: Sequelize.ENUM('APROVADO', 'DESAPROVADO'),
+        allowNull: false
+    }
+}, {
+    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    timestamps: false
+})
+
+module.exports = { TiposUtilizadores, Utilizadores, Verificacoes, Validacoes }

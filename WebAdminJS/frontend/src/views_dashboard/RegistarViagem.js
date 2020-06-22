@@ -15,23 +15,14 @@ import { Formik } from 'formik'
 import { FormRegistarViagem } from '../components/formRegistarViagem'
 import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import { RotaGoogleMap } from '../components/rotaGoogleMap'
-import { backendUrl } from '../configs'
+import { backendUrl, GoogleMapsApiKey } from '../configs'
 
 export default function RegistarViagem() {
     const classes = useStyles()
 
-    const [motoristas, setMotoristas] = useState([])
     const [localidades, setLocalidades] = useState([])
     const [origem, setOrigem] = useState(null)
     const [destino, setDestino] = useState(null)
-    const [origemMaps, setOrigemMaps] = useState({
-        lat: 0,
-        lng: 0,
-    })
-    const [destinoMaps, setDestinoMaps] = useState({
-        lat: 0,
-        lng: 0,
-    })
     const [distDur, setDistDur] = useState({
         isSet: false,
         duracaoText: '',
@@ -42,6 +33,7 @@ export default function RegistarViagem() {
 
     const handleChangeOrigem = (event) => {
         // const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
+        console.log(event)
         if(origem !== null) {
             if (event.NR_LOCALIDADE !== origem.NR_LOCALIDADE) {
                 setOrigem(event)
@@ -49,10 +41,6 @@ export default function RegistarViagem() {
         } else {
             setOrigem(event)
         }
-        /*setOrigemMaps({
-            lat: event.LATITUDE,
-            lng: event.LONGITUDE,
-        })*/
     }
     const handleChangeDestino = (event) => {
         // const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
@@ -63,10 +51,6 @@ export default function RegistarViagem() {
         } else {
             setDestino(event)
         }
-        setDestinoMaps({
-            lat: event.LATITUDE,
-            lng: event.LONGITUDE,
-        })
     }
 
     useEffect(() => {
@@ -77,26 +61,19 @@ export default function RegistarViagem() {
                     setLocalidades(res.data.data)
                 }
             })
-        axios
-            .get(backendUrl + 'user/motoristas', { headers: authHeader() })
-            .then(res => {
-                if (res.data.success) {
-                    setMotoristas(res.data.data)
-                }
-            })
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
-        // setMessage('')
         formikActions.setSubmitting(true)
         console.log(values)
-        /* return axios
-            .post('http://localhost:5000/user/testes', values)
+        return axios
+            .post(backendUrl + 'viagens/registopedidoviagem', values, { headers: authHeader() })
             .then(() => {
                 formikActions.setSubmitting(false)
+                formikActions.resetForm()
             }, (reason) => {
-                throw new Error('Utilizador Inválido')
-            }) */
+                console.log(reason)
+            })
     }
 
     return (
@@ -139,9 +116,9 @@ export default function RegistarViagem() {
                                     datahora_ida: null,
                                     datahora_volta: null,
                                     nrcliente: '',
-                                    motorista: 0,
                                     observacoes: '',
                                     distancia: 0,
+                                    duracao: 0,
                                 }}
                             >
                                 {({
@@ -155,7 +132,6 @@ export default function RegistarViagem() {
                                         }}>
                                             <FormRegistarViagem classes={classes}
                                                 localidades={localidades}
-                                                motoristas={motoristas}
                                                 distDur={distDur}
                                                 callbackOrigem={handleChangeOrigem}
                                                 callbackDestino={handleChangeDestino}/>
@@ -166,7 +142,7 @@ export default function RegistarViagem() {
                         </Grid>
                         <Grid item sm={6} xs={12}>
                             <LoadScript
-                                /*googleMapsApiKey="AIzaSyCjX2Bhd023B83EgYkUr1wyqZfUUIWIKgE"*/>
+                                googleMapsApiKey={GoogleMapsApiKey}>
                                 <GoogleMap
                                     mapContainerStyle={{
                                         width: '100%',

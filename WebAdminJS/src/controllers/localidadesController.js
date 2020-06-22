@@ -1,6 +1,5 @@
 let Localidades = require('../models/Localidades'),
-    sequelize = require('../config/database'),
-    config = require('../config/config')
+    sequelize = require('../config/database')
 
 const controllers = {}
 sequelize.sync()
@@ -13,12 +12,12 @@ controllers.list = async (req, res) => {
         order: [
             ['LOCALIDADE', 'ASC'],
         ],
-    }).then(function(data) {
+    }).then((data) => {
         return res.json({
             success: true,
             data: data,
         })
-    }).catch(error => {
+    }).catch(() => {
         return res.json({ success: false })
     })
 }

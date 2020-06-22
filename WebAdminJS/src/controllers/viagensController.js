@@ -1,25 +1,32 @@
-let { Sequelize, Op } = require('sequelize'),
-    User = require('../models/utilizadoresModel'),
+let { Op } = require('sequelize'),
+    { Utilizadores } = require('../models/Utilizadores'),
+    Localidades = require('../models/Localidades'),
     sequelize = require('../config/database'),
     { PedidoViagem, ClassificacaoViagem, ClientesViagem } = require('../models/Viagens'),
-    config = require('../config/config'),
-    functions = require('../functions'),
-    moment = require('moment')
+    { Viaturas } = require('../models/Viaturas')
 
-PedidoViagem.belongsTo(User, { foreignKey: 'NR_CLIENTE_PEDIDO', as: 'Cliente' })
-PedidoViagem.belongsTo(User, { foreignKey: 'MOTORISTA', as: 'Motorista' })
-User.hasMany(PedidoViagem, { foreignKey: 'NR_CLIENTE_PEDIDO', as: 'CLIENTEVIAGEM' })
-User.hasMany(PedidoViagem, { foreignKey: 'MOTORISTA', as: 'MOTORISTAVIAGEM' })
+PedidoViagem.belongsTo(Localidades, { foreignKey: 'ORIGEM', as: 'Origem' })
+PedidoViagem.belongsTo(Localidades, { foreignKey: 'DESTINO', as: 'Destino' })
+Localidades.hasMany(PedidoViagem, { foreignKey: 'ORIGEM', as: 'ORIGEMVIAGEM' })
+Localidades.hasMany(PedidoViagem, { foreignKey: 'DESTINO', as: 'DESTINOVIAGEM' })
+
+PedidoViagem.belongsTo(Utilizadores, { foreignKey: 'NR_CLIENTE_PEDIDO', as: 'Cliente' })
+PedidoViagem.belongsTo(Utilizadores, { foreignKey: 'MOTORISTA', as: 'Motorista' })
+Utilizadores.hasMany(PedidoViagem, { foreignKey: 'NR_CLIENTE_PEDIDO', as: 'CLIENTEVIAGEM' })
+Utilizadores.hasMany(PedidoViagem, { foreignKey: 'MOTORISTA', as: 'MOTORISTAVIAGEM' })
 
 ClassificacaoViagem.belongsTo(PedidoViagem, { foreignKey: 'NR_VIAGEM', as: 'Viagem' })
-ClassificacaoViagem.belongsTo(User, { foreignKey: 'NR_CLIENTE', as: 'NrCliente' })
+ClassificacaoViagem.belongsTo(Utilizadores, { foreignKey: 'NR_CLIENTE', as: 'NrCliente' })
 PedidoViagem.hasMany(ClassificacaoViagem, { foreignKey: 'NR_VIAGEM', as: 'VIAGEMCLASSIFICACAO' })
-User.hasMany(ClassificacaoViagem, { foreignKey: 'NR_CLIENTE', as: 'NRCLIENTECLASSIFICACAO' })
+Utilizadores.hasMany(ClassificacaoViagem, { foreignKey: 'NR_CLIENTE', as: 'NRCLIENTECLASSIFICACAO' })
 
 ClientesViagem.belongsTo(PedidoViagem, { foreignKey: 'NR_VIAGEM', as: 'NrViagem' })
-ClientesViagem.belongsTo(User, { foreignKey: 'NR_CLIENTE', as: 'ClienteViagem' })
+ClientesViagem.belongsTo(Utilizadores, { foreignKey: 'NR_CLIENTE', as: 'ClienteViagem' })
 PedidoViagem.hasMany(ClientesViagem, { foreignKey: 'NR_VIAGEM', as: 'VIAGEMCLIENTESVIAGEM' })
-User.hasMany(ClientesViagem, { foreignKey: 'NR_CLIENTE', as: 'NRCLIENTEVIAGEM' })
+Utilizadores.hasMany(ClientesViagem, { foreignKey: 'NR_CLIENTE', as: 'NRCLIENTEVIAGEM' })
+
+PedidoViagem.belongsTo(Viaturas, { foreignKey: 'VIATURA', as: 'ViagemViatura' })
+Viaturas.hasMany(PedidoViagem, { foreignKey: 'VIATURA', as: 'VIATURAVIAGEM' })
 
 const controllers = {}
 sequelize.sync()
@@ -28,20 +35,30 @@ controllers.historicoViagens = async (req, res) => {
     await PedidoViagem.findAll({
         where: {
             ESTADO: {
-                [Op.or]: ['CANCELADA', 'CONCLUIDA']
+                [Op.or]: ['DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA']
             }
         },
         order: [
             ['createdAt', 'DESC']
-        ]
-    }).then(function(data){
-        res.json({success:true, data: data});
-    }).catch(function() {
-        return res.json({success: false})
+        ],
+        include: [{
+            model: Localidades,
+            as: 'Origem',
+        }, {
+            model: Localidades,
+            as: 'Destino',
+        }],
+    }).then((data) => {
+        res.json({ success:true, data: data })
+    }).catch((error) => {
+        console.log(error)
+        return res.json({ success: false })
     })
 }
 controllers.registoPedidoViagem = async (req, res) => {
-    const { origem, destino, passageiros, motivo, datahora_ida, datahora_volta, nrcliente, motorista, observacoes, distancia } = req.body
+    const {
+        origem, destino, passageiros, motivo, datahora_ida, datahora_volta, nrcliente, observacoes, distancia, duracao
+    } = req.body
     await PedidoViagem.create({
         ORIGEM: origem,
         DESTINO: destino,
@@ -52,15 +69,17 @@ controllers.registoPedidoViagem = async (req, res) => {
         NR_CLIENTE_PEDIDO: nrcliente,
         OBSERVACOES: observacoes,
         DISTANCIA: distancia,
+        DURACAO: duracao,
         ESTADO: 'PEDIDO',
-    }).then(function(data) {
+    }).then( (data) => {
         //functions.sendEmail(email.toString(), 'Conta criada no DRT', 'Password: ' + password + '\nToken: ' + token)
 
         return res.json({
             success: true,
             data: data,
         })
-    }).catch(Sequelize.UniqueConstraintError, () => {
+    }).catch((error) => {
+        console.log(error)
         return res.json({
             success: false,
         })
@@ -69,19 +88,29 @@ controllers.registoPedidoViagem = async (req, res) => {
 controllers.pedidoViagem = async (req, res) => {
     await PedidoViagem.findAll({
         where: {
-            ESTADO: 'PEDIDO',
-            MOTORISTA: {
-                [Op.ne]: null
+            ESTADO: {
+                [Op.or]: ['PEDIDO', 'PENDENTE']
             }
         },
         order: [
             ['DATAHORA_IDA', 'ASC'],
             ['createdAt', 'ASC']
-        ]
-    }).then(function(data){
-        res.json({success:true, data: data});
-    }).catch(function() {
-        return res.json({success: false})
+        ],
+        include: [{
+            model: Localidades,
+            as: 'Origem'
+        }, {
+            model: Localidades,
+            as: 'Destino'
+        }, {
+            model: Viaturas,
+            as: 'ViagemViatura'
+        }],
+    }).then((data) => {
+        res.json({ success:true, data: data })
+    }).catch((error) => {
+        console.log(error)
+        return res.json({ success: false })
     })
 }
 controllers.classificacaoViagem = async (req, res) => {
@@ -91,7 +120,16 @@ controllers.classificacaoViagem = async (req, res) => {
     }, 3000);*/
 
     /*console.log(req.body);*/
-    res.json({success:true});
+    res.json({ success:true })
+}
+controllers.editarViagem = async (req, res) => {
+    /*setTimeout(function() {
+        console.log(req.body)
+        res.json({ success: true })
+    }, 3000);*/
+
+    /*console.log(req.body);*/
+    res.json({ success:true })
 }
 
-module.exports = controllers;
+module.exports = controllers

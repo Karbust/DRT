@@ -8,18 +8,14 @@ import {
 } from '@material-ui/core'
 import { Field, useFormikContext } from 'formik'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { Autocomplete, createFilterOptions } from '@material-ui/lab'
+import { Autocomplete } from '@material-ui/lab'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment'
 import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { backendUrl } from '../configs'
-import authHeader from './auth-header'
-import { validateNCC } from './functions'
 
 export const FormRegistarViagem = ({
-    classes, localidades, motoristas, distDur, callbackOrigem, callbackDestino,
+    classes, localidades, distDur, callbackOrigem, callbackDestino,
 }) => {
     const {
         setFieldValue, values, isValid, isSubmitting, submitForm, validateField,
@@ -27,37 +23,15 @@ export const FormRegistarViagem = ({
 
     const [idaVoltaSwitch, setIdaVoltaSwitch] = useState(true)
     const [idaVolta, setIdaVolta] = useState(false)
-    const [numerosccs, setNumeroscc] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [prefix, setPrefix] = useState('')
 
     const handleChangeIdaVolta = (event) => {
         setIdaVolta(event.target.checked)
     }
 
-    const filterOptions = createFilterOptions({
-        matchFrom: 'start',
-        stringify: (option) => option.N_CC,
-    })
-
     useEffect(() => {
         setFieldValue('distancia', distDur.distanciaValue)
-    }, [setFieldValue, distDur.distanciaValue])
-
-    useEffect(() => {
-        if (values.nrcliente.length === 5 && values.nrcliente !== prefix) {
-            setLoading(true)
-            setPrefix(values.nrcliente)
-            axios
-                .post(backendUrl + 'user/listarncc', { cc: values.nrcliente }, { headers: authHeader() })
-                .then(res => {
-                    if (res.data.success) {
-                        setLoading(false)
-                        setNumeroscc(res.data.data)
-                    }
-                })
-        }
-    }, [values.nrcliente, prefix])
+        setFieldValue('duracao', distDur.duracaoValue)
+    }, [setFieldValue, distDur.distanciaValue, distDur.duracaoValue])
 
     return (
         <Box mb={2}>
@@ -78,17 +52,21 @@ export const FormRegistarViagem = ({
                                 getOptionDisabled={(option) => option.NR_LOCALIDADE === values.destino}
                                 renderInput={(params) =>
                                     <TextField {...field} {...params} required
+                                        autoComplete="off"
                                         label="Origem" variant="outlined"
                                         className={classes.textField}
                                         error={Boolean(errors.origem)}
                                         helperText={errors.origem}
                                         onBlur={(event) => validateField(event.currentTarget.name)}
+                                        onChange={undefined}
                                     />
                                 }
                                 onChange={(event, newValue, reason) => {
                                     if (reason === 'select-option') {
                                         setFieldValue('origem', newValue.NR_LOCALIDADE)
                                         callbackOrigem(newValue)
+                                    } else if (reason === 'clear') {
+                                        setFieldValue('origem', 0)
                                     }
                                 }}
                             />
@@ -109,18 +87,22 @@ export const FormRegistarViagem = ({
                                 getOptionDisabled={(option) => option.NR_LOCALIDADE === values.origem}
                                 renderInput={(params) =>
                                     <TextField {...field} {...params} required
+                                        autoComplete="off"
                                         label="Destino"
                                         variant="outlined"
                                         className={classes.textField}
                                         helperText={errors.destino}
                                         error={Boolean(errors.destino)}
                                         onBlur={(event) => validateField(event.currentTarget.name)}
+                                        onChange={undefined}
                                     />
                                 }
                                 onChange={(event, newValue, reason) => {
                                     if (reason === 'select-option') {
                                         setFieldValue('destino', newValue.NR_LOCALIDADE)
                                         callbackDestino(newValue)
+                                    } else if (reason === 'clear') {
+                                        setFieldValue('origem', 0)
                                     }
                                 }}
                             />
@@ -232,7 +214,7 @@ export const FormRegistarViagem = ({
                         />
                         <Field name="datahora_volta"
                             validate={(datahora_volta) => {
-                                if(!datahora_volta) {
+                                if(!datahora_volta && idaVolta) {
                                     return 'Campo obrigatório'
                                 }
                                 if(moment(datahora_volta).isSameOrBefore(values.datahora_ida)) {
@@ -288,37 +270,6 @@ export const FormRegistarViagem = ({
                                 error={Boolean(errors.nrcliente)}
                                 helperText={errors.nrcliente}
                                 onBlur={(event) => validateField(event.currentTarget.name)}
-                            />
-                        )}
-                    </Field>
-                    <Field name="motorista"
-                        validate={(passageiros) => passageiros !== 0 ? undefined : 'Campo obrigatório'}>
-                        {({ field, form: { errors } }) => (
-                            <Autocomplete
-                                id="motorista"
-                                options={motoristas}
-                                getOptionLabel={option => {
-                                    if (!option.NOME_UTILIZADOR) {
-                                        return ''
-                                    }
-                                    return option.NOME_UTILIZADOR
-                                }}
-                                renderInput={(params) =>
-                                    <TextField {...field} {...params} required
-                                        label="Motorista"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        error={Boolean(errors.motorista)}
-                                        helperText={errors.motorista}
-                                        onBlur={(event) => validateField(event.currentTarget.name)}
-                                    />
-                                }
-                                onChange={(event, newValue, reason) => {
-                                    if (reason === 'select-option') {
-                                        console.log(newValue.NR_UTILIZADOR)
-                                        setFieldValue('motorista', newValue.NR_UTILIZADOR)
-                                    }
-                                }}
                             />
                         )}
                     </Field>

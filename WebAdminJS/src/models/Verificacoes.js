@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize'),
     sequelize = require('../config/database'),
-    Utilizadores = require('./utilizadoresModel')
+    Utilizadores = require('./Utilizadores')
 
 var Verificacoes = sequelize.define('VERIFICACOES', {
     NR_VERIFICACAO: {

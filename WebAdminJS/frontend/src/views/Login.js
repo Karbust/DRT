@@ -52,7 +52,7 @@ export default function Login () {
                 setMessage('Login efetuado com sucesso.')
                 setSeveridade('success')
                 setOpen(true)
-                setTimeout(function () {
+                setTimeout(() => {
                     window.location.reload()
                 }, 3000)
             })
@@ -84,49 +84,50 @@ export default function Login () {
                             </Alert>
                         </Snackbar>
                         <FormControl>
-                            <Box mb={4}>
-                                <Typography variant="h5">
-                                    Mobilidade Urbana de Viseu
-                                </Typography>
-                            </Box>
-
-                            <Box mb={4}>
-                                <TextField label="Utilizador" type="email"
-                                    id="defaultLoginFormEmail" fullWidth value={username}
-                                    onChange={onChangeUsername} required/>
-                            </Box>
-                            <Box mb={4}>
-                                <TextField label="Palavra-Passe" type="password"
-                                    id="defaultLoginFormPassword" fullWidth
-                                    value={password} onChange={onChangePassword}
-                                    required/>
-                            </Box>
-
-                            <Box component="span"
-                                display="block" /* style={{textAlign: 'left'}} */>
-                                <FormControlLabel label={
-                                    <Typography color={'textSecondary'}>Lembrar
+                            <form>
+                                <Box mb={4}>
+                                    <Typography variant="h5">
+                                        Mobilidade Urbana de Viseu
                                     </Typography>
-                                } control={
-                                    <GoldCheckbox onChange={onChangeRemember}
-                                        name="defaultLoginFormRemember"/>
-                                }/>
-                            </Box>
-                            <Box component="span"
-                                display="block" /* style={{textAlign: 'left'}} */>
-                                <Link color={'textSecondary'} component={RouterLink} to="">
-                                    Esqueceu a palavra-passe?
-                                </Link>
-                            </Box>
+                                </Box>
 
-                            <Box my={4}>
-                                <StyledButton type="submit" disabled={loading}
-                                    onClick={handleLogin}>
-                                    {loading && (<CircularProgress color={'inherit'}/>)}
-                                    {!loading && 'Login'}
-                                </StyledButton>
-                            </Box>
+                                <Box mb={4}>
+                                    <TextField label="Utilizador" type="email"
+                                        id="defaultLoginFormEmail" fullWidth value={username}
+                                        onChange={onChangeUsername} required/>
+                                </Box>
+                                <Box mb={4}>
+                                    <TextField label="Palavra-Passe" type="password"
+                                        id="defaultLoginFormPassword" fullWidth
+                                        value={password} onChange={onChangePassword}
+                                        required/>
+                                </Box>
 
+                                <Box component="span"
+                                    display="block" /* style={{textAlign: 'left'}} */>
+                                    <FormControlLabel label={
+                                        <Typography color={'textSecondary'}>Lembrar
+                                        </Typography>
+                                    } control={
+                                        <GoldCheckbox onChange={onChangeRemember}
+                                            name="defaultLoginFormRemember"/>
+                                    }/>
+                                </Box>
+                                <Box component="span"
+                                    display="block" /* style={{textAlign: 'left'}} */>
+                                    <Link color={'textSecondary'} component={RouterLink} to="">
+                                        Esqueceu a palavra-passe?
+                                    </Link>
+                                </Box>
+
+                                <Box my={4}>
+                                    <StyledButton type="submit" disabled={loading}
+                                        onClick={handleLogin}>
+                                        {loading && (<CircularProgress color={'inherit'}/>)}
+                                        {!loading && 'Login'}
+                                    </StyledButton>
+                                </Box>
+                            </form>
                         </FormControl>
                     </Box>
                 </Grid>

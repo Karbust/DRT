@@ -5,7 +5,8 @@
 		"client": "cd frontend && npm start",
 		"server": "node ./src/server.js",
 		"dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-		"lint": "eslint src/**/*.js"
+		"lint": "eslint src/**/*.js",
+		"lint-fix": "eslint src/**/*.js --fix"
 	},
 	"dependencies": {
 		"aws-sdk": "^2.681.0",
@@ -24,6 +25,7 @@
 	},
 	"devDependencies": {
 		"concurrently": "^3.5.0",
+		"eslint": "^6.8.0",
 		"eslint-config-standard": "^14.1.1",
 		"eslint-plugin-import": "^2.20.2",
 		"eslint-plugin-node": "^11.1.0",

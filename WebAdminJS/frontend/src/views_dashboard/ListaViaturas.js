@@ -3,7 +3,6 @@ import axios from 'axios'
 import { backendUrl } from '../configs'
 import authHeader from '../components/auth-header'
 import {
-    useTheme,
     Box,
     Breadcrumbs,
     Link,
@@ -17,18 +16,15 @@ import {
     Paper,
     TablePagination,
     TableFooter,
-    Chip,
 } from '@material-ui/core'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
 import { useStyles, TablePaginationActions } from '../components/MuiStyles'
-import moment from 'moment'
 
-export default function RegistosNaoValidados() {
+export default function ValidarRegistos() {
     const classes = useStyles()
-    const theme = useTheme()
 
-    const [viagens, setViagens] = useState([])
+    const [viaturas, setViaturas] = useState([])
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(10)
     const [update, setUpdate] = React.useState(false)
@@ -43,10 +39,11 @@ export default function RegistosNaoValidados() {
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'viagens/historicoviagens', { headers: authHeader() })
+            .get(backendUrl + 'viaturas/viaturas', { headers: authHeader() })
             .then(res => {
                 if (res.data.success) {
-                    setViagens(res.data.data)
+                    console.log(res.data.data)
+                    setViaturas(res.data.data)
                     setUpdate(false)
                 }
             })
@@ -58,7 +55,7 @@ export default function RegistosNaoValidados() {
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
                         <Typography variant={'h4'}>
-                            Histórico de Viagens
+                            Lista de Viaturas
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
@@ -71,8 +68,8 @@ export default function RegistosNaoValidados() {
                                     Início
                                 </Link>
                                 <Link color="textPrimary" component={RouterLink}
-                                    to='/Dashboard/Utilizadores/ValidarRegistoCliente'
-                                    aria-current="page">Histórico de Viagens</Link>
+                                    to='/Dashboard/Utilizadores/ListaViaturas'
+                                    aria-current="page">Lista de Viaturas</Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
@@ -84,43 +81,35 @@ export default function RegistosNaoValidados() {
                         >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell># Viagem</TableCell>
-                                    <TableCell>Origem</TableCell>
-                                    <TableCell>Destino</TableCell>
-                                    <TableCell>Data/Hora Ida</TableCell>
-                                    <TableCell>Data/Hora Volta</TableCell>
-                                    <TableCell>Passageiros</TableCell>
-                                    <TableCell>Motivo</TableCell>
-                                    <TableCell>Distância</TableCell>
-                                    <TableCell>Custo</TableCell>
-                                    <TableCell>Motorista</TableCell>
-                                    <TableCell>Estado</TableCell>
+                                    <TableCell># Viatura</TableCell>
+                                    <TableCell>Matrícula</TableCell>
+                                    <TableCell>Ano</TableCell>
+                                    <TableCell>Capacidade</TableCell>
+                                    <TableCell>Marca</TableCell>
+                                    <TableCell>Modelo</TableCell>
+                                    <TableCell>Cor</TableCell>
+                                    <TableCell># Apólice</TableCell>
+                                    <TableCell>Seguradora</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {(rowsPerPage > 0
-                                    ? viagens.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                                    : viagens
+                                    ? viaturas.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                                    : viaturas
                                 ).map((row, key) => (
                                     <TableRow key={key}>
                                         <TableCell component="th" scope="row">
-                                            {row.NR_VIAGEM_PEDIDO}
+                                            {row.NR_VIATURA}
                                         </TableCell>
-                                        <TableCell>{row.Origem.LOCALIDADE}</TableCell>
-                                        <TableCell>{row.Destino.LOCALIDADE}</TableCell>
-                                        <TableCell>{moment(row.DATAHORA_IDA).format('YYYY-MM-DD HH:mm')}</TableCell>
-                                        <TableCell>{!row.DATAHORA_VOLTA ? '-' : moment(row.DATAHORA_VOLTA).format('YYYY-MM-DD HH:mm')}</TableCell>
-                                        <TableCell>{row.PASSAGEIROS}</TableCell>
-                                        <TableCell>{row.MOTIVO}</TableCell>
-                                        <TableCell>{row.DISTANCIA}</TableCell>
-                                        <TableCell>{row.CUSTO}</TableCell>
-                                        <TableCell>{row.MOTORISTA}</TableCell>
-                                        <TableCell>
-                                            {row.ESTADO === 'CONCLUIDA' && <Chip style={{ backgroundColor: theme.palette.success.main }} size="small" label={row.ESTADO} />}
-                                            {row.ESTADO === 'CANCELADA' && <Chip style={{ backgroundColor: theme.palette.warning.main }} size="small" label={row.ESTADO} />}
-                                            {row.ESTADO === 'FALTA' && <Chip style={{ backgroundColor: theme.palette.error.main }} size="small" label={row.ESTADO} />}
-                                            {row.ESTADO === 'DECORRER' && <Chip style={{ backgroundColor: theme.palette.info3.main }} size="small" label={row.ESTADO} />}
-                                        </TableCell>
+                                        <TableCell>{row.MATRICULA}</TableCell>
+                                        <TableCell>{row.ANO}</TableCell>
+                                        <TableCell>{row.CAPACIDADE}</TableCell>
+                                        <TableCell>{row.Modelo.Marca.NOME_MARCA}</TableCell>
+                                        <TableCell>{row.Modelo.NOME_MODELO}</TableCell>
+                                        <TableCell>{row.Cor.NOME_COR}</TableCell>
+                                        <TableCell>{row.NR_APOLICE_SEGURO}</TableCell>
+                                        <TableCell>{row.Seguradora.NOME_SEGURADORA}</TableCell>
+
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -131,8 +120,8 @@ export default function RegistosNaoValidados() {
                                             label: 'Todos',
                                             value: -1,
                                         }]}
-                                        colSpan={11}
-                                        count={viagens.length}
+                                        colSpan={5}
+                                        count={viaturas.length}
                                         rowsPerPage={rowsPerPage}
                                         page={page}
                                         SelectProps={{

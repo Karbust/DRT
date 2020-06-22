@@ -1,6 +1,5 @@
 [
   {
-    "NR_LOCALIDADE": 1,
     "LOCALIDADE": "Bairro Da Gândara",
     "TARIFA": 4,
     "COD_POSTAL": "3500-881",
@@ -9,7 +8,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 2,
     "LOCALIDADE": "Bodiosa Nova",
     "TARIFA": 4,
     "COD_POSTAL": "3515-512",
@@ -18,7 +16,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 3,
     "LOCALIDADE": "Casal-Cavernães",
     "TARIFA": 4,
     "COD_POSTAL": "3505-109",
@@ -27,7 +24,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 4,
     "LOCALIDADE": "Morrosa",
     "TARIFA": 4,
     "COD_POSTAL": "3510-742",
@@ -36,7 +32,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 5,
     "LOCALIDADE": "Passos De Silgueiros",
     "TARIFA": 4,
     "COD_POSTAL": "3500-541",
@@ -45,7 +40,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 6,
     "LOCALIDADE": "Pindelo",
     "TARIFA": 4,
     "COD_POSTAL": "3500-543",
@@ -54,7 +48,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 7,
     "LOCALIDADE": "Póvoa De Moscoso",
     "TARIFA": 4,
     "COD_POSTAL": "3500-894",
@@ -63,7 +56,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 8,
     "LOCALIDADE": "Travassos-Orgens",
     "TARIFA": 4,
     "COD_POSTAL": "3510-704",
@@ -72,7 +64,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 9,
     "LOCALIDADE": "Almargem",
     "TARIFA": 5,
     "COD_POSTAL": "3515-699",
@@ -81,7 +72,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 10,
     "LOCALIDADE": "Aval",
     "TARIFA": 5,
     "COD_POSTAL": "3515-511",
@@ -90,7 +80,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 11,
     "LOCALIDADE": "Avelinha",
     "TARIFA": 5,
     "COD_POSTAL": "3505-123",
@@ -99,7 +88,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 12,
     "LOCALIDADE": "Aviúges",
     "TARIFA": 5,
     "COD_POSTAL": "3505-135",
@@ -108,7 +96,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 13,
     "LOCALIDADE": "Balisque",
     "TARIFA": 5,
     "COD_POSTAL": "3505-337",
@@ -117,7 +104,6 @@
     "ATIVO": true
   },
   {
-    "NR_LOCALIDADE": 14,
     "LOCALIDADE": "Barbeita",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -126,7 +112,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 15,
     "LOCALIDADE": "Bassim",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -135,7 +120,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 16,
     "LOCALIDADE": "Bertelhe",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -144,7 +128,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 17,
     "LOCALIDADE": "Boa Aldeia",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -153,7 +136,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 18,
     "LOCALIDADE": "Brufe",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -162,7 +144,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 19,
     "LOCALIDADE": "Cabril",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -171,7 +152,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 20,
     "LOCALIDADE": "Cabrum",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -180,7 +160,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 21,
     "LOCALIDADE": "Cadimas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -189,7 +168,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 22,
     "LOCALIDADE": "Calde",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -198,7 +176,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 23,
     "LOCALIDADE": "Canidelo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -207,7 +184,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 24,
     "LOCALIDADE": "Carcavelos",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -216,7 +192,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 25,
     "LOCALIDADE": "Carqueijal",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -225,7 +200,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 26,
     "LOCALIDADE": "Carregoso",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -234,7 +208,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 27,
     "LOCALIDADE": "Carriça",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -243,7 +216,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 28,
     "LOCALIDADE": "Carvalhais",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -252,7 +224,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 29,
     "LOCALIDADE": "Carvalhal",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -261,7 +232,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 30,
     "LOCALIDADE": "Casainho",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -270,7 +240,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 31,
     "LOCALIDADE": "Casal",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -279,7 +248,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 32,
     "LOCALIDADE": "Casal-Torredeita",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -288,7 +256,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 33,
     "LOCALIDADE": "Casal De Esporão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -297,7 +264,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 34,
     "LOCALIDADE": "Casaldeiro",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -306,7 +272,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 35,
     "LOCALIDADE": "Cepões",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -315,7 +280,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 36,
     "LOCALIDADE": "Corredoura",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -324,7 +288,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 37,
     "LOCALIDADE": "Corvos-À-Nogueira",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -333,7 +296,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 38,
     "LOCALIDADE": "Cota",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -342,7 +304,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 39,
     "LOCALIDADE": "Couto",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -351,7 +312,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 40,
     "LOCALIDADE": "Couto De Baixo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -360,7 +320,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 41,
     "LOCALIDADE": "Covelas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -369,7 +328,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 42,
     "LOCALIDADE": "Covelo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -378,7 +336,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 43,
     "LOCALIDADE": "Dade",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -387,7 +344,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 44,
     "LOCALIDADE": "Dornelas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -396,7 +352,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 45,
     "LOCALIDADE": "Ermida",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -405,7 +360,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 46,
     "LOCALIDADE": "Farminhão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -414,7 +368,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 47,
     "LOCALIDADE": "Figueiredo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -423,7 +376,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 48,
     "LOCALIDADE": "Forniço",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -432,7 +384,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 49,
     "LOCALIDADE": "Fragosela De Baixo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -441,7 +392,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 50,
     "LOCALIDADE": "Guimarães",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -450,7 +400,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 51,
     "LOCALIDADE": "Juncal",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -459,7 +408,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 52,
     "LOCALIDADE": "Lagoinhas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -468,7 +416,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 53,
     "LOCALIDADE": "Lamaçais",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -477,7 +424,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 54,
     "LOCALIDADE": "Lubagueira",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -486,7 +432,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 55,
     "LOCALIDADE": "Macieira",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -495,7 +440,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 56,
     "LOCALIDADE": "Magarelas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -504,7 +448,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 57,
     "LOCALIDADE": "Mata",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -513,7 +456,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 58,
     "LOCALIDADE": "Moeira De Baixo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -522,7 +464,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 59,
     "LOCALIDADE": "Moimenta",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -531,7 +472,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 60,
     "LOCALIDADE": "Mosteirinho",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -540,7 +480,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 61,
     "LOCALIDADE": "Nelas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -549,7 +488,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 62,
     "LOCALIDADE": "Nespereira",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -558,7 +496,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 63,
     "LOCALIDADE": "Nesperido",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -567,7 +504,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 64,
     "LOCALIDADE": "Nogueira",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -576,7 +512,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 65,
     "LOCALIDADE": "Nogueira De Cima",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -585,7 +520,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 66,
     "LOCALIDADE": "Nogueiredo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -594,7 +528,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 67,
     "LOCALIDADE": "Novais",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -603,7 +536,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 68,
     "LOCALIDADE": "Outeirinho",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -612,7 +544,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 69,
     "LOCALIDADE": "Outeiro",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -621,7 +552,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 70,
     "LOCALIDADE": "Outeiro De Povolide",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -630,7 +560,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 71,
     "LOCALIDADE": "Paraduça",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -639,7 +568,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 72,
     "LOCALIDADE": "Passos",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -648,7 +576,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 73,
     "LOCALIDADE": "Pedra Cavaleira",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -657,7 +584,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 74,
     "LOCALIDADE": "Pinheiro",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -666,7 +592,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 75,
     "LOCALIDADE": "Pinouca",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -675,7 +600,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 76,
     "LOCALIDADE": "Poives",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -684,7 +608,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 77,
     "LOCALIDADE": "Portela",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -693,7 +616,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 78,
     "LOCALIDADE": "Pousa Maria",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -702,7 +624,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 79,
     "LOCALIDADE": "Póvoa",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -711,7 +632,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 80,
     "LOCALIDADE": "Póvoa Do Dão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -720,7 +640,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 81,
     "LOCALIDADE": "Povoação",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -729,7 +648,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 82,
     "LOCALIDADE": "Prime",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -738,7 +656,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 83,
     "LOCALIDADE": "Quinta Dos Frades",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -747,7 +664,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 84,
     "LOCALIDADE": "Quintãs",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -756,7 +672,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 85,
     "LOCALIDADE": "Real",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -765,7 +680,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 86,
     "LOCALIDADE": "Remonde",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -774,7 +688,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 87,
     "LOCALIDADE": "Routar",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -783,7 +696,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 88,
     "LOCALIDADE": "Salgueiral",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -792,7 +704,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 89,
     "LOCALIDADE": "Sanguinhedo De Maçãs",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -801,7 +712,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 90,
     "LOCALIDADE": "Santos Evos",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -810,7 +720,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 91,
     "LOCALIDADE": "São Cosmado",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -819,7 +728,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 92,
     "LOCALIDADE": "São Cristóvão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -828,7 +736,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 93,
     "LOCALIDADE": "São José",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -837,7 +744,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 94,
     "LOCALIDADE": "São Martinho-São Pedro De France",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -846,7 +752,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 95,
     "LOCALIDADE": "São Simão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -855,7 +760,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 96,
     "LOCALIDADE": "Sequeiros",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -864,7 +768,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 97,
     "LOCALIDADE": "Serdaninha",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -873,7 +776,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 98,
     "LOCALIDADE": "Sernada",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -882,7 +784,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 99,
     "LOCALIDADE": "Silvares",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -891,7 +792,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 100,
     "LOCALIDADE": "Silvares-Cavernães",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -900,7 +800,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 101,
     "LOCALIDADE": "Sítio De Vila Meã",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -909,7 +808,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 102,
     "LOCALIDADE": "Sobral Do Dão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -918,7 +816,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 103,
     "LOCALIDADE": "Souto Do Chão",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -927,7 +824,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 104,
     "LOCALIDADE": "Taboadelo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -936,7 +832,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 105,
     "LOCALIDADE": "Termas De Alcafache",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -945,7 +840,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 106,
     "LOCALIDADE": "Torredeita",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -954,7 +848,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 107,
     "LOCALIDADE": "Travasso",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -963,7 +856,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 108,
     "LOCALIDADE": "Travassos",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -972,7 +864,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 109,
     "LOCALIDADE": "Várzea",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -981,7 +872,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 110,
     "LOCALIDADE": "Várzea-Torredeita",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -990,7 +880,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 111,
     "LOCALIDADE": "Vil De Ferreiros",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -999,7 +888,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 112,
     "LOCALIDADE": "Vila Chã-Cepões",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1008,7 +896,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 113,
     "LOCALIDADE": "Vila Chã Do Monte",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1017,7 +904,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 114,
     "LOCALIDADE": "Vila Corça",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1026,7 +912,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 115,
     "LOCALIDADE": "Vila De Um Santo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1035,7 +920,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 116,
     "LOCALIDADE": "Vila Nova-Couto De Baixo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1044,7 +928,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 117,
     "LOCALIDADE": "Vilar",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1053,7 +936,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 118,
     "LOCALIDADE": "Vilar Da Ordem",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1062,7 +944,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 119,
     "LOCALIDADE": "Vilar De Baixo",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1071,7 +952,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 120,
     "LOCALIDADE": "Vilar Do Monte",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1080,7 +960,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 121,
     "LOCALIDADE": "Vilarinho",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1089,7 +968,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 122,
     "LOCALIDADE": "Vilas Covas",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1098,7 +976,30 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 123,
+    "LOCALIDADE": "Viseu - COMV",
+    "TARIFA": 1,
+    "COD_POSTAL": "3510-044",
+    "LATITUDE": 40.661827,
+    "LONGITUDE": -7.915552,
+    "ATIVO": true
+  },
+  {
+    "LOCALIDADE": "Viseu - Hospital",
+    "TARIFA": 1,
+    "COD_POSTAL": "3500-602",
+    "LATITUDE": 40.64967,
+    "LONGITUDE": -7.909406,
+    "ATIVO": true
+  },
+  {
+    "LOCALIDADE": "Viseu - Palácio do Gelo",
+    "TARIFA": 1,
+    "COD_POSTAL": "3500-046",
+    "LATITUDE": 40.644167,
+    "LONGITUDE": -7.910043,
+    "ATIVO": true
+  },
+  {
     "LOCALIDADE": "Vouguinha",
     "TARIFA": 5,
     "COD_POSTAL": "",
@@ -1107,7 +1008,6 @@
     "ATIVO": false
   },
   {
-    "NR_LOCALIDADE": 124,
     "LOCALIDADE": "Zonho",
     "TARIFA": 5,
     "COD_POSTAL": "",

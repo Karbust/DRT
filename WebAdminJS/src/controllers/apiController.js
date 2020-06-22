@@ -1,13 +1,12 @@
 let Localidades = require('../models/Localidades'),
-    Paises = require('../models/Paises')
+    Paises = require('../models/Paises'),
     sequelize = require('../config/database'),
-    NodeCache = require('node-cache'),
-    config = require('../config/config')
+    NodeCache = require('node-cache')
 
 const controllers = {}
 sequelize.sync()
 
-const cache = new NodeCache( { stdTTL: 100, checkperiod: 120 } );
+const cache = new NodeCache( { stdTTL: 100, checkperiod: 120 } )
 
 controllers.localidades = async (req, res) => {
     if(cache.get('localidades') === undefined) {
@@ -18,13 +17,13 @@ controllers.localidades = async (req, res) => {
             order: [
                 ['LOCALIDADE', 'ASC'],
             ],
-        }).then(function(data) {
+        }).then((data) => {
             cache.set('localidades', JSON.stringify(data), 900)
             return res.json({
                 success: true,
                 data: data,
             })
-        }).catch(error => {
+        }).catch(() => {
             return res.json({ success: false })
         })
     } else {
@@ -41,13 +40,13 @@ controllers.nacionalidades = async (req, res) => {
             order: [
                 ['NR_PAIS', 'ASC'],
             ],
-        }).then(function(data) {
+        }).then((data) => {
             cache.set('nacionalidades', JSON.stringify(data), 900 )
             return res.json({
                 success: true,
                 data: data,
             })
-        }).catch(error => {
+        }).catch(() => {
             return res.json({ success: false })
         })
     } else {

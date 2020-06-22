@@ -44,6 +44,9 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
                             region: 'PT',
                         }}
                         // required
+                        // Não é permitida cache
+                        // https://cloud.google.com/maps-platform/terms#3.-license.
+                        // https://cloud.google.com/maps-platform/terms/maps-service-terms#1.-directions-api
                         callback={directionsCallback}
                         // optional
                         onLoad={directionsService => {

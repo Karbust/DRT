@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NavLink, Route, Switch, useRouteMatch } from 'react-router-dom'
+import { NavLink, Switch, useRouteMatch } from 'react-router-dom'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -38,20 +38,26 @@ import Logo from './imagens/logo_muv.svg'
 import { useStyles } from './components/MuiStyles'
 import RegistarCliente from './views_dashboard/RegistarCliente'
 import RegistarMotorista from './views_dashboard/RegistarMotorista'
-import RegistarVeiculo from './views_dashboard/RegistarVeiculo'
 import RegistarViagem from './views_dashboard/RegistarViagem'
 import DashboardView from './views_dashboard/DashboardView'
 import ValidarRegistos from './views_dashboard/ValidarRegistos'
 import PedidosViagem from './views_dashboard/PedidosViagem'
 import HistoricoViagens from './views_dashboard/HistoricoViagens'
+import RegistarViatura from './views_dashboard/RegistarViatura'
+import ListaViaturas from './views_dashboard/ListaViaturas'
 import clsx from 'clsx'
 import RegistosNaoValidados from './views_dashboard/RegistosNaoValidados'
+import { Role } from './components/functions'
+import { PrivateRoute } from './components/PrivateRoute'
 
 export default function Dashboard () {
     const theme = useTheme()
     const [open, setOpen] = useState(false)
     const [openNestedViagens, setOpenNestedViagens] = React.useState(false)
+    const [openNestedViaturas, setOpenNestedViaturas] = React.useState(false)
     const [openNestedUsers, setOpenNestedUsers] = React.useState(false)
+
+    const currentUser = JSON.parse(localStorage.getItem('user'))
 
     const classes = useStyles()
 
@@ -65,6 +71,9 @@ export default function Dashboard () {
 
     const handleClickViagens = () => {
         setOpenNestedViagens(!openNestedViagens)
+    }
+    const handleClickViaturas = () => {
+        setOpenNestedViaturas(!openNestedViaturas)
     }
     const handleClickUsers = () => {
         setOpenNestedUsers(!openNestedUsers)
@@ -117,95 +126,160 @@ export default function Dashboard () {
                             <ListItemIcon><NearMe/></ListItemIcon>
                             <ListItemText primary="Dashboard"/>
                         </ListItem>
-                        <ListItem button onClick={handleClickViagens}>
-                            <ListItemIcon>
-                                <MapTwoTone/>
-                            </ListItemIcon>
-                            <ListItemText primary="Viagens" />
-                            {openNestedViagens ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                        <Collapse in={openNestedViagens} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                                <ListItem button key="Registar Viagem" component={NavLink} className={classes.nested}
-                                    to={`${url}/Viagens/RegistarViagem`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
-                                    <ListItemIcon><MapOutlined/></ListItemIcon>
-                                    <ListItemText primary="Registar Viagem"/>
-                                </ListItem>
-                                <ListItem button key="Pedidos de Viagem" component={NavLink} className={classes.nested}
-                                    to={`${url}/Viagens/PedidosViagem`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
-                                    <ListItemIcon><Map/></ListItemIcon>
-                                    <ListItemText primary="Pedidos Viagem"/>
-                                </ListItem>
-                                <ListItem button key="Histórico Viagens" component={NavLink} className={classes.nested}
-                                    to={`${url}/Viagens/HistoricoViagens`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
-                                    <ListItemIcon><History/></ListItemIcon>
-                                    <ListItemText primary="Histórico Viagens"/>
-                                </ListItem>
-                            </List>
-                        </Collapse>
+                        {
+                            ([Role.Administrador,Role.AdministradorOperador,Role.Telefonista].includes(currentUser.tipoUser)) &&
+                                <>
+                                    <ListItem button onClick={handleClickViagens}>
+                                        <ListItemIcon>
+                                            <MapTwoTone/>
+                                        </ListItemIcon>
+                                        <ListItemText primary="Viagens" />
+                                        {openNestedViagens ? <ExpandLess /> : <ExpandMore />}
+                                    </ListItem>
+                                    <Collapse in={openNestedViagens} timeout="auto" unmountOnExit>
+                                        <List component="div" disablePadding>
+                                            {
+                                                ([Role.Administrador,Role.AdministradorOperador,Role.Telefonista].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Viagem" component={NavLink} className={classes.nested}
+                                                to={`${url}/Viagens/RegistarViagem`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
+                                                <ListItemIcon><MapOutlined/></ListItemIcon>
+                                                <ListItemText primary="Registar Viagem"/>
+                                            </ListItem>
+                                            }
+                                            {
+                                                ([Role.Administrador,Role.AdministradorOperador,Role.Telefonista].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Pedidos de Viagem" component={NavLink} className={classes.nested}
+                                                to={`${url}/Viagens/PedidosViagem`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
+                                                <ListItemIcon><Map/></ListItemIcon>
+                                                <ListItemText primary="Pedidos Viagem"/>
+                                            </ListItem>
+                                            }
+                                            {
+                                                ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Histórico Viagens" component={NavLink} className={classes.nested}
+                                                to={`${url}/Viagens/HistoricoViagens`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
+                                                <ListItemIcon><History/></ListItemIcon>
+                                                <ListItemText primary="Histórico Viagens"/>
+                                            </ListItem>
+                                            }
+                                        </List>
+                                    </Collapse>
+                                </>
+                        }
 
-                        <ListItem button onClick={handleClickUsers}>
-                            <ListItemIcon>
-                                <Icon component={FontAwesomeIcon} icon={faUsers}/>
-                            </ListItemIcon>
-                            <ListItemText primary="Utilizadores" />
-                            {openNestedUsers ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                        <Collapse in={openNestedUsers} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                                <ListItem button key="Validar Registo Cliente" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/ValidarRegistoCliente`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserCheck} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Validar Registo Cliente"/>
+                        {
+                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                            <>
+                                <ListItem button onClick={handleClickUsers}>
+                                    <ListItemIcon>
+                                        <Icon component={FontAwesomeIcon} icon={faUsers} fontSize="small"/>
+                                    </ListItemIcon>
+                                    <ListItemText primary="Utilizadores" />
+                                    {openNestedUsers ? <ExpandLess /> : <ExpandMore />}
                                 </ListItem>
-                                <ListItem button key="Registos Não Validados" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/RegistosNaoValidados`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserTimes} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Registos Não Validados"/>
-                                </ListItem>
-                                <ListItem button key="Registar Cliente" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/RegistarCliente`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserPlus} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Registar Cliente"/>
-                                </ListItem>
-                                <ListItem button key="Registar Motorista" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/RegistarMotorista`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserTie} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Registar Motorista"/>
-                                </ListItem>
-                                <ListItem button key="Registar Administrador" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/RegistarAdministrador`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserShield} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Registar Administrador"/>
-                                </ListItem>
-                                <ListItem button key="Registar Operador" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/RegistarOperador`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserCog} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Registar Operador"/>
-                                </ListItem>
-                                <ListItem button key="Registar Telefonista" component={NavLink} className={classes.nested}
-                                    to={`${url}/Utilizadores/RegistarTelefonista`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                                    exact>
-                                    <ListItemIcon><Icon component={FontAwesomeIcon} icon={faHeadset} fontSize='small'/></ListItemIcon>
-                                    <ListItemText primary="Registar Telefonista"/>
-                                </ListItem>
-                            </List>
-                        </Collapse>
+                                <Collapse in={openNestedUsers} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Validar Registo Cliente" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/ValidarRegistoCliente`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserCheck} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Validar Registo Cliente"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registos Não Validados" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/RegistosNaoValidados`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserTimes} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Registos Não Validados"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Cliente" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/RegistarCliente`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserPlus} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Registar Cliente"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Motorista" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/RegistarMotorista`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserTie} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Registar Motorista"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Administrador" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/RegistarAdministrador`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserShield} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Registar Administrador"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Operador" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/RegistarOperador`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faUserCog} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Registar Operador"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Telefonista" component={NavLink} className={classes.nested}
+                                                to={`${url}/Utilizadores/RegistarTelefonista`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><Icon component={FontAwesomeIcon} icon={faHeadset} fontSize='small'/></ListItemIcon>
+                                                <ListItemText primary="Registar Telefonista"/>
+                                            </ListItem>
+                                        }
+                                    </List>
+                                </Collapse>
+                            </>
+                        }
 
-
-                        <ListItem button key="Registar Veículo" component={NavLink}
-                            to={`${url}/RegistarVeiculo`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
-                            exact>
-                            <ListItemIcon><DirectionsCar/></ListItemIcon>
-                            <ListItemText primary="Registar Veículo"/>
-                        </ListItem>
-
+                        {
+                            ([Role.Administrador,Role.AdministradorOperador,Role.AdministrativoOperador].includes(currentUser.tipoUser)) &&
+                            <>
+                                <ListItem button onClick={handleClickViaturas}>
+                                    <ListItemIcon>
+                                        <MapTwoTone/>
+                                    </ListItemIcon>
+                                    <ListItemText primary="Viaturas" />
+                                    {openNestedViaturas ? <ExpandLess /> : <ExpandMore />}
+                                </ListItem>
+                                <Collapse in={openNestedViaturas} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Registar Viatura" component={NavLink} className={classes.nested}
+                                                to={`${url}/Viaturas/RegistarViatura`} activeStyle={{ backgroundColor: theme.palette.primary.main }}
+                                                exact>
+                                                <ListItemIcon><DirectionsCar/></ListItemIcon>
+                                                <ListItemText primary="Registar Viatura"/>
+                                            </ListItem>
+                                        }
+                                        {
+                                            ([Role.Administrador,Role.AdministradorOperador,Role.AdministrativoOperador].includes(currentUser.tipoUser)) &&
+                                            <ListItem button key="Lista Viaturas" component={NavLink} className={classes.nested}
+                                                to={`${url}/Viaturas/ListaViaturas`} activeStyle={{ backgroundColor: theme.palette.primary.main }} exact>
+                                                <ListItemIcon><Map/></ListItemIcon>
+                                                <ListItemText primary="Lista Viaturas"/>
+                                            </ListItem>
+                                        }
+                                    </List>
+                                </Collapse>
+                            </>
+                        }
                     </List>
                     <Divider/>
                     <List>
@@ -219,23 +293,25 @@ export default function Dashboard () {
                 <main className={classes.content}>
                     <div className={classes.toolbar}/>
                     <Switch>
-                        <Route exact path={path} component={DashboardView}/>
+                        <PrivateRoute exact path={path} component={DashboardView}/>
 
-                        <Route exact path={`${path}/Viagens`} component={DashboardView}/>
-                        <Route exact path={`${path}/Viagens/RegistarViagem`} component={RegistarViagem}/>
-                        <Route exact path={`${path}/Viagens/PedidosViagem`} component={PedidosViagem}/>
-                        <Route exact path={`${path}/Viagens/HistoricoViagens`} component={HistoricoViagens}/>
+                        <PrivateRoute exact path={`${path}/Viagens`} component={DashboardView}/>
+                        <PrivateRoute exact path={`${path}/Viagens/RegistarViagem`} roles={[Role.Administrador,Role.AdministradorOperador,Role.Telefonista]} component={RegistarViagem}/>
+                        <PrivateRoute exact path={`${path}/Viagens/PedidosViagem`} roles={[Role.Administrador,Role.AdministradorOperador,Role.Telefonista]} component={PedidosViagem}/>
+                        <PrivateRoute exact path={`${path}/Viagens/HistoricoViagens`} roles={[Role.Administrador,Role.AdministradorOperador]} component={HistoricoViagens}/>
 
-                        <Route exact path={`${path}/Utilizadores`} component={DashboardView}/>
-                        <Route exact path={`${path}/Utilizadores/ValidarRegistoCliente`} component={ValidarRegistos}/>
-                        <Route exact path={`${path}/Utilizadores/RegistosNaoValidados`} component={RegistosNaoValidados}/>
-                        <Route exact path={`${path}/Utilizadores/RegistarCliente`} component={RegistarCliente}/>
-                        <Route exact path={`${path}/Utilizadores/RegistarMotorista`} component={RegistarMotorista}/>
-                        <Route exact path={`${path}/Utilizadores/RegistarAdministrador`} component={RegistarCliente}/>
-                        <Route exact path={`${path}/Utilizadores/RegistarOperador`} component={RegistarCliente}/>
-                        <Route exact path={`${path}/Utilizadores/RegistarTelefonista`} component={RegistarCliente}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores`} component={DashboardView}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/ValidarRegistoCliente`} roles={[Role.Administrador,Role.Administrativo]} component={ValidarRegistos}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/RegistosNaoValidados`} roles={[Role.Administrador,Role.Administrativo]} component={RegistosNaoValidados}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/RegistarCliente`} roles={[Role.Administrador,Role.Administrativo]} component={RegistarCliente}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/RegistarMotorista`} roles={[Role.Administrador,Role.AdministradorOperador]} component={RegistarMotorista}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/RegistarAdministrador`} roles={[Role.Administrador]} component={RegistarCliente}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/RegistarOperador`} roles={[Role.Administrador]} component={RegistarCliente}/>
+                        <PrivateRoute exact path={`${path}/Utilizadores/RegistarTelefonista`} roles={[Role.Administrador,Role.AdministradorOperador]} component={RegistarCliente}/>
 
-                        <Route exact path={`${path}/RegistarVeiculo`} component={RegistarVeiculo}/>
+                        <PrivateRoute exact path={`${path}/Viaturas`} component={DashboardView}/>
+                        <PrivateRoute exact path={`${path}/Viaturas/RegistarViatura`} roles={[Role.Administrador,Role.AdministradorOperador]} component={RegistarViatura}/>
+                        <PrivateRoute exact path={`${path}/Viaturas/ListaViaturas`} roles={[Role.Administrador,Role.AdministradorOperador,Role.AdministrativoOperador]} component={ListaViaturas}/>
                     </Switch>
                 </main>
             </div>

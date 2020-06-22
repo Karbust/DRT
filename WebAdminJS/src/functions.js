@@ -1,24 +1,24 @@
 module.exports = {
     password: function (length) {
-        var result = '';
-        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
+        var result = ''
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+        var charactersLength = characters.length
         for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            result += characters.charAt(Math.floor(Math.random() * charactersLength))
         }
-        return result;
+        return result
     },
     sendEmail : function (to, subject, message, from) {
-        const AWS = require('aws-sdk');
-        const config = require('./config/config'); // load configurations file
+        const AWS = require('aws-sdk')
+        const config = require('./config/config') // load configurations file
 
         AWS.config.update({
             accessKeyId: config.aws.key,
             secretAccessKey: config.aws.secret,
             region: config.aws.ses.region
-        });
+        })
 
-        const ses = new AWS.SES();
+        const ses = new AWS.SES()
 
         const params = {
             Destination: {
@@ -44,14 +44,14 @@ module.exports = {
             },
             ReturnPath: from ? from : config.aws.ses.fromAddress,
             Source: from ? from : config.aws.ses.fromAddress,
-        };
+        }
 
         ses.sendEmail(params, (err, data) => {
             if (err) {
-                return console.log(err, err.stack);
+                return console.log(err, err.stack)
             } else {
-                console.log("Email sent.", data);
+                console.log("Email sent.", data)
             }
-        });
+        })
     }
 }

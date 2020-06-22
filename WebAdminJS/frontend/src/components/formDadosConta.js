@@ -20,7 +20,8 @@ export const FormDadosConta = ({ classes }) => {
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="utilizador">
+                    <Field name="utilizador"
+                        validate={(utilizador) => validator.isAlphanumeric(utilizador) ? undefined : 'Nome de utilizador inválido'}>
                         {({ field, form: { errors } }) => (
                             <TextField {...field} required fullWidth id="utilizador"
                                 type="text"

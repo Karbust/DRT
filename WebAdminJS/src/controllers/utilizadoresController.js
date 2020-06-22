@@ -1,9 +1,9 @@
 let { Sequelize, Op } = require('sequelize'),
     jwt = require('jsonwebtoken'),
     bcrypt = require('bcrypt'),
-    User = require('../models/utilizadoresModel'),
-    Verificacoes = require('../models/Verificacoes'),
-    Validacoes = require('../models/Validacoes'),
+    {
+        TiposUtilizadores, Utilizadores, Verificacoes, Validacoes
+    } = require('../models/Utilizadores'),
     sequelize = require('../config/database'),
     config = require('../config/config'),
     functions = require('../functions'),
@@ -11,10 +11,13 @@ let { Sequelize, Op } = require('sequelize'),
     NodeCache = require('node-cache'),
     { v4: uuidv4 } = require('uuid')
 
-Validacoes.belongsTo(User, { foreignKey: 'NR_VALIDADO', as: 'Validado' })
-Validacoes.belongsTo(User, { foreignKey: 'NR_VALIDADOR', as: 'Validador' })
-User.hasMany(Validacoes, { foreignKey: 'NR_VALIDADO', as: 'VALIDADOVALIDACOES' })
-User.hasMany(Validacoes, { foreignKey: 'NR_VALIDADOR', as: 'VALIDADORVALIDACOES' })
+Utilizadores.belongsTo(TiposUtilizadores, { foreignKey: 'TIPO_UTILIZADOR', as: 'TipoUser' })
+TiposUtilizadores.hasMany(Utilizadores, { foreignKey: 'TIPO_UTILIZADOR', as: 'UTILIZADORTIPOUTILIZADOR' })
+
+Validacoes.belongsTo(Utilizadores, { foreignKey: 'NR_VALIDADO', as: 'Validado' })
+Validacoes.belongsTo(Utilizadores, { foreignKey: 'NR_VALIDADOR', as: 'Validador' })
+Utilizadores.hasMany(Validacoes, { foreignKey: 'NR_VALIDADO', as: 'VALIDADOVALIDACOES' })
+Utilizadores.hasMany(Validacoes, { foreignKey: 'NR_VALIDADOR', as: 'VALIDADORVALIDACOES' })
 
 const controllers = {}
 sequelize.sync()
@@ -25,8 +28,8 @@ const cache = new NodeCache({
 })
 
 controllers.listar = async (req, res) => {
-    const data = await User.findAll()
-        .then(function(data) {
+    const data = await Utilizadores.findAll()
+        .then((data) => {
             return data
         })
         .catch(error => {
@@ -40,7 +43,7 @@ controllers.listar = async (req, res) => {
 
 controllers.listarMotoristas = async (req, res) => {
     if (cache.get('motoristas') === undefined) {
-        await User.findAll({
+        await Utilizadores.findAll({
             attributes: ['NR_UTILIZADOR', 'NOME_UTILIZADOR'],
             where: {
                 TIPO_UTILIZADOR: 5,
@@ -48,13 +51,13 @@ controllers.listarMotoristas = async (req, res) => {
             order: [
                 ['NOME_UTILIZADOR', 'ASC'],
             ],
-        }).then(function(data) {
+        }).then((data) => {
             cache.set('motoristas', JSON.stringify(data), 900)
             return res.json({
                 success: true,
                 data: data,
             })
-        }).catch(error => {
+        }).catch(() => {
             return res.json({ success: false })
         })
     } else {
@@ -66,7 +69,7 @@ controllers.listarMotoristas = async (req, res) => {
 }
 
 controllers.listarNcc = async (req, res) => {
-    await User.findAll({
+    await Utilizadores.findAll({
         attributes: ['NR_UTILIZADOR', 'N_CC'],
         where: {
             N_CC: {
@@ -76,12 +79,12 @@ controllers.listarNcc = async (req, res) => {
         order: [
             ['N_CC', 'ASC'],
         ],
-    }).then(function(data) {
+    }).then((data) => {
         return res.json({
             success: true,
             data: data,
         })
-    }).catch(error => {
+    }).catch(() => {
         return res.json({ success: false })
     })
 }
@@ -94,7 +97,7 @@ controllers.validacaoConta = async (req, res) => {
         let promises = []
         if(aprovar) {
             promises.push(
-                User.update({
+                Utilizadores.update({
                     VALIDADO: true,
                 }, {
                     where: {
@@ -116,7 +119,7 @@ controllers.validacaoConta = async (req, res) => {
                 }),
             )
         } else {
-            promises.push(User.destroy({
+            promises.push(Utilizadores.destroy({
                 where: {
                     NR_UTILIZADOR: user,
                 },
@@ -136,9 +139,9 @@ controllers.validacaoConta = async (req, res) => {
         }
 
         return Promise.all(promises)
-    }).then(function() {
+    }).then(() => {
         return res.json({ success: true })
-    }).catch(function(err) {
+    }).catch((err) => {
         console.log(err)
         return res.json({ success: false })
     })
@@ -149,7 +152,7 @@ controllers.verificarContaLink = async (req, res) => {
         await sequelize.transaction(async (t) => {
             let promises = []
             promises.push(
-                User.update({
+                Utilizadores.update({
                     VERIFICADO: true,
                     TOKEN: '1',
                 }, {
@@ -162,14 +165,14 @@ controllers.verificarContaLink = async (req, res) => {
             )
 
             promises.push(
-                User.findOne({
+                Utilizadores.findOne({
                     attributes: ['NR_UTILIZADOR'],
                     where: {
                         TOKEN: token,
                     },
                 }, {
                     transaction: t,
-                }).then(function(data) {
+                }).then((data) => {
                     Verificacoes.create({
                         NR_VERIFICADO: data.NR_UTILIZADOR,
                         TOKEN: token,
@@ -182,9 +185,9 @@ controllers.verificarContaLink = async (req, res) => {
             )
 
             return Promise.all(promises)
-        }).then(function() {
+        }).then(() => {
             return res.json({ success: true })
-        }).catch(function() {
+        }).catch(() => {
             return res.json({ success: false })
         })
     } else {
@@ -195,7 +198,7 @@ controllers.verificarConta = async (req, res) => {
     await sequelize.transaction(async (t) => {
         let promises = []
         promises.push(
-            User.update({
+            Utilizadores.update({
                 VERIFICADO: true,
             }, {
                 where: {
@@ -218,9 +221,9 @@ controllers.verificarConta = async (req, res) => {
         )
 
         return Promise.all(promises)
-    }).then(function() {
+    }).then(() => {
         return res.json({ success: true })
-    }).catch(function() {
+    }).catch(() => {
         return res.json({ success: false })
     })
 }
@@ -229,22 +232,22 @@ controllers.verificarContaEnvioEmail = async (req, res) => {
 
     //functions.sendEmail(req.body.email.toString(), 'Conta criada no DRT', 'Token: ' + token)
 
-    User.update({
+    Utilizadores.update({
         TOKEN: token,
         DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
     }, {
         where: {
             NR_UTILIZADOR: req.body.user,
         },
-    }).then(function(){
+    }).then(() => {
         return res.json({ success: true })
-    }).catch(function() {
+    }).catch(() => {
         return res.json({ success: false })
     })
 }
 
 controllers.listaUtilizadoresNaoValidados = async (req, res) => {
-    await User.findAll({
+    await Utilizadores.findAll({
         attributes: [
             'NR_UTILIZADOR',
             'NOME_UTILIZADOR',
@@ -272,18 +275,18 @@ controllers.listaUtilizadoresNaoValidados = async (req, res) => {
         order: [
             ['createdAt', 'ASC'],
         ],
-    }).then(function(data) {
+    }).then((data) => {
         return res.json({
             success: true,
             data: data,
         })
-    }).catch(error => {
+    }).catch(() => {
         return res.json({ success: false })
     })
 }
 
 controllers.listaRegistosNaoValidados = async (req, res) => {
-    await User.findAll({
+    await Utilizadores.findAll({
         attributes: [
             'NR_UTILIZADOR',
             'NOME_UTILIZADOR',
@@ -312,12 +315,12 @@ controllers.listaRegistosNaoValidados = async (req, res) => {
             }
         }],
         paranoid: false
-    }).then(function(data) {
+    }).then((data) => {
         return res.json({
             success: true,
             data: data,
         })
-    }).catch(error => {
+    }).catch((error) => {
         console.log(error)
         return res.json({ success: false, message: error })
     })
@@ -329,7 +332,7 @@ controllers.apagarRegistoNaoValidado = async (req, res) => {
 
         let promises = []
 
-        promises.push(User.destroy({
+        promises.push(Utilizadores.destroy({
             where: {
                 NR_UTILIZADOR: user,
             },
@@ -357,12 +360,14 @@ controllers.apagarRegistoNaoValidado = async (req, res) => {
 }
 
 controllers.registar = async (req, res) => {
-    let { nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, tipo_utilizador } = req.body
+    let {
+        nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, tipo_utilizador
+    } = req.body
     let imagens = req.files.map((file) => file.filename)
     let password = functions.password(8)
     let token = uuidv4()
 
-    await User.create({
+    await Utilizadores.create({
         NOME_UTILIZADOR: nome,
         DATA_NASCIMENTO: moment(datanascimento).format('YYYY-MM-DD'),
         N_CC: ncc,
@@ -386,7 +391,7 @@ controllers.registar = async (req, res) => {
         VERIFICADO: false,
         TOKEN: token,
         DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
-    }).then(function(data) {
+    }).then((data) => {
         //functions.sendEmail(email.toString(), 'Conta criada no DRT', 'Password: ' + password + '\nToken: ' + token)
 
         return res.json({
@@ -414,14 +419,14 @@ controllers.login = async (req, res) => {
         var username = req.body.username
         var password = req.body.password
 
-        await User.findOne({
+        await Utilizadores.findOne({
             where: {
                 EMAIL: username,
                 TIPO_UTILIZADOR: {
                     [Op.in]: [1, 2, 3, 4, 6],
                 },
             },
-        }).then(function(data) {
+        }).then((data) => {
             if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
                 return res.json({
                     success: false,
@@ -460,11 +465,13 @@ controllers.login = async (req, res) => {
                 token = jwt.sign({
                     nr_user: data.NR_UTILIZADOR,
                     email: username,
+                    tipo_utilizador: data.TIPO_UTILIZADOR
                 }, config.jwt.secret, {})
             } else {
                 token = jwt.sign({
                     nr_user: data.NR_UTILIZADOR,
                     email: username,
+                    tipo_utilizador: data.TIPO_UTILIZADOR
                 }, config.jwt.secret, { expiresIn: '1h' })
             }
 
@@ -490,11 +497,12 @@ controllers.login = async (req, res) => {
 }
 
 controllers.verificar_login = async (req, res) => {
-    jwt.verify(req.body.token.Authorization.split(' ')[1], config.jwt.secret, function(err, decoded) {
+    jwt.verify(req.body.token.Authorization.split(' ')[1], config.jwt.secret, (err, decoded) => {
         if (decoded) {
             res.json({
                 success: true,
                 message: 'Autenticação válida!',
+                data: decoded
             })
         } else {
             res.json({

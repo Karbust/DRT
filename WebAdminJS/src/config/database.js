@@ -1,4 +1,4 @@
-var Sequelize = require('sequelize');
+var Sequelize = require('sequelize')
 const sequelize = new Sequelize(
     'drt_testes', //base de dados
     'drt', //utilizador
@@ -9,5 +9,5 @@ const sequelize = new Sequelize(
         dialect: 'postgres'/*,
         sync: {force: true}*/
     }
-);
-module.exports = sequelize;
+)
+module.exports = sequelize

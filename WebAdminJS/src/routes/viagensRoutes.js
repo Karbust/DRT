@@ -4,9 +4,10 @@ let express = require('express'),
 
 const viagensController = require('../controllers/viagensController')
 
-router.post('/historicoviagens', middleware.checkToken, viagensController.historicoViagens);
-router.post('/registopedidoviagem', middleware.checkToken, viagensController.registoPedidoViagem);
-router.get('/pedidosviagem', middleware.checkToken, viagensController.pedidoViagem);
-router.post('/classificacaoviagem', middleware.checkToken, viagensController.classificacaoViagem);
+router.get('/historicoviagens', /*middleware.checkToken,*/ viagensController.historicoViagens)
+router.post('/registopedidoviagem', middleware.checkToken, viagensController.registoPedidoViagem)
+router.get('/pedidosviagem', /*middleware.checkToken,*/ viagensController.pedidoViagem)
+router.post('/classificacaoviagem', middleware.checkToken, viagensController.classificacaoViagem)
+router.post('/editarviagem', middleware.checkToken, viagensController.editarViagem)
 
-module.exports = router;
+module.exports = router

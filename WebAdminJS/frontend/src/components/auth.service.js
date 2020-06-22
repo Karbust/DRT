@@ -16,17 +16,22 @@ class AuthService {
 
     logout () { localStorage.removeItem('user') }
     getCurrentUser () {
-        if (JSON.parse(localStorage.getItem('user'))) {
-            const token = authHeader()
+        let user = JSON.parse(localStorage.getItem('user'))
+        if (user) {
             return axios
-                .post(backendUrl + 'user/verificar_login', { token })
+                .post(backendUrl + 'user/verificar_login', { token: authHeader() })
                 .then(res => {
-                    if (!res.data.success) {
+                    if (res.data.success) {
+                        //console.log(res.data.data)
+                        return res.data.data
+                    } else {
                         this.logout()
                         window.location.reload()
                     }
                 })
-        } else { return false }
+        } else {
+            return false
+        }
     }
 }
 
