@@ -1,8 +1,9 @@
-let express = require('express'),
-    router = express.Router()
+import express from 'express'
 
-const firstRunController = require('../controllers/firstRunController')
+const firstRunRouter = express.Router()
 
-router.get('/', firstRunController.firstRun)
+import { firstRunController } from '../controllers/firstRunController.js'
 
-module.exports = router
+firstRunRouter.get('/', firstRunController.firstRun)
+
+export { firstRunRouter }

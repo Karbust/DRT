@@ -1,4 +1,5 @@
-var Sequelize = require('sequelize')
+import Sequelize from 'sequelize'
+
 const sequelize = new Sequelize(
     'drt_testes', //base de dados
     'drt', //utilizador
@@ -10,4 +11,4 @@ const sequelize = new Sequelize(
         sync: {force: true}*/
     }
 )
-module.exports = sequelize
+export { sequelize }

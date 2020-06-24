@@ -13,11 +13,12 @@ import {
 import moment from 'moment'
 import MomentUtils from '@date-io/moment'
 import validator from 'validator'
-import { validateNCC, validateNSS, validateNIF } from './functions'
 import { Autocomplete } from '@material-ui/lab'
 
+import { validateNCC, validateNSS, validateNIF } from './functions'
+
 export const FormDadosPessoais = ({
-    classes, nacionalidades
+    classes, nacionalidades,
 }) => {
     const { setFieldValue, validateField } = useFormikContext()
 
@@ -25,13 +26,19 @@ export const FormDadosPessoais = ({
         <Box ml={10} mr={10}>
             <Grid container spacing={4}>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="nome"
-                        validate={(nome) => nome.length >= 5 ? undefined : 'Nome inválido'}>
-                        {({ field, form: { errors, validateField } }) => (
-                            <TextField {...field} required fullWidth id="nome"
+                    <Field
+                        name="nome"
+                        validate={(nome) => (nome.length >= 5 ? undefined : 'Nome inválido')}
+                    >
+                        {({ field, form: { errors } }) => (
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="nome"
                                 type="text"
                                 label="Nome Completo"
-                                placeholder={'Nome Completo'}
+                                placeholder="Nome Completo"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.nome)}
@@ -42,20 +49,28 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <MuiPickersUtilsProvider libInstance={moment}
-                        utils={MomentUtils} locale={'pt'}>
-                        <Field name="datanascimento"
-                            validate={(datanascimento) => datanascimento !== null ? undefined : 'Campo obrigatório' }>
+                    <MuiPickersUtilsProvider
+                        libInstance={moment}
+                        utils={MomentUtils}
+                        locale="pt"
+                    >
+                        <Field
+                            name="datanascimento"
+                            validate={(datanascimento) => (datanascimento !== null ? undefined : 'Campo obrigatório')}
+                        >
                             {({ field, form: { errors } }) => (
-                                <DatePicker {...field} required disableFuture
+                                <DatePicker
+                                    {...field}
+                                    required
+                                    disableFuture
                                     fullWidth
                                     openTo="year"
                                     id="datanascimento"
                                     format="YYYY-MM-DD"
                                     label="Data de Nascimento"
                                     views={['year', 'month', 'date']}
-                                    placeholder={'Data de Nascimento'}
-                                    margin={'normal'}
+                                    placeholder="Data de Nascimento"
+                                    margin="normal"
                                     className={classes.textField}
                                     inputVariant="outlined"
                                     error={Boolean(errors.datanascimento)}
@@ -70,13 +85,20 @@ export const FormDadosPessoais = ({
                     </MuiPickersUtilsProvider>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="genero"
-                        validate={(genero) => genero !== '' ? undefined : 'Género inválido'}>
+                    <Field
+                        name="genero"
+                        validate={(genero) => (genero !== '' ? undefined : 'Género inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="genero"
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="genero"
                                 select
                                 label="Género"
-                                placeholder={'Género'} variant="outlined"
+                                placeholder="Género"
+                                variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.genero)}
                                 helperText={errors.genero}
@@ -91,13 +113,19 @@ export const FormDadosPessoais = ({
                 </Grid>
 
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="ncc"
-                        validate={(ncc) => validateNCC(ncc) ? undefined : 'NCC inválido'}>
+                    <Field
+                        name="ncc"
+                        validate={(ncc) => (validateNCC(ncc) ? undefined : 'NCC inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="ncc"
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="ncc"
                                 type="text"
                                 label="Número do Cartão de Cidadão"
-                                placeholder={'Número do Cartão de Cidadão'}
+                                placeholder="Número do Cartão de Cidadão"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.ncc)}
@@ -109,13 +137,19 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="nss"
-                        validate={(nss) => validateNSS(nss) ? undefined : 'NSS inválido'}>
+                    <Field
+                        name="nss"
+                        validate={(nss) => (validateNSS(nss) ? undefined : 'NSS inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="nss"
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="nss"
                                 type="text"
                                 label="Número da Segurança Social"
-                                placeholder={'Número da Segurança Social'}
+                                placeholder="Número da Segurança Social"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.nss)}
@@ -126,13 +160,19 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="nif"
-                        validate={(nif) => validateNIF(nif) ? undefined : 'NIF Inválido'}>
+                    <Field
+                        name="nif"
+                        validate={(nif) => (validateNIF(nif) ? undefined : 'NIF Inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="nif"
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="nif"
                                 type="text"
                                 label="Número de Identificação Fiscal"
-                                placeholder={'Número de Identificação Fiscal'}
+                                placeholder="Número de Identificação Fiscal"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.nif)}
@@ -144,14 +184,19 @@ export const FormDadosPessoais = ({
                 </Grid>
 
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="telemovel"
-                        validate={(telemovel) => validator.isMobilePhone(telemovel, 'pt-PT') ? undefined : 'Telemóvel inválido'}>
+                    <Field
+                        name="telemovel"
+                        validate={(telemovel) => (validator.isMobilePhone(telemovel, 'pt-PT') ? undefined : 'Telemóvel inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
                                 id="telemovel"
                                 type="text"
                                 label="Telemóvel"
-                                placeholder={'Telemóvel'}
+                                placeholder="Telemóvel"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.telemovel)}
@@ -162,13 +207,18 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="telefone"
-                        validate={(telefone) => telefone.length === 9 ? undefined : 'Telefone inválido'}>
+                    <Field
+                        name="telefone"
+                        validate={(telefone) => (telefone.length === 9 ? undefined : 'Telefone inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} fullWidth id="telefone"
+                            <TextField
+                                {...field}
+                                fullWidth
+                                id="telefone"
                                 type="text"
                                 label="Telefone"
-                                placeholder={'Telefone'}
+                                placeholder="Telefone"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.telefone)}
@@ -179,29 +229,35 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="nacionalidade"
-                        validate={(nacionalidade) => nacionalidade !== 0 ? undefined : 'Campo obrigatório'}>
+                    <Field
+                        name="nacionalidade"
+                        validate={(nacionalidade) => (nacionalidade !== 0 ? undefined : 'Campo obrigatório')}
+                    >
                         {({ field, form: { errors } }) => (
                             <Autocomplete
                                 id="nacionalidade"
                                 options={nacionalidades}
-                                getOptionLabel={option => {
+                                getOptionLabel={(option) => {
                                     if (!option.NOME) {
                                         return ''
                                     }
                                     return option.NOME
                                 }}
-                                renderInput={(params) =>
-                                    <TextField {...field} {...params} required
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...field}
+                                        {...params}
+                                        required
                                         autoComplete="off"
-                                        label="Nacionalidade" variant="outlined"
+                                        label="Nacionalidade"
+                                        variant="outlined"
                                         className={classes.textField}
                                         error={Boolean(errors.nacionalidade)}
                                         helperText={errors.nacionalidade}
                                         onBlur={(event) => validateField(event.currentTarget.name)}
                                         onChange={undefined}
                                     />
-                                }
+                                )}
                                 onChange={(event, newValue, reason) => {
                                     if (reason === 'select-option') {
                                         setFieldValue('nacionalidade', newValue.NR_PAIS)
@@ -215,14 +271,19 @@ export const FormDadosPessoais = ({
                 </Grid>
 
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="morada"
-                        validate={(morada) => morada !== '' ? undefined : 'Morada inválida'}>
+                    <Field
+                        name="morada"
+                        validate={(morada) => (morada !== '' ? undefined : 'Morada inválida')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
                                 id="morada"
                                 type="text"
                                 label="Morada"
-                                placeholder={'Morada'}
+                                placeholder="Morada"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.morada)}
@@ -233,14 +294,19 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="codpostal"
-                        validate={(codpostal) => validator.isPostalCode(codpostal, 'PT') ? undefined : 'Código postal inválido'}>
+                    <Field
+                        name="codpostal"
+                        validate={(codpostal) => (validator.isPostalCode(codpostal, 'PT') ? undefined : 'Código postal inválido')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
                                 id="codpostal"
                                 type="text"
                                 label="Código Postal"
-                                placeholder={'Código Postal'}
+                                placeholder="Código Postal"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.codpostal)}
@@ -251,14 +317,19 @@ export const FormDadosPessoais = ({
                     </Field>
                 </Grid>
                 <Grid item lg={4} md={5} sm={6} xs={12}>
-                    <Field name="localidade"
-                        validate={(localidade) => localidade !== '' ? undefined : 'Localidade inválida'}>
+                    <Field
+                        name="localidade"
+                        validate={(localidade) => (localidade !== '' ? undefined : 'Localidade inválida')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
                                 id="localidade"
                                 type="text"
                                 label="Localidade"
-                                placeholder={'Localidade'}
+                                placeholder="Localidade"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.localidade)}

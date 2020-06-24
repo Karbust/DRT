@@ -1,9 +1,11 @@
-let express = require('express'),
-    router = express.Router(),
-    middleware = require('../middleware/jwt')
+import express from 'express'
+import { checkToken, authorize, Role } from '../middleware/jwt.js'
 
-const apiController = require('../controllers/apiController')
-router.get('/localidades', /*middleware.checkToken,*/ apiController.localidades)
-router.get('/nacionalidades', /*middleware.checkToken,*/ apiController.nacionalidades)
+const apiRouter = express.Router()
 
-module.exports = router
+import { apiController } from '../controllers/apiController.js'
+
+apiRouter.get('/localidades', /*checkToken,*/ apiController.localidades)
+apiRouter.get('/nacionalidades', /*checkToken,*/ apiController.nacionalidades)
+
+export { apiRouter }

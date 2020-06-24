@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { backendUrl } from '../configs'
-import authHeader from '../components/auth-header'
 import {
     useTheme,
     Box,
@@ -30,12 +28,14 @@ import {
     NavigateNext,
 } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
-import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
 import moment from 'moment'
-import { useConfirm } from 'material-ui-confirm'
 import { Formik } from 'formik'
-import { FormPedidosViagem } from '../components/formPedidosViagem'
 import { Alert } from '@material-ui/lab'
+
+import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
+import authHeader from '../components/auth-header'
+import { backendUrl } from '../configs'
+import { FormPedidosViagem } from '../components/formPedidosViagem'
 
 export default function PedidosViagem() {
     const classes = useStyles()
@@ -43,13 +43,13 @@ export default function PedidosViagem() {
 
     const [localidades, setLocalidades] = useState([])
     const [motoristas, setMotoristas] = useState([])
+    const [viaturas, setViaturas] = useState([])
     const [viagens, setViagens] = useState([])
     const [currentViagem, setCurrentViagem] = useState({ viagem: [], key: null })
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(10)
     const [update, setUpdate] = React.useState(false)
     const [open, setOpen] = React.useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const [message, setMessage] = useState('')
     const [severidade, setSeveridade] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
@@ -57,8 +57,7 @@ export default function PedidosViagem() {
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
     const handleClickOpen = (key) => {
-        console.log(viagens[key])
-        setCurrentViagem({ viagem: viagens[key], key: key })
+        setCurrentViagem({ viagem: viagens[key], key })
         setOpen(true)
     }
 
@@ -74,24 +73,36 @@ export default function PedidosViagem() {
         setOpenAlert(false)
     }
 
-    const onFormikSubmit= (values, formikActions) => {
-        console.log(values)
-        /*setCurrentViagem({ user: viagens[key], key: key })
-        setIsSubmitting(true)
+    const onFormikSubmit = (values, formikActions) => {
+        formikActions.setSubmitting(true)
         axios
-            .post(backendUrl + 'user/verificarconta', { viagem: currentViagem.NR_VIAGEM }, { headers: authHeader() })
-            .then(res => {
+            .post(`${backendUrl}viagens/editarviagem`, { values, nr_viagem: currentViagem.viagem.NR_VIAGEM_PEDIDO }, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
-                    viagens[key].VERIFICADO = true
-                    setIsSubmitting(false)
+                    formikActions.setSubmitting(false)
+                    viagens[currentViagem.key].ESTADO = 'PENDENTE'
+                    setMessage('Viagem editada com sucesso')
+                    setSeveridade('success')
+                    setOpenAlert(true)
+                    setOpen(false)
+                } else {
+                    formikActions.setSubmitting(false)
+                    setMessage('Ocorreu um erro ao editar a viagem.')
+                    setSeveridade('error')
+                    setOpenAlert(true)
                 }
-            })*/
+            }).catch(() => {
+                formikActions.setSubmitting(false)
+                setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                setSeveridade('error')
+                setOpenAlert(true)
+            })
     }
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'api/localidades', { headers: authHeader() })
-            .then(res => {
+            .get(`${backendUrl}api/localidades`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setLocalidades(res.data.data)
                 } else {
@@ -106,8 +117,8 @@ export default function PedidosViagem() {
                 setOpenAlert(true)
             })
         axios
-            .get(backendUrl + 'user/motoristas', { headers: authHeader() })
-            .then(res => {
+            .get(`${backendUrl}user/motoristas`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setMotoristas(res.data.data)
                 } else {
@@ -118,6 +129,22 @@ export default function PedidosViagem() {
             })
             .catch(() => {
                 setMessage('Ocorreu um erro ao pedir a lista de motoristas ao servidor.')
+                setSeveridade('error')
+                setOpenAlert(true)
+            })
+        axios
+            .get(`${backendUrl}viaturas/viaturas`, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    setViaturas(res.data.data)
+                } else {
+                    setMessage('Ocorreu um erro ao pedir a lista de viaturas.')
+                    setSeveridade('error')
+                    setOpenAlert(true)
+                }
+            })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao pedir a lista de viaturas ao servidor.')
                 setSeveridade('error')
                 setOpenAlert(true)
             })
@@ -133,8 +160,8 @@ export default function PedidosViagem() {
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'viagens/pedidosviagem', { headers: authHeader() })
-            .then(res => {
+            .get(`${backendUrl}viagens/pedidosviagem`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setViagens(res.data.data)
                     setUpdate(false)
@@ -154,38 +181,51 @@ export default function PedidosViagem() {
     return (
         <>
             <div className={classes.root}>
-                <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}
-                    TransitionComponent={Slide}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    TransitionComponent={Slide}
+                >
                     <Alert onClose={handleCloseAlert} severity={severidade}>
                         {message}
                     </Alert>
                 </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant={'h4'}>
+                        <Typography variant="h4">
                             Pedidos de Viagem
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant={'h5'}>
+                        <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small"/>}
-                                aria-label="breadcrumb">
-                                <Link color="inherit" component={RouterLink}
-                                    to='/'>
+                                separator={<NavigateNext fontSize="small" />}
+                                aria-label="breadcrumb"
+                            >
+                                <Link
+                                    color="inherit"
+                                    component={RouterLink}
+                                    to="/"
+                                >
                                     Início
                                 </Link>
-                                <Link color="textPrimary" component={RouterLink}
-                                    to='/Dashboard/Utilizadores/PedidosViagem'
-                                    aria-current="page">Pedidos Viagem</Link>
+                                <Link
+                                    color="textPrimary"
+                                    component={RouterLink}
+                                    to="/Dashboard/Utilizadores/PedidosViagem"
+                                    aria-current="page"
+                                >
+                                    Pedidos Viagem
+                                </Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
                 </Box>
                 <Dialog
                     fullScreen={fullScreen}
-                    fullWidth={true}
+                    fullWidth
                     maxWidth="md"
                     open={open}
                     scroll="paper"
@@ -207,17 +247,19 @@ export default function PedidosViagem() {
                             datahora_ida: currentViagem.viagem.DATAHORA_IDA,
                             datahora_volta: currentViagem.viagem.DATAHORA_VOLTA,
                             nrcliente: currentViagem.viagem.NR_CLIENTE_PEDIDO,
-                            observacoes: currentViagem.viagem.OBSERVACOES,
+                            observacoes: currentViagem.viagem.OBSERVACOES || '',
                             distancia: currentViagem.viagem.DISTANCIA,
                             duracao: currentViagem.viagem.DURACAO,
                             custo: currentViagem.viagem.CUSTO || '',
-                            motorista: currentViagem.viagem.MOTORISTA,
+                            comparticipacao: currentViagem.viagem.CUSTO || '',
+                            motorista: currentViagem.viagem.MOTORISTA || 0,
+                            viatura: currentViagem.viagem.VIATURA || 0,
                         }}
                     >
                         {({
                             submitForm,
                             isValid,
-                            errors: formErrors,
+                            isSubmitting,
                         }) => {
                             return (
                                 <>
@@ -225,27 +267,33 @@ export default function PedidosViagem() {
                                         <form onSubmit={(event) => {
                                             event.preventDefault()
                                             submitForm()
-                                        }}>
+                                        }}
+                                        >
                                             <FormPedidosViagem
                                                 localidades={localidades}
                                                 motoristas={motoristas}
+                                                viaturas={viaturas}
                                                 currentViagem={currentViagem}
                                             />
                                         </form>
                                     </DialogContent>
                                     <DialogActions>
-                                        <Button onClick={handleClose}
-                                            variant="outlined" color="primary"
+                                        <Button
+                                            onClick={handleClose}
+                                            variant="outlined"
+                                            color="primary"
                                             disabled={isSubmitting}
                                         >
                                             Cancelar
                                         </Button>
-                                        <StyledButton onClick={submitForm} color="primary"
+                                        <StyledButton
+                                            onClick={submitForm}
+                                            color="primary"
                                             style={{ width: '115px' }}
                                             disabled={!isValid || isSubmitting}
                                         >
                                             {isSubmitting && (
-                                                <CircularProgress color={'inherit'}/>)}
+                                                <CircularProgress color="inherit" />)}
                                             {!isSubmitting && 'Guardar'}
                                         </StyledButton>
                                     </DialogActions>
@@ -256,7 +304,8 @@ export default function PedidosViagem() {
                 </Dialog>
                 <Box mb={2}>
                     <TableContainer component={Paper}>
-                        <Table className={classes.root}
+                        <Table
+                            className={classes.root}
                             aria-label="simple table"
                         >
                             <TableHead>
@@ -294,15 +343,20 @@ export default function PedidosViagem() {
                                             { row.MOTIVO === 'T' && 'TRABALHO' }
                                             { row.MOTIVO === 'SNU' && 'SAÚDE NÃO URGENTE' }
                                         </TableCell>
-                                        <TableCell>{(row.DISTANCIA/1000).toFixed(2)} Km</TableCell>
+                                        <TableCell>
+                                            {(row.DISTANCIA / 1000).toFixed(2)}
+                                            {' '}
+                                            Km
+                                        </TableCell>
                                         <TableCell>{!row.CUSTO ? '-' : row.CUSTO }</TableCell>
                                         <TableCell>{!row.MOTORISTA ? '-' : row.MOTORISTA}</TableCell>
                                         <TableCell>
                                             {row.ESTADO === 'PEDIDO' && <Chip style={{ backgroundColor: theme.palette.info.main }} size="small" label={row.ESTADO} />}
-                                            {row.ESTADO === 'PENDENTE' && <Chip style={{ backgroundColor: theme.palette.info2.main }}  size="small" label={row.ESTADO} />}
+                                            {row.ESTADO === 'PENDENTE' && <Chip style={{ backgroundColor: theme.palette.info2.main }} size="small" label={row.ESTADO} />}
                                         </TableCell>
                                         <TableCell>
-                                            <Button variant="contained"
+                                            <Button
+                                                variant="contained"
                                                 color="primary"
                                                 disableElevation
                                                 onClick={() => handleClickOpen(key)}

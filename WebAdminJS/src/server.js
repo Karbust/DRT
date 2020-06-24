@@ -1,9 +1,7 @@
-let express = require('express'),
-    cors = require('cors'),
-    bodyParser = require('body-parser'),
-    middleware = require('./middleware/jwt'),
-    Role = require('./middleware/jwt').Role
-
+import express from 'express'
+import cors from 'cors'
+import bodyParser from 'body-parser'
+import { checkToken, authorize, Role } from './middleware/jwt.js'
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -23,24 +21,24 @@ app.use((req, res, next) => {
     next()
 })
 
-const users = require('./routes/userRoutes')
-const viagens = require('./routes/viagensRoutes')
-const viaturas = require('./routes/viaturasRoutes')
-const emails = require('./routes/emailRoutes')
-const api = require('./routes/apiRoutes')
-const firstrun = require('./routes/firstRunRoutes')
+import { userRouter } from './routes/userRoutes.js'
+import { viagensRouter } from './routes/viagensRoutes.js'
+import { viaturasRouter } from './routes/viaturasRoutes.js'
+import { emailRouter } from './routes/emailRoutes.js'
+import { apiRouter } from './routes/apiRoutes.js'
+import { firstRunRouter } from './routes/firstRunRoutes.js'
 
-app.use('/mail', emails)
-app.use('/public', middleware.checkToken, express.static('src/public'))
-app.use('/user', users)
-app.use('/viagens', viagens)
-app.use('/viaturas', viaturas)
-app.use('/api', middleware.checkToken, api)
+app.use('/mail', emailRouter)
+app.use('/public', checkToken, express.static('src/public'))
+app.use('/user', userRouter)
+app.use('/viagens', viagensRouter)
+app.use('/viaturas', viaturasRouter)
+app.use('/api', apiRouter)
 
 app.use('/firstrun',
-    middleware.checkToken,
-    middleware.authorize([Role.Administrador]),
-    firstrun
+    checkToken,
+    authorize([Role.Administrador]),
+    firstRunRouter
 )
 
 app.listen(port, () => console.log(`Listening on port ${port}`))

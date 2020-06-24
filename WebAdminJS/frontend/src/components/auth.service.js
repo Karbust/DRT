@@ -1,12 +1,15 @@
 import axios from 'axios'
-import authHeader from './auth-header'
+
 import { backendUrl } from '../configs'
 
+import authHeader from './auth-header'
+
 class AuthService {
-    login (username, password, remember) {
+    login = (values) => {
+        const { email, password, remember } = values
         return axios
-            .post(backendUrl + 'user/login', { username, password, remember })
-            .then(res => {
+            .post(`${backendUrl}user/login`, { username: email, password, remember })
+            .then((res) => {
                 if (res.data.token) {
                     localStorage.setItem('user', JSON.stringify(res.data))
                 }
@@ -14,24 +17,22 @@ class AuthService {
             })
     }
 
-    logout () { localStorage.removeItem('user') }
-    getCurrentUser () {
-        let user = JSON.parse(localStorage.getItem('user'))
+    logout = () => { localStorage.removeItem('user') }
+
+    getCurrentUser = () => {
+        const user = JSON.parse(localStorage.getItem('user'))
         if (user) {
             return axios
-                .post(backendUrl + 'user/verificar_login', { token: authHeader() })
-                .then(res => {
+                .post(`${backendUrl}user/verificar_login`, { token: authHeader() })
+                .then((res) => {
                     if (res.data.success) {
-                        //console.log(res.data.data)
                         return res.data.data
-                    } else {
-                        this.logout()
-                        window.location.reload()
                     }
+                    this.logout()
+                    return window.location.reload()
                 })
-        } else {
-            return false
         }
+        return false
     }
 }
 

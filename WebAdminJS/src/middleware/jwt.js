@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken'),
-    config = require('../config/config.js')
+import jwt from 'jsonwebtoken'
+import { jwt as jwtSecret } from '../config/config.js'
 
 let Role = {
     Administrador: 1,
@@ -9,14 +9,13 @@ let Role = {
     AdministrativoOperador: 6
 }
 let checkToken = (req, res, next) => {
-    console.log(req.headers)
     let token = req.headers['x-access-token'] ||
         req.headers['authorization']
     if (token) {
         if (token.startsWith('Bearer ')) {
             token = token.slice(7, token.length) //remove a palavra ‘Bearer ’
         }
-        jwt.verify(token, config.jwt.secret, (err, decoded) => {
+        jwt.verify(token, jwtSecret, (err, decoded) => {
             if (err) {
                 return res.status(401).json({
                     success: false,
@@ -57,8 +56,5 @@ function authorize(roles = []) {
         }
     ]
 }
-module.exports = {
-    checkToken: checkToken,
-    authorize: authorize,
-    Role: Role
-}
+
+export { checkToken, authorize, Role }

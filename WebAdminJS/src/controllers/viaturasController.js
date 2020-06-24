@@ -1,7 +1,7 @@
-let { Sequelize } = require('sequelize'),
-    {
-        Cores, Marcas, Modelos, Seguradoras, Viaturas
-    } = require('../models/Viaturas')
+import Sequelize from 'sequelize'
+import {
+    Cores, Marcas, Modelos, Seguradoras, Viaturas
+} from '../models/Viaturas.js'
 
 Modelos.belongsTo(Marcas, { foreignKey: 'NR_MARCA', as: 'Marca' })
 Viaturas.belongsTo(Modelos, { foreignKey: 'NR_MODELO', as: 'Modelo' })
@@ -16,9 +16,9 @@ Cores.hasMany(Viaturas, { foreignKey: 'NR_COR', as: 'CORVIATURA' })
 
 Viaturas.sync()
 
-const controllers = {}
+const viaturasController = {}
 
-controllers.listaViaturas = async (req, res) => {
+viaturasController.listaViaturas = async (req, res) => {
     await Viaturas.findAll({
         include: [{
             model: Modelos,
@@ -41,7 +41,7 @@ controllers.listaViaturas = async (req, res) => {
         return res.json({ success: false })
     })
 }
-controllers.listaModelos = async (req, res) => {
+viaturasController.listaModelos = async (req, res) => {
     await Modelos.findAll({
         order: [
             ['NR_MODELO', 'ASC']
@@ -57,7 +57,7 @@ controllers.listaModelos = async (req, res) => {
         return res.json({ success: false })
     })
 }
-controllers.listaMarcas = async (req, res) => {
+viaturasController.listaMarcas = async (req, res) => {
     await Marcas.findAll({
         order: [
             ['NR_MARCA', 'ASC']
@@ -69,7 +69,7 @@ controllers.listaMarcas = async (req, res) => {
         return res.json({ success: false })
     })
 }
-controllers.listaSeguradoras = async (req, res) => {
+viaturasController.listaSeguradoras = async (req, res) => {
     await Seguradoras.findAll({
         order: [
             ['NR_SEGURADORA', 'ASC']
@@ -81,7 +81,7 @@ controllers.listaSeguradoras = async (req, res) => {
         return res.json({ success: false })
     })
 }
-controllers.listaCores = async (req, res) => {
+viaturasController.listaCores = async (req, res) => {
     await Cores.findAll({
         order: [
             ['NR_COR', 'ASC']
@@ -94,7 +94,7 @@ controllers.listaCores = async (req, res) => {
     })
 }
 
-controllers.adicionarViatura = async (req, res) => {
+viaturasController.adicionarViatura = async (req, res) => {
     let {
         matricula, ano, modelo, cor, capacidade, apolice, seguradora
     } = req.body
@@ -126,7 +126,7 @@ controllers.adicionarViatura = async (req, res) => {
         })
     })
 }
-controllers.adicionarMarca = async (req, res) => {
+viaturasController.adicionarMarca = async (req, res) => {
     await Marcas.create({
         NOME_MARCA: req.body.nome_marca,
     }).then((data) => {
@@ -147,7 +147,7 @@ controllers.adicionarMarca = async (req, res) => {
         })
     })
 }
-controllers.adicionarModelo = async (req, res) => {
+viaturasController.adicionarModelo = async (req, res) => {
     await Modelos.create({
         NR_MARCA: req.body.marca,
         NOME_MODELO: req.body.nome_modelo,
@@ -165,7 +165,7 @@ controllers.adicionarModelo = async (req, res) => {
         })
     })
 }
-controllers.adicionarCor = async (req, res) => {
+viaturasController.adicionarCor = async (req, res) => {
     await Cores.create({
         NOME_COR: req.body.nome_cor,
     }).then((data) => {
@@ -186,7 +186,7 @@ controllers.adicionarCor = async (req, res) => {
         })
     })
 }
-controllers.adicionarSeguradora = async (req, res) => {
+viaturasController.adicionarSeguradora = async (req, res) => {
     await Seguradoras.create({
         NOME_SEGURADORA: req.body.nome_seguradora,
     }).then((data) => {
@@ -208,4 +208,4 @@ controllers.adicionarSeguradora = async (req, res) => {
     })
 }
 
-module.exports = controllers
+export { viaturasController }

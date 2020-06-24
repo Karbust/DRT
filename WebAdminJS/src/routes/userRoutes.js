@@ -1,8 +1,9 @@
-let express = require('express'),
-    router = express.Router(),
-    middleware = require('../middleware/jwt'),
-    multer = require('multer'),
-    { v4: uuidv4 } = require('uuid')
+import express from 'express'
+import { checkToken, authorize, Role } from '../middleware/jwt.js'
+import multer from 'multer'
+import { v4 as uuidv4 } from 'uuid'
+
+const userRouter = express.Router()
 
 const DIR = './src/public/documentos/'
 
@@ -28,20 +29,20 @@ var upload = multer({
     }
 })
 
-const userController = require('../controllers/utilizadoresController')
-router.get('/listar', middleware.checkToken, userController.listar)
-router.get('/motoristas', /*middleware.checkToken,*/ userController.listarMotoristas)
-router.get('/utilizadoresnaovalidados', middleware.checkToken, userController.listaUtilizadoresNaoValidados)
-router.get('/registosnaovalidados', /*middleware.checkToken,*/ userController.listaRegistosNaoValidados)
-router.get('/apagarregistonaovalidado', middleware.checkToken, userController.apagarRegistoNaoValidado)
-router.post('/validacaoconta', middleware.checkToken, userController.validacaoConta)
-router.post('/verificarconta', middleware.checkToken, userController.verificarConta)
-router.get('/verificarconta/:token', userController.verificarContaLink)
-router.post('/verificarcontaenvioemail', middleware.checkToken, userController.verificarContaEnvioEmail)
-router.post('/listarncc', /*middleware.checkToken,*/ userController.listarNcc)
-router.post('/registar', upload.array('files', 2), userController.registar)
-router.post('/login', userController.login)
-router.post('/verificar_login', userController.verificar_login)
-router.post('/testes', userController.testes)
+import { userController } from '../controllers/utilizadoresController.js'
+userRouter.get('/listar', checkToken, userController.listar)
+userRouter.get('/motoristas', /*checkToken,*/ userController.listarMotoristas)
+userRouter.get('/utilizadoresnaovalidados', checkToken, userController.listaUtilizadoresNaoValidados)
+userRouter.get('/registosnaovalidados', /*checkToken,*/ userController.listaRegistosNaoValidados)
+userRouter.get('/apagarregistonaovalidado', checkToken, userController.apagarRegistoNaoValidado)
+userRouter.post('/validacaoconta', checkToken, userController.validacaoConta)
+userRouter.post('/verificarconta', checkToken, userController.verificarConta)
+userRouter.post('/verificarcontalink', userController.verificarContaLink)
+userRouter.post('/verificarcontaenvioemail', checkToken, userController.verificarContaEnvioEmail)
+userRouter.post('/listarncc', /*checkToken,*/ userController.listarNcc)
+userRouter.post('/register', upload.array('files', 2), userController.registar)
+userRouter.post('/login', userController.login)
+userRouter.post('/verificar_login', userController.verificar_login)
+userRouter.post('/testes', userController.testes)
 
-module.exports = router
+export { userRouter }

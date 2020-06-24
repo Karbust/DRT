@@ -8,7 +8,7 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
     const [response, setResponse] = useState(null)
 
     useEffect(() => {
-        if(destino !== null || origem !== null) {
+        if (destino !== null || origem !== null) {
             setResponse(null)
         }
     }, [destino, origem])
@@ -31,8 +31,8 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
         <>
             {
                 (
-                    destino !== null &&
-                    origem !== null
+                    destino !== null
+                    && origem !== null
                 ) && (
                     <DirectionsService
                         // required
@@ -48,14 +48,6 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
                         // https://cloud.google.com/maps-platform/terms#3.-license.
                         // https://cloud.google.com/maps-platform/terms/maps-service-terms#1.-directions-api
                         callback={directionsCallback}
-                        // optional
-                        onLoad={directionsService => {
-                            console.log('DirectionsService onLoad directionsService: ', directionsService)
-                        }}
-                        // optional
-                        onUnmount={directionsService => {
-                            console.log('DirectionsService onUnmount directionsService: ', directionsService)
-                        }}
                     />
                 )
             }
@@ -66,14 +58,6 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
                         // required
                         options={{
                             directions: response,
-                        }}
-                        // optional
-                        onLoad={directionsRenderer => {
-                            console.log('DirectionsRenderer onLoad directionsRenderer: ', directionsRenderer)
-                        }}
-                        // optional
-                        onUnmount={directionsRenderer => {
-                            console.log('DirectionsRenderer onUnmount directionsRenderer: ', directionsRenderer)
                         }}
                     />
                 )

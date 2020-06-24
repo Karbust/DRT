@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { backendUrl } from '../configs'
-import authHeader from '../components/auth-header'
 import {
     useTheme,
     Box,
@@ -33,7 +31,10 @@ import {
     IconButton,
     CircularProgress,
     Tooltip,
+    Slide,
+    Snackbar,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import {
     NavigateNext,
     Close,
@@ -44,9 +45,12 @@ import {
     TOUCH_ACTIVATION,
 } from 'react-image-magnifiers'
 import { Link as RouterLink } from 'react-router-dom'
-import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
 import moment from 'moment'
 import { useConfirm } from 'material-ui-confirm'
+
+import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
+import authHeader from '../components/auth-header'
+import { backendUrl } from '../configs'
 
 export default function ValidarRegistos() {
     const classes = useStyles()
@@ -59,21 +63,49 @@ export default function ValidarRegistos() {
     const [isSubmittingDisapprove, setIsSubmittingDisapprove] = useState(false)
     const [isVerifying, setIsVerifying] = useState(false)
     const [isResendingEmail, setIsResendingEmail] = useState(false)
-    const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(10)
-    const [open, setOpen] = React.useState(false)
-    const [openImagem, setOpenImagem] = React.useState(false)
-    const [imagemSelecionada, setImagemSelecionada] = React.useState('')
-    const [update, setUpdate] = React.useState(false)
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [open, setOpen] = useState(false)
+    const [openImagem, setOpenImagem] = useState(false)
+    const [imagemSelecionada, setImagemSelecionada] = useState('')
+    const [update, setUpdate] = useState(false)
+
+    const [srcSlotImg1, setSrcSlotImg1] = useState(null)
+    const [srcSlotImg2, setSrcSlotImg2] = useState(null)
+
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') { return }
+
+        setOpenAlert(false)
+    }
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
     const handleClickOpen = (key) => {
-        setCurrentUtilizador({ user: utilizadores[key], key: key })
+        setCurrentUtilizador({ user: utilizadores[key], key })
+        setSrcSlotImg1(null)
+        setSrcSlotImg2(null)
+        axios.get(`${backendUrl}public/documentos/${utilizadores[key].MORADA_COMPROVATIVO}`, { headers: authHeader(), responseType: 'arraybuffer' })
+            .then((res) => {
+                const blob = new Blob([res.data])
+                const url = URL.createObjectURL(blob)
+                setSrcSlotImg1(url)
+            })
+        axios.get(`${backendUrl}public/documentos/${utilizadores[key].N_CC_COMPROVATIVO}`, { headers: authHeader(), responseType: 'arraybuffer' })
+            .then((res) => {
+                const blob = new Blob([res.data])
+                const url = URL.createObjectURL(blob)
+                setSrcSlotImg2(url)
+            })
         setOpen(true)
     }
 
     const handleClose = () => {
+        setCurrentUtilizador({ user: [], key: null })
         setOpen(false)
     }
     const handleDisapprove = () => {
@@ -84,7 +116,7 @@ export default function ValidarRegistos() {
             confirmationText: 'Não validar',
             confirmationButtonProps: {
                 variant: 'outlined',
-                disabled: isSubmittingDisapprove
+                disabled: isSubmittingDisapprove,
             },
             cancellationText: 'Cancelar',
             cancellationButtonProps: {
@@ -92,35 +124,61 @@ export default function ValidarRegistos() {
             },
         }).then(() => {
             axios
-                .post(backendUrl + 'user/validacaoconta', { user: currentUtilizador.user.NR_UTILIZADOR, aprovar: false }, { headers: authHeader() })
-                .then(res => {
+                .post(`${backendUrl}user/validacaoconta`, { user: currentUtilizador.user.NR_UTILIZADOR, aprovar: false }, { headers: authHeader() })
+                .then((res) => {
                     if (res.data.success) {
                         setIsSubmittingDisapprove(false)
                         setUpdate(true)
                         setOpen(false)
+                        setMessage('Conta desaprovada com sucesso.')
+                        setSeverity('success')
+                        setOpenAlert(true)
                     } else {
                         setIsSubmittingApprove(false)
+                        setMessage('Ocorreu um erro ao desaprovar a conta.')
+                        setSeverity('error')
+                        setOpenAlert(true)
                     }
                 })
+                .catch(() => {
+                    setIsSubmittingApprove(false)
+                    setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                    setSeverity('error')
+                    setOpenAlert(true)
+                })
+        }).catch(() => {
+            setIsSubmittingApprove(false)
         })
     }
     const handleApprove = () => {
         setIsSubmittingApprove(true)
         axios
-            .post(backendUrl + 'user/validacaoconta', { user: currentUtilizador.user.NR_UTILIZADOR, aprovar: true }, { headers: authHeader() })
-            .then(res => {
+            .post(`${backendUrl}user/validacaoconta`, { user: currentUtilizador.user.NR_UTILIZADOR, aprovar: true }, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setIsSubmittingApprove(false)
                     setUpdate(true)
+                    setMessage('Conta validada com sucesso.')
+                    setSeverity('success')
+                    setOpenAlert(true)
                     setOpen(false)
                 } else {
                     setIsSubmittingApprove(false)
+                    setMessage('Ocorreu um erro ao validar a conta.')
+                    setSeverity('error')
+                    setOpenAlert(true)
                 }
+            })
+            .catch(() => {
+                setIsSubmittingApprove(false)
+                setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
             })
     }
 
     const handleClickVerificar = (key) => {
-        setCurrentUtilizador({ user: utilizadores[key], key: key })
+        setCurrentUtilizador({ user: utilizadores[key], key })
         setIsVerifying(true)
         confirm({
             title: 'Verificação',
@@ -136,17 +194,30 @@ export default function ValidarRegistos() {
         })
             .then(() => {
                 axios
-                    .post(backendUrl + 'user/verificarconta', { user: utilizadores[key].NR_UTILIZADOR }, { headers: authHeader() })
-                    .then(res => {
+                    .post(`${backendUrl}user/verificarconta`, { user: utilizadores[key].NR_UTILIZADOR }, { headers: authHeader() })
+                    .then((res) => {
                         if (res.data.success) {
                             utilizadores[key].VERIFICADO = true
                             setIsVerifying(false)
+                            setMessage('Conta verificada com sucesso.')
+                            setSeverity('success')
+                            setOpenAlert(true)
+                        } else {
+                            setIsVerifying(false)
+                            setMessage('Ocorreu um erro ao verificar a conta.')
+                            setSeverity('error')
+                            setOpenAlert(true)
                         }
+                    })
+                    .catch(() => {
+                        setIsVerifying(false)
+                        setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                        setSeverity('error')
+                        setOpenAlert(true)
                     })
             })
             .catch(() => {
                 setIsVerifying(false)
-                console.log('teste2')
             })
     }
 
@@ -167,17 +238,29 @@ export default function ValidarRegistos() {
         })
             .then(() => {
                 axios
-                    .post(backendUrl + 'user/verificarcontaenvioemail', { user: utilizadores[key].NR_UTILIZADOR, email: utilizadores[key].EMAIL }, { headers: authHeader() })
-                    .then(res => {
+                    .post(`${backendUrl}user/verificarcontaenvioemail`, { user: utilizadores[key].NR_UTILIZADOR, email: utilizadores[key].EMAIL }, { headers: authHeader() })
+                    .then((res) => {
                         if (res.data.success) {
                             setIsResendingEmail(false)
+                            setMessage('Email enviado com sucesso.')
+                            setSeverity('success')
+                            setOpenAlert(true)
+                        } else {
+                            setIsResendingEmail(false)
+                            setMessage('Ocorreu um erro ao enviar o email.')
+                            setSeverity('error')
+                            setOpenAlert(true)
                         }
+                    })
+                    .catch(() => {
+                        setIsResendingEmail(false)
+                        setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                        setSeverity('error')
+                        setOpenAlert(true)
                     })
             }).catch(() => {
                 setIsResendingEmail(false)
-                console.log('teste2')
             })
-        //setOpen(false)
     }
 
     const handleOpenImagen = (imagem) => {
@@ -200,18 +283,16 @@ export default function ValidarRegistos() {
     const handleGenero = (genero) => {
         if (genero === 'M') {
             return 'Masculino'
-        } else if (genero === 'F') {
+        } if (genero === 'F') {
             return 'Feminino'
-        } else {
-            return 'Outro'
         }
+        return 'Outro'
     }
-
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'user/utilizadoresnaovalidados', { headers: authHeader() })
-            .then(res => {
+            .get(`${backendUrl}user/utilizadoresnaovalidados`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setUtilizadores(res.data.data)
                     setUpdate(false)
@@ -222,61 +303,90 @@ export default function ValidarRegistos() {
     return (
         <>
             <div className={classes.root}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    TransitionComponent={Slide}
+                >
+                    <Alert onClose={handleCloseAlert} severity={severity}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant={'h4'}>
+                        <Typography variant="h4">
                             Validar Registos
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant={'h5'}>
+                        <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small"/>}
-                                aria-label="breadcrumb">
-                                <Link color="inherit" component={RouterLink}
-                                    to='/'>
+                                separator={<NavigateNext fontSize="small" />}
+                                aria-label="breadcrumb"
+                            >
+                                <Link
+                                    color="inherit"
+                                    component={RouterLink}
+                                    to="/"
+                                >
                                     Início
                                 </Link>
-                                <Link color="textPrimary" component={RouterLink}
-                                    to='/Dashboard/Utilizadores/ValidarRegistoCliente'
-                                    aria-current="page">RegistarVeiculo</Link>
+                                <Link
+                                    color="textPrimary"
+                                    component={RouterLink}
+                                    to="/Dashboard/Utilizadores/ValidarRegistoCliente"
+                                    aria-current="page"
+                                >
+                                    RegistarVeiculo
+                                </Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
                 </Box>
-                <Dialog fullScreen open={openImagem} onClose={handleCloseImagem}
-                    TransitionComponent={Transition}>
+                <Dialog
+                    fullScreen
+                    open={openImagem}
+                    onClose={handleCloseImagem}
+                    TransitionComponent={Transition}
+                >
                     <AppBar position="sticky">
                         <Toolbar>
-                            <IconButton edge="start" color="inherit"
+                            <IconButton
+                                edge="start"
+                                color="inherit"
                                 onClick={handleCloseImagem}
-                                aria-label="close">
-                                <Close/>
+                                aria-label="close"
+                            >
+                                <Close />
                             </IconButton>
                         </Toolbar>
                     </AppBar>
                     <Box className={classes.toolbarImagem}>
                         <Magnifier
                             className={classes.inputPosition}
-                            imageSrc={backendUrl + 'public/documentos/' + imagemSelecionada}
-                            largeImageSrc={backendUrl + 'public/documentos/' + imagemSelecionada}
+                            imageSrc={imagemSelecionada}
+                            largeImageSrc={imagemSelecionada}
                             mouseActivation={MOUSE_ACTIVATION.CLICK}
                             touchActivation={TOUCH_ACTIVATION.TAP}
-                            dragToMove={true}
+                            dragToMove
                         />
                     </Box>
                 </Dialog>
                 <Dialog
                     fullScreen={fullScreen}
-                    fullWidth={true}
+                    fullWidth
                     maxWidth="md"
                     open={open}
                     TransitionComponent={Transition}
                     onClose={handleClose}
                     aria-labelledby="responsive-dialog-title"
                 >
-                    <DialogTitle id="responsive-dialog-title">Validação de Conta
-                        de Utilizador</DialogTitle>
+                    <DialogTitle id="responsive-dialog-title">
+                        Validação de Conta
+                        de Utilizador
+                    </DialogTitle>
                     <DialogContent dividers>
                         <Box mb={2}>
                             <Grid container spacing={1}>
@@ -395,15 +505,18 @@ export default function ValidarRegistos() {
                                     />
                                 </Grid>
                                 <Box className={classes.GridListRoot}>
-                                    <GridList className={classes.GridList}
-                                        cols={1}>
+                                    <GridList
+                                        className={classes.GridList}
+                                        cols={1}
+                                    >
                                         <GridListTile cols={1} rows={1}>
                                             <img
-                                                src={backendUrl + 'public/documentos/' + currentUtilizador.user.MORADA_COMPROVATIVO}
-                                                onClick={() => handleOpenImagen(currentUtilizador.user.MORADA_COMPROVATIVO)}
-                                                alt={'Comprovativo de Morada'}/>
+                                                src={srcSlotImg1}
+                                                onClick={() => handleOpenImagen(srcSlotImg1)}
+                                                alt="Comprovativo de Morada"
+                                            />
                                             <GridListTileBar
-                                                title={'Comprovativo de Morada'}
+                                                title="Comprovativo de Morada"
                                                 classes={{
                                                     root: classes.GridListTitleBar,
                                                     title: classes.GridListTitle,
@@ -412,11 +525,12 @@ export default function ValidarRegistos() {
                                         </GridListTile>
                                         <GridListTile cols={1} rows={1}>
                                             <img
-                                                src={backendUrl + 'public/documentos/' + currentUtilizador.user.N_CC_COMPROVATIVO}
-                                                onClick={() => handleOpenImagen(currentUtilizador.user.N_CC_COMPROVATIVO)}
-                                                alt={'Comprovativo Ncc'}/>
+                                                src={srcSlotImg2}
+                                                onClick={() => handleOpenImagen(srcSlotImg2)}
+                                                alt="Comprovativo Ncc"
+                                            />
                                             <GridListTileBar
-                                                title={'Comprovativo Cartão de Cidadão'}
+                                                title="Comprovativo Cartão de Cidadão"
                                                 classes={{
                                                     root: classes.GridListTitleBar,
                                                     title: classes.GridListTitle,
@@ -429,37 +543,50 @@ export default function ValidarRegistos() {
                         </Box>
                     </DialogContent>
                     <DialogActions>
-                        <Button autoFocus onClick={handleClose}
-                            variant="outlined" color="primary"
+                        <Button
+                            autoFocus
+                            onClick={handleClose}
+                            variant="outlined"
+                            color="primary"
                             disabled={isSubmittingApprove || isSubmittingDisapprove}
                         >
                             Cancelar
                         </Button>
-                        <Button onClick={handleDisapprove} variant="outlined"
-                            color="primary" style={{
+                        <Button
+                            onClick={handleDisapprove}
+                            variant="outlined"
+                            color="primary"
+                            style={{
                                 width: '123px',
                                 height: '36px',
                             }}
                             disabled={isSubmittingApprove || isSubmittingDisapprove}
                         >
                             {isSubmittingDisapprove && (
-                                <CircularProgress size={30}
-                                    color={'inherit'}/>)}
+                                <CircularProgress
+                                    size={30}
+                                    color="inherit"
+                                />
+                            )}
                             {!isSubmittingDisapprove && 'Desaprovar'}
                         </Button>
-                        <StyledButton onClick={handleApprove} color="primary"
-                            autoFocus style={{ width: '115px' }}
+                        <StyledButton
+                            onClick={handleApprove}
+                            color="primary"
+                            autoFocus
+                            style={{ width: '115px' }}
                             disabled={isSubmittingDisapprove || isSubmittingApprove}
                         >
                             {isSubmittingApprove && (
-                                <CircularProgress color={'inherit'}/>)}
+                                <CircularProgress color="inherit" />)}
                             {!isSubmittingApprove && 'Aprovar'}
                         </StyledButton>
                     </DialogActions>
                 </Dialog>
                 <Box mb={2}>
                     <TableContainer component={Paper}>
-                        <Table className={classes.root}
+                        <Table
+                            className={classes.root}
                             aria-label="simple table"
                         >
                             <TableHead>
@@ -467,8 +594,10 @@ export default function ValidarRegistos() {
                                     <TableCell>Número de Utilizador</TableCell>
                                     <TableCell>Nome do Utilizador</TableCell>
                                     <TableCell>Freguesia</TableCell>
-                                    <TableCell>Data de Criação da
-                                        Conta</TableCell>
+                                    <TableCell>
+                                        Data de Criação da
+                                        Conta
+                                    </TableCell>
                                     <TableCell>Ações</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -487,7 +616,8 @@ export default function ValidarRegistos() {
                                         <TableCell>
                                             {
                                                 row.VERIFICADO ? (
-                                                    <Button variant="contained"
+                                                    <Button
+                                                        variant="contained"
                                                         color="primary"
                                                         disableElevation
                                                         onClick={() => handleClickOpen(key)}
@@ -511,8 +641,8 @@ export default function ValidarRegistos() {
                                                                         height: '36px',
                                                                     }}
                                                                 >
-                                                                    {isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR ?
-                                                                        (<CircularProgress size={30} color={'inherit'}/>) : 'Verificar'}
+                                                                    {isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR
+                                                                        ? (<CircularProgress size={30} color="inherit" />) : 'Verificar'}
                                                                 </Button>
                                                             </span>
                                                         </Tooltip>
@@ -529,8 +659,8 @@ export default function ValidarRegistos() {
                                                                         height: '36px',
                                                                     }}
                                                                 >
-                                                                    {isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR ?
-                                                                        (<CircularProgress size={30} color={'inherit'}/>) : 'Reenviar Email'}
+                                                                    {isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR
+                                                                        ? (<CircularProgress size={30} color="inherit" />) : 'Reenviar Email'}
                                                                 </Button>
                                                             </span>
                                                         </Tooltip>

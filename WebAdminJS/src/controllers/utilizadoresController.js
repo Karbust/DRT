@@ -1,15 +1,15 @@
-let { Sequelize, Op } = require('sequelize'),
-    jwt = require('jsonwebtoken'),
-    bcrypt = require('bcrypt'),
-    {
-        TiposUtilizadores, Utilizadores, Verificacoes, Validacoes
-    } = require('../models/Utilizadores'),
-    sequelize = require('../config/database'),
-    config = require('../config/config'),
-    functions = require('../functions'),
-    moment = require('moment'),
-    NodeCache = require('node-cache'),
-    { v4: uuidv4 } = require('uuid')
+import Sequelize from 'sequelize'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import {
+    TiposUtilizadores, Utilizadores, Verificacoes, Validacoes
+} from '../models/Utilizadores.js'
+import { sequelize } from '../config/database.js'
+import { url, jwt as jwtSecret } from '../config/config.js'
+import { password as passwordGen, sendEmail } from '../functions.js'
+import moment from 'moment'
+import NodeCache from 'node-cache'
+import { v4 as uuidv4 } from 'uuid'
 
 Utilizadores.belongsTo(TiposUtilizadores, { foreignKey: 'TIPO_UTILIZADOR', as: 'TipoUser' })
 TiposUtilizadores.hasMany(Utilizadores, { foreignKey: 'TIPO_UTILIZADOR', as: 'UTILIZADORTIPOUTILIZADOR' })
@@ -19,15 +19,17 @@ Validacoes.belongsTo(Utilizadores, { foreignKey: 'NR_VALIDADOR', as: 'Validador'
 Utilizadores.hasMany(Validacoes, { foreignKey: 'NR_VALIDADO', as: 'VALIDADOVALIDACOES' })
 Utilizadores.hasMany(Validacoes, { foreignKey: 'NR_VALIDADOR', as: 'VALIDADORVALIDACOES' })
 
-const controllers = {}
+const userController = {}
 sequelize.sync()
+
+const op = Sequelize.Op;
 
 const cache = new NodeCache({
     stdTTL: 100,
     checkperiod: 120,
 })
 
-controllers.listar = async (req, res) => {
+userController.listar = async (req, res) => {
     const data = await Utilizadores.findAll()
         .then((data) => {
             return data
@@ -41,7 +43,7 @@ controllers.listar = async (req, res) => {
     })
 }
 
-controllers.listarMotoristas = async (req, res) => {
+userController.listarMotoristas = async (req, res) => {
     if (cache.get('motoristas') === undefined) {
         await Utilizadores.findAll({
             attributes: ['NR_UTILIZADOR', 'NOME_UTILIZADOR'],
@@ -52,7 +54,7 @@ controllers.listarMotoristas = async (req, res) => {
                 ['NOME_UTILIZADOR', 'ASC'],
             ],
         }).then((data) => {
-            cache.set('motoristas', JSON.stringify(data), 900)
+            cache.set('motoristas', JSON.stringify(data), 3600)
             return res.json({
                 success: true,
                 data: data,
@@ -68,12 +70,12 @@ controllers.listarMotoristas = async (req, res) => {
     }
 }
 
-controllers.listarNcc = async (req, res) => {
+userController.listarNcc = async (req, res) => {
     await Utilizadores.findAll({
         attributes: ['NR_UTILIZADOR', 'N_CC'],
         where: {
             N_CC: {
-                [Op.startsWith]: req.body.cc,
+                [op.startsWith]: req.body.cc,
             },
         },
         order: [
@@ -89,7 +91,7 @@ controllers.listarNcc = async (req, res) => {
     })
 }
 
-controllers.validacaoConta = async (req, res) => {
+userController.validacaoConta = async (req, res) => {
     await sequelize.transaction(async (t) => {
         let { user, aprovar } = req.body
         let { nr_user } = req.decoded
@@ -146,8 +148,8 @@ controllers.validacaoConta = async (req, res) => {
         return res.json({ success: false })
     })
 }
-controllers.verificarContaLink = async (req, res) => {
-    let { token } = req.params
+userController.verificarContaLink = async (req, res) => {
+    let { token } = req.body
     if(token !== '1' && token !== '' && token !== null && token !== undefined) {
         await sequelize.transaction(async (t) => {
             let promises = []
@@ -194,7 +196,7 @@ controllers.verificarContaLink = async (req, res) => {
         return res.json({ success: false })
     }
 }
-controllers.verificarConta = async (req, res) => {
+userController.verificarConta = async (req, res) => {
     await sequelize.transaction(async (t) => {
         let promises = []
         promises.push(
@@ -227,10 +229,10 @@ controllers.verificarConta = async (req, res) => {
         return res.json({ success: false })
     })
 }
-controllers.verificarContaEnvioEmail = async (req, res) => {
+userController.verificarContaEnvioEmail = async (req, res) => {
     let token = uuidv4()
 
-    //functions.sendEmail(req.body.email.toString(), 'Conta criada no DRT', 'Token: ' + token)
+    //sendEmail(req.body.email.toString(), 'Conta criada no DRT', 'Token: ' + token)
 
     Utilizadores.update({
         TOKEN: token,
@@ -246,7 +248,7 @@ controllers.verificarContaEnvioEmail = async (req, res) => {
     })
 }
 
-controllers.listaUtilizadoresNaoValidados = async (req, res) => {
+userController.listaUtilizadoresNaoValidados = async (req, res) => {
     await Utilizadores.findAll({
         attributes: [
             'NR_UTILIZADOR',
@@ -285,13 +287,14 @@ controllers.listaUtilizadoresNaoValidados = async (req, res) => {
     })
 }
 
-controllers.listaRegistosNaoValidados = async (req, res) => {
+userController.listaRegistosNaoValidados = async (req, res) => {
     await Utilizadores.findAll({
         attributes: [
             'NR_UTILIZADOR',
             'NOME_UTILIZADOR',
             'FREGUESIA',
             'createdAt',
+            'deletedAt',
             [
                 sequelize.literal(`(SELECT "NOME_UTILIZADOR" AS "NOME_VALIDADOR" FROM "UTILIZADORES" INNER JOIN "VALIDACOES" ON "NR_UTILIZADOR"="NR_VALIDADOR" GROUP BY "NR_UTILIZADOR", "NOME_UTILIZADOR", "NR_VALIDADOR")`),
                 'NOME_VALIDADOR'
@@ -300,7 +303,7 @@ controllers.listaRegistosNaoValidados = async (req, res) => {
         where: {
             VALIDADO: false,
             deletedAt: {
-                [Op.ne]: null
+                [op.ne]: null
             }
         },
         order: [
@@ -325,7 +328,7 @@ controllers.listaRegistosNaoValidados = async (req, res) => {
         return res.json({ success: false, message: error })
     })
 }
-controllers.apagarRegistoNaoValidado = async (req, res) => {
+userController.apagarRegistoNaoValidado = async (req, res) => {
     /*await sequelize.transaction(async (t) => {
         let { user, aprovar } = req.body
         let { nr_user } = req.decoded
@@ -359,12 +362,18 @@ controllers.apagarRegistoNaoValidado = async (req, res) => {
     })*/
 }
 
-controllers.registar = async (req, res) => {
+userController.registar = async (req, res) => {
     let {
         nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, tipo_utilizador
     } = req.body
+    if(req.files === undefined){
+        return res.json({
+            success: false,
+            message: 'Erro ao efetuar o upload dos ficheiros.',
+        })
+    }
     let imagens = req.files.map((file) => file.filename)
-    let password = functions.password(8)
+    let password = passwordGen(8)
     let token = uuidv4()
 
     await Utilizadores.create({
@@ -392,7 +401,9 @@ controllers.registar = async (req, res) => {
         TOKEN: token,
         DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
     }).then((data) => {
-        //functions.sendEmail(email.toString(), 'Conta criada no DRT', 'Password: ' + password + '\nToken: ' + token)
+        sendEmail(data.EMAIL,
+            'Conta criada no DRT',
+            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'ativacao/' + token)
 
         return res.json({
             success: true,
@@ -407,13 +418,11 @@ controllers.registar = async (req, res) => {
     })
 }
 
-controllers.login = async (req, res) => {
+userController.login = async (req, res) => {
     if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
         return res.status(403).json({
             success: false,
             message: 'Campos em Branco',
-            token: '',
-            validado: false,
         })
     } else if (req.body.username && req.body.password) {
         var username = req.body.username
@@ -423,7 +432,7 @@ controllers.login = async (req, res) => {
             where: {
                 EMAIL: username,
                 TIPO_UTILIZADOR: {
-                    [Op.in]: [1, 2, 3, 4, 6],
+                    [op.in]: [1, 2, 3, 4, 6],
                 },
             },
         }).then((data) => {
@@ -431,10 +440,6 @@ controllers.login = async (req, res) => {
                 return res.json({
                     success: false,
                     message: 'Dados de autenticação inválidos.',
-                    token: '',
-                    tipoUser: null,
-                    validado: false,
-                    verificado: false,
                 })
             }
 
@@ -442,10 +447,6 @@ controllers.login = async (req, res) => {
                 return res.json({
                     success: false,
                     message: 'Conta não validada.',
-                    token: '',
-                    tipoUser: null,
-                    validado: false,
-                    verificado: false,
                 })
             }
 
@@ -453,10 +454,6 @@ controllers.login = async (req, res) => {
                 return res.json({
                     success: false,
                     message: 'Conta não verificada.',
-                    token: '',
-                    tipoUser: null,
-                    validado: false,
-                    verificado: false,
                 })
             }
 
@@ -466,13 +463,13 @@ controllers.login = async (req, res) => {
                     nr_user: data.NR_UTILIZADOR,
                     email: username,
                     tipo_utilizador: data.TIPO_UTILIZADOR
-                }, config.jwt.secret, {})
+                }, jwtSecret, {})
             } else {
                 token = jwt.sign({
                     nr_user: data.NR_UTILIZADOR,
                     email: username,
                     tipo_utilizador: data.TIPO_UTILIZADOR
-                }, config.jwt.secret, { expiresIn: '1h' })
+                }, jwtSecret, { expiresIn: '1h' })
             }
 
             return res.json({
@@ -482,22 +479,19 @@ controllers.login = async (req, res) => {
                 tipoUser: data.TIPO_UTILIZADOR,
                 validado: data.VALIDADO,
                 verificado: data.VERIFICADO,
+                nome: data.NOME_UTILIZADOR
             })
         }).catch(() => {
             return res.json({
                 success: false,
                 message: 'Erro no processo de autenticação. Tente de novo mais tarde.',
-                token: '',
-                tipoUser: null,
-                validado: false,
-                verificado: false,
             })
         })
     }
 }
 
-controllers.verificar_login = async (req, res) => {
-    jwt.verify(req.body.token.Authorization.split(' ')[1], config.jwt.secret, (err, decoded) => {
+userController.verificar_login = async (req, res) => {
+    jwt.verify(req.body.token.Authorization.split(' ')[1], jwtSecret, (err, decoded) => {
         if (decoded) {
             res.json({
                 success: true,
@@ -513,7 +507,7 @@ controllers.verificar_login = async (req, res) => {
     })
 }
 
-controllers.testes = async (req, res) => {
+userController.testes = async (req, res) => {
     /*setTimeout(function() {
         console.log(req.body)
         res.json({ success: true })
@@ -523,4 +517,4 @@ controllers.testes = async (req, res) => {
     res.json({success:true});*/
 }
 
-module.exports = controllers
+export { userController }

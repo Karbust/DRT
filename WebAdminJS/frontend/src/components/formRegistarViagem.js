@@ -37,30 +37,36 @@ export const FormRegistarViagem = ({
         <Box mb={2}>
             <Grid container spacing={4}>
                 <Grid item md={6} sm={12} xs={12}>
-                    <Field name="origem"
-                        validate={(origem) => origem !== 0 ? undefined : 'Campo obrigatório'}>
+                    <Field
+                        name="origem"
+                        validate={(origem) => (origem !== 0 ? undefined : 'Campo obrigatório')}
+                    >
                         {({ field, form: { errors } }) => (
                             <Autocomplete
                                 id="origem"
                                 options={localidades}
-                                getOptionLabel={option => {
+                                getOptionLabel={(option) => {
                                     if (!option.LOCALIDADE) {
                                         return ''
                                     }
                                     return option.LOCALIDADE
                                 }}
                                 getOptionDisabled={(option) => option.NR_LOCALIDADE === values.destino}
-                                renderInput={(params) =>
-                                    <TextField {...field} {...params} required
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...field}
+                                        {...params}
+                                        required
                                         autoComplete="off"
-                                        label="Origem" variant="outlined"
+                                        label="Origem"
+                                        variant="outlined"
                                         className={classes.textField}
                                         error={Boolean(errors.origem)}
                                         helperText={errors.origem}
                                         onBlur={(event) => validateField(event.currentTarget.name)}
                                         onChange={undefined}
                                     />
-                                }
+                                )}
                                 onChange={(event, newValue, reason) => {
                                     if (reason === 'select-option') {
                                         setFieldValue('origem', newValue.NR_LOCALIDADE)
@@ -72,21 +78,26 @@ export const FormRegistarViagem = ({
                             />
                         )}
                     </Field>
-                    <Field name="destino"
-                        validate={(destino) => destino !== 0 ? undefined : 'Campo obrigatório'}>
+                    <Field
+                        name="destino"
+                        validate={(destino) => (destino !== 0 ? undefined : 'Campo obrigatório')}
+                    >
                         {({ field, form: { errors } }) => (
                             <Autocomplete
                                 id="destino"
                                 options={localidades}
-                                getOptionLabel={option => {
+                                getOptionLabel={(option) => {
                                     if (!option.LOCALIDADE) {
                                         return ''
                                     }
                                     return option.LOCALIDADE
                                 }}
                                 getOptionDisabled={(option) => option.NR_LOCALIDADE === values.origem}
-                                renderInput={(params) =>
-                                    <TextField {...field} {...params} required
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...field}
+                                        {...params}
+                                        required
                                         autoComplete="off"
                                         label="Destino"
                                         variant="outlined"
@@ -96,7 +107,7 @@ export const FormRegistarViagem = ({
                                         onBlur={(event) => validateField(event.currentTarget.name)}
                                         onChange={undefined}
                                     />
-                                }
+                                )}
                                 onChange={(event, newValue, reason) => {
                                     if (reason === 'select-option') {
                                         setFieldValue('destino', newValue.NR_LOCALIDADE)
@@ -108,13 +119,19 @@ export const FormRegistarViagem = ({
                             />
                         )}
                     </Field>
-                    <Field name="passageiros"
-                        validate={(passageiros) => passageiros !== '' ? undefined : 'Campo obrigatório'}>
+                    <Field
+                        name="passageiros"
+                        validate={(passageiros) => (passageiros !== '' ? undefined : 'Campo obrigatório')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth
-                                id="passageiros" select
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="passageiros"
+                                select
                                 label="Passageiros"
-                                placeholder={'Passageiros'}
+                                placeholder="Passageiros"
                                 variant="outlined"
                                 className={classes.textField}
                                 helperText={errors.passageiros}
@@ -128,13 +145,19 @@ export const FormRegistarViagem = ({
                             </TextField>
                         )}
                     </Field>
-                    <Field name="motivo"
-                        validate={(motivo) => motivo !== '' ? undefined : 'Campo obrigatório'}>
+                    <Field
+                        name="motivo"
+                        validate={(motivo) => (motivo !== '' ? undefined : 'Campo obrigatório')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth id="motivo"
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
+                                id="motivo"
                                 select
                                 label="Motivo"
-                                placeholder={'Motivo'}
+                                placeholder="Motivo"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.motivo)}
@@ -143,45 +166,55 @@ export const FormRegistarViagem = ({
                             >
                                 <MenuItem key="1" value="L">Lazer</MenuItem>
                                 <MenuItem key="2" value="T">Trabalho</MenuItem>
-                                <MenuItem key="3" value="SNU">Saúde Não
-                                    Urgente</MenuItem>
+                                <MenuItem key="3" value="SNU">
+                                    Saúde Não
+                                    Urgente
+                                </MenuItem>
                             </TextField>
                         )}
                     </Field>
-                    <MuiPickersUtilsProvider libInstance={moment}
+                    <MuiPickersUtilsProvider
+                        libInstance={moment}
                         utils={MomentUtils}
-                        locale={'pt'}>
-                        <Field name="datahora_ida"
+                        locale="pt"
+                    >
+                        <Field
+                            name="datahora_ida"
                             validate={(datahora_ida) => {
-                                if(!datahora_ida) {
+                                if (!datahora_ida) {
                                     return 'Campo obrigatório'
                                 }
-                                if(moment(datahora_ida).isSameOrAfter(values.datahora_volta)) {
+                                if (moment(datahora_ida).isSameOrAfter(values.datahora_volta)) {
                                     return 'Hora inválida (igual/inferior hora ida)'
                                 }
-                                if(values.datahora_volta && moment(values.datahora_volta).diff(datahora_ida, 'minutes') < 30) {
+                                if (values.datahora_volta && moment(values.datahora_volta).diff(datahora_ida, 'minutes') < 30) {
                                     return 'Hora inválida (+30 minutos diferença)'
                                 }
                                 return undefined
-                            }}>
+                            }}
+                        >
                             {({ field, form: { errors } }) => (
-                                <DateTimePicker {...field} required disablePast
+                                <DateTimePicker
+                                    {...field}
+                                    required
+                                    disablePast
                                     minDate={moment().isBefore(moment({ hour: 17, minute: 0, seconds: 0 })) ? moment().add(1, 'day') : moment().add(2, 'day')}
                                     maxDate={values.datahora_volta ? values.datahora_volta : moment('2100-01-01')}
-                                    fullWidth ampm={false}
+                                    fullWidth
+                                    ampm={false}
                                     openTo="day"
                                     id="datahora_ida"
                                     format="YYYY-MM-DD HH:mm"
                                     label="Data e Hora - Ida"
                                     views={['date', 'month', 'hours', 'minutes']}
-                                    placeholder={'Data e Hora - Ida'}
-                                    margin={'normal'}
+                                    placeholder="Data e Hora - Ida"
+                                    margin="normal"
                                     inputVariant="outlined"
                                     helperText={errors.datahora_ida}
                                     onChange={(value) => {
                                         setIdaVoltaSwitch(false)
                                         setFieldValue('datahora_ida', value.format('YYYY-MM-DD HH:mm'))
-                                        if(!idaVoltaSwitch) {
+                                        if (!idaVoltaSwitch) {
                                             if (!values.datahora_volta) {
                                                 errors.datahora_volta = 'Campo obrigatório'
                                             } else if (moment(values.datahora_volta).isSameOrBefore(value.format('YYYY-MM-DD HH:mm'))) {
@@ -200,7 +233,7 @@ export const FormRegistarViagem = ({
                             )}
                         </Field>
                         <FormControlLabel
-                            control={
+                            control={(
                                 <Switch
                                     checked={idaVolta}
                                     disabled={idaVoltaSwitch}
@@ -208,26 +241,31 @@ export const FormRegistarViagem = ({
                                     name="checkedB"
                                     color="primary"
                                 />
-                            }
+                            )}
                             className={classes.textField}
                             label="Ida e volta?"
                         />
-                        <Field name="datahora_volta"
+                        <Field
+                            name="datahora_volta"
                             validate={(datahora_volta) => {
-                                if(!datahora_volta && idaVolta) {
+                                if (!datahora_volta && idaVolta) {
                                     return 'Campo obrigatório'
                                 }
-                                if(moment(datahora_volta).isSameOrBefore(values.datahora_ida)) {
+                                if (moment(datahora_volta).isSameOrBefore(values.datahora_ida)) {
                                     return 'Hora inválida (igual/inferior hora ida)'
                                 }
-                                if(moment(datahora_volta).diff(values.datahora_ida, 'minutes') < 30) {
+                                if (moment(datahora_volta).diff(values.datahora_ida, 'minutes') < 30) {
                                     return 'Hora inválida (+30 minutos diferença)'
                                 }
                                 return undefined
-                            }}>
+                            }}
+                        >
                             {({ field, form: { errors } }) => (
-                                <DateTimePicker {...field} required={idaVolta}
-                                    disablePast fullWidth
+                                <DateTimePicker
+                                    {...field}
+                                    required={idaVolta}
+                                    disablePast
+                                    fullWidth
                                     minDate={moment(values.datahora_ida).format('YYYY-MM-DD HH:mm')}
                                     ampm={false}
                                     openTo="day"
@@ -235,15 +273,15 @@ export const FormRegistarViagem = ({
                                     format="YYYY-MM-DD HH:mm"
                                     label="Data e Hora - Volta"
                                     views={['date', 'month', 'hours', 'minutes']}
-                                    placeholder={'Data e Hora - Volta'}
-                                    margin={'normal'}
+                                    placeholder="Data e Hora - Volta"
+                                    margin="normal"
                                     inputVariant="outlined"
                                     helperText={errors.datahora_volta}
                                     onChange={(value) => {
                                         setFieldValue('datahora_volta', value.format('YYYY-MM-DD HH:mm'))
-                                        if(moment(values.datahora_ida).isSameOrAfter(value)) {
+                                        if (moment(values.datahora_ida).isSameOrAfter(value)) {
                                             errors.datahora_ida = 'Hora inválida (igual/inferior hora ida)'
-                                        } else if(value && moment(value).diff(values.datahora_ida, 'minutes') < 30) {
+                                        } else if (value && moment(value).diff(values.datahora_ida, 'minutes') < 30) {
                                             errors.datahora_ida = 'Hora inválida (30 minutos diferença)'
                                         } else {
                                             errors.datahora_ida = undefined
@@ -260,10 +298,15 @@ export const FormRegistarViagem = ({
                     </MuiPickersUtilsProvider>
                 </Grid>
                 <Grid item md={6} sm={12} xs={12}>
-                    <Field name="nrcliente"
-                        validate={(nrcliente) => nrcliente ? undefined : 'Campo obrigatório'}>
+                    <Field
+                        name="nrcliente"
+                        validate={(nrcliente) => (nrcliente ? undefined : 'Campo obrigatório')}
+                    >
                         {({ field, form: { errors } }) => (
-                            <TextField {...field} required fullWidth
+                            <TextField
+                                {...field}
+                                required
+                                fullWidth
                                 label="Número Cliente"
                                 variant="outlined"
                                 className={classes.textField}
@@ -274,12 +317,14 @@ export const FormRegistarViagem = ({
                         )}
                     </Field>
                     <Field name="observacoes">
-                        {({ field, form: { errors } }) => (
-                            <TextField {...field}
+                        {({ field }) => (
+                            <TextField
+                                {...field}
                                 id="observacoes"
                                 label="Observações"
                                 placeholder="Observações"
-                                multiline fullWidth
+                                multiline
+                                fullWidth
                                 rows={5}
                                 variant="outlined"
                                 className={classes.textField}
@@ -290,7 +335,8 @@ export const FormRegistarViagem = ({
                         id="dados"
                         label="Dados"
                         placeholder="Dados"
-                        multiline fullWidth
+                        multiline
+                        fullWidth
                         rows={5}
                         variant="outlined"
                         InputProps={{
@@ -299,9 +345,9 @@ export const FormRegistarViagem = ({
                         className={clsx(classes.textField, {
                             [classes.invisible]: !distDur.isSet,
                         })}
-                        value={'Distância (aprox.): ' + distDur.distanciaText + '\nTempo de viagem (aprox.): ' + distDur.duracaoText}
+                        value={`Distância (aprox.): ${distDur.distanciaText}\nTempo de viagem (aprox.): ${distDur.duracaoText}`}
                     />
-                    <div align={'right'}>
+                    <div align="right">
                         <Button
                             variant="contained"
                             color="primary"
@@ -309,8 +355,11 @@ export const FormRegistarViagem = ({
                             className={classes.button2}
                             disabled={!isValid || isSubmitting}
                         >
-                            {isSubmitting && (<CircularProgress
-                                color={'inherit'}/>)}
+                            {isSubmitting && (
+                                <CircularProgress
+                                    color="inherit"
+                                />
+                            )}
                             {!isSubmitting && ('Concluir')}
                         </Button>
                     </div>

@@ -1,15 +1,17 @@
-let sequelize = require('../config/database'),
-    fs = require('fs'),
-    { TiposUtilizadores } = require('../models/Utilizadores'),
-    Localidades = require('../models/Localidades'),
-    Paises = require('../models/Paises'),
-    {
-        Cores, Marcas, Modelos, Seguradoras
-    } = require('../models/Viaturas')
+import { sequelize } from '../config/database.js'
+import { TiposUtilizadores } from '../models/Utilizadores.js'
+import { Localidades } from '../models/Localidades.js'
+import { Paises } from '../models/Paises.js'
+import { Cores, Marcas, Modelos, Seguradoras } from '../models/Viaturas.js'
+import fs from 'fs'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const controllers = {}
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-controllers.firstRun = async (req, res) => {
+const firstRunController = {}
+
+firstRunController.firstRun = async (req, res) => {
     // VIATURAS - START
     let cores = JSON.parse(fs.readFileSync(__dirname + '/../cores.json', {
         encoding: 'utf8',
@@ -79,4 +81,4 @@ controllers.firstRun = async (req, res) => {
     })
 }
 
-module.exports = controllers
+export { firstRunController }

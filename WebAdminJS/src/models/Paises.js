@@ -1,5 +1,5 @@
-var Sequelize = require('sequelize'),
-    sequelize = require('../config/database')
+import Sequelize from 'sequelize'
+import { sequelize } from '../config/database.js'
 
 var Paises = sequelize.define('PAISES', {
     NR_PAIS: {
@@ -28,4 +28,4 @@ var Paises = sequelize.define('PAISES', {
     timestamps: false
 })
 
-module.exports = Paises
+export { Paises }

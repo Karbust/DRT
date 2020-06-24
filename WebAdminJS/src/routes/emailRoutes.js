@@ -1,14 +1,14 @@
-let express = require('express')
-let router = express.Router()
+import express from 'express'
+import AWS from 'aws-sdk'
 
-const AWS = require('aws-sdk')
+const emailRouter = express.Router()
 
-const config = require('../config/config') // load configurations file
+import { aws } from '../config/config.js' // load configurations file
 
 AWS.config.update({
-    accessKeyId: config.aws.key,
-    secretAccessKey: config.aws.secret,
-    region: config.aws.ses.region
+    accessKeyId: aws.key,
+    secretAccessKey: aws.secret,
+    region: aws.ses.region
 })
 
 const ses = new AWS.SES()
@@ -36,8 +36,8 @@ const sendEmail = (to, subject, message, from) => {
                 Data: subject
             }
         },
-        ReturnPath: from ? from : config.aws.ses.fromAddress,
-        Source: from ? from : config.aws.ses.fromAddress,
+        ReturnPath: from ? from : aws.ses.fromAddress,
+        Source: from ? from : aws.ses.fromAddress,
     }
 
     ses.sendEmail(params, (err, data) => {
@@ -49,11 +49,11 @@ const sendEmail = (to, subject, message, from) => {
     })
 }
 
-router.get('/test', (req, res) => {
+emailRouter.get('/test', (req, res) => {
     // call sesClient to send an email
-    sendEmail('charparodar@gmail.com', "Hey! Welcome", "This is the body of email")
+    sendEmail('charparodar@gmail.com', "Hey! Welcome", "This is the body of email<br>Teste")
 
     res.send('Email is sent!')
 })
 
-module.exports = router
+export { emailRouter }

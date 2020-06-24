@@ -1,41 +1,13 @@
 import React from 'react'
 import {
-    makeStyles, Typography, Box, Breadcrumbs, Link
+    Typography, Box, Breadcrumbs, Link,
 } from '@material-ui/core'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        height: 180
-    },
-    container: {
-        display: 'flex',
-        justifyContent: 'space-between'
-    },
-    box: {
-        display: 'flex',
-        backgroundColor: '#E9ECEF',
-        borderRadius: '0.25rem',
-        flexWrap: 'wrap',
-        padding: '0.75rem 1rem',
-        marginBottom: '1rem'
-    },
-    paper: {
-        margin: theme.spacing(1)
-    },
-    svg: {
-        width: 100,
-        height: 100
-    },
-    polygon: {
-        fill: theme.palette.common.white,
-        stroke: theme.palette.divider,
-        strokeWidth: 1
-    }
-}))
+import { useStyles } from '../components/MuiStyles'
 
-export default function DashboardView () {
+export default function DashboardView() {
     const classes = useStyles()
 
     return (
@@ -43,24 +15,26 @@ export default function DashboardView () {
             <div className={classes.root}>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant={'h4'}>
-                            DashboardView
+                        <Typography variant="h4">
+                            Dashboard
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant={'h5'}>
+                        <Typography variant="h5">
                             <Breadcrumbs separator={<NavigateNext fontSize="small" />} aria-label="breadcrumb">
-                                <Link color="inherit" component={RouterLink} to='/'>
+                                <Link color="inherit" component={RouterLink} to="/">
                                     Início
                                 </Link>
-                                <Link color="textPrimary" component={RouterLink} to='/Dashboard' aria-current="page">DashboardView</Link>
+                                <Link color="textPrimary" component={RouterLink} to="/Dashboard" aria-current="page">Dashboard</Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
                 </Box>
                 <Box mb={2}>
-                    <Typography variant={'h4'} paragraph gutterBottom>
-                        DashboardView
+                    <Typography variant="h4" paragraph gutterBottom>
+                        Bem-vindo
+                        {' '}
+                        { JSON.parse(localStorage.getItem('user')).nome }
                     </Typography>
                     <Typography paragraph>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt

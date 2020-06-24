@@ -1,13 +1,30 @@
-let express = require('express'),
-    router = express.Router(),
-    middleware = require('../middleware/jwt')
+import express from 'express'
+import { checkToken, authorize, Role } from '../middleware/jwt.js'
 
-const viagensController = require('../controllers/viagensController')
+const viagensRouter = express.Router()
 
-router.get('/historicoviagens', /*middleware.checkToken,*/ viagensController.historicoViagens)
-router.post('/registopedidoviagem', middleware.checkToken, viagensController.registoPedidoViagem)
-router.get('/pedidosviagem', /*middleware.checkToken,*/ viagensController.pedidoViagem)
-router.post('/classificacaoviagem', middleware.checkToken, viagensController.classificacaoViagem)
-router.post('/editarviagem', middleware.checkToken, viagensController.editarViagem)
+import { viagensController } from '../controllers/viagensController.js'
 
-module.exports = router
+viagensRouter.get('/historicoviagens',
+    checkToken,
+    authorize([Role.Administrador, Role.AdministradorOperador]),
+    viagensController.historicoViagens
+)
+viagensRouter.post('/registopedidoviagem',
+    checkToken, authorize([Role.Administrador, Role.AdministradorOperador, Role.Telefonista]),
+    viagensController.registoPedidoViagem
+)
+viagensRouter.get('/pedidosviagem',
+    checkToken, authorize([Role.Administrador, Role.AdministradorOperador, Role.Telefonista]),
+    viagensController.pedidoViagem
+)
+viagensRouter.post('/editarviagem',
+    checkToken, authorize([Role.Administrador, Role.AdministradorOperador, Role.Telefonista]),
+    viagensController.editarViagem
+)
+
+// TODO: ROTAS ANDROID - CLASSIFICAÇÃO VIAGEM - VIAGENS ROUTES
+viagensRouter.post('/classificacaoviagem', checkToken, viagensController.classificacaoViagem)
+viagensRouter.get('/classificacoesviagens', checkToken, viagensController.classificacoesViagens)
+
+export { viagensRouter }

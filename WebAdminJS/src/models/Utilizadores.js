@@ -1,7 +1,7 @@
-var Sequelize = require('sequelize'),
-    sequelize = require('../config/database'),
-    bcrypt = require('bcrypt'),
-    Paises = require('./Paises')
+import Sequelize from 'sequelize'
+import { sequelize } from '../config/database.js'
+import bcrypt from 'bcrypt'
+import { Paises } from './Paises.js'
 
 var TiposUtilizadores = sequelize.define('TIPOS_UTILIZADORES',{
     NR_TIPO_UTILIZADOR:{
@@ -36,7 +36,7 @@ var Utilizadores = sequelize.define('UTILIZADORES', {
         unique: true,
     },
     N_SEGSOCIAL: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         allowNull: false,
         unique: true,
     },
@@ -220,4 +220,4 @@ var Validacoes = sequelize.define('VALIDACOES', {
     timestamps: false
 })
 
-module.exports = { TiposUtilizadores, Utilizadores, Verificacoes, Validacoes }
+export { TiposUtilizadores, Utilizadores, Verificacoes, Validacoes }

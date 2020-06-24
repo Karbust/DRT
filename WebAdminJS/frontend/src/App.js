@@ -1,10 +1,15 @@
-import React from 'react'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import {
+    BrowserRouter as Router, Route, Switch, Redirect, useParams,
+} from 'react-router-dom'
+import axios from 'axios'
+
 import AuthService from './components/auth.service'
 import Login from './views/Login'
 import Dashboard from './Dashboard'
+import { backendUrl } from './configs'
 
-function PrivateRoute ({ children, ...rest }) {
+function PrivateRoute({ children, ...rest }) {
     return (
         <Route
             {...rest}
@@ -12,15 +17,14 @@ function PrivateRoute ({ children, ...rest }) {
                 return AuthService.getCurrentUser() ? (
                     children
                 ) : (
-                    <Redirect to="/Login"/>
+                    <Redirect to="/Login" />
                 )
-            }
-            }
+            }}
         />
     )
 }
 
-/*export const PrivateRoute1 = ({ component: Component, roles, ...rest }) => (
+/* export const PrivateRoute1 = ({ component: Component, roles, ...rest }) => (
     <Route {...rest} render={props => {
         const currentUser = AuthService.getCurrentUser()
         if (!currentUser) {
@@ -37,42 +41,71 @@ function PrivateRoute ({ children, ...rest }) {
         // authorised so return component
         return <Component {...props} />
     }} />
-)*/
+) */
 
-function App () {
+function App() {
     return (
         <Router>
             <Switch>
+                <Route path="/Ativacao/:token">
+                    <Ativacao />
+                </Route>
                 <PrivateRoute path="/" exact>
                     <Redirect push to="/Dashboard" />
                 </PrivateRoute>
                 <PrivateRoute path="/Dashboard">
                     <Dashboard />
                 </PrivateRoute>
-                <Route path="/Login" >
+                <Route path="/Login">
                     <LoginPage />
                 </Route>
-                <Route path="/Logout" >
+                <Route path="/Logout">
                     <Logout />
                 </Route>
-                <Route path='*' exact={true}>
-                    <Redirect to="/"/>
+                <Route path="*" exact>
+                    <Redirect to="/" />
                 </Route>
             </Switch>
         </Router>
     )
 }
 
-function LoginPage () {
+function LoginPage() {
     if (!AuthService.getCurrentUser()) { return <Login /> }
     return <Redirect to="/Dashboard" />
 }
 
-function Logout () {
+function Logout() {
     if (AuthService.getCurrentUser()) {
         AuthService.logout()
     }
     return <Redirect to="/Login" />
 }
+function Ativacao() {
+    // We can use the `useParams` hook here to access
+    // the dynamic pieces of the URL.
+    const { token } = useParams()
 
+    const [status, setStatus] = useState('')
+
+    useEffect(() => {
+        axios
+            .post(`${backendUrl}user/verificarcontalink`, { token })
+            .then((data) => {
+                if (data.data.success) {
+                    setStatus('Conta ativada com sucesso.')
+                } else {
+                    setStatus('Ocorreu um erro ao ativar a conta.')
+                }
+            }).catch(() => {
+                setStatus('Ocorreu um erro ao enviar o pedido para o servidor.')
+            })
+    }, [token])
+
+    return (
+        <div>
+            <h3>{status}</h3>
+        </div>
+    )
+}
 export default App

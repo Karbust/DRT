@@ -5,15 +5,18 @@ import {
     Box,
     Breadcrumbs,
     Link,
-    Grid,
+    Grid, Slide,
+    Snackbar,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
+import { Formik } from 'formik'
+import { GoogleMap, LoadScript } from '@react-google-maps/api'
+
 import { useStyles } from '../components/MuiStyles'
 import authHeader from '../components/auth-header'
-import { Formik } from 'formik'
 import { FormRegistarViagem } from '../components/formRegistarViagem'
-import { GoogleMap, LoadScript } from '@react-google-maps/api'
 import { RotaGoogleMap } from '../components/rotaGoogleMap'
 import { backendUrl, GoogleMapsApiKey } from '../configs'
 
@@ -30,11 +33,20 @@ export default function RegistarViagem() {
         duracaoValue: '',
         distanciaValue: '',
     })
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpenAlert(false)
+    }
 
     const handleChangeOrigem = (event) => {
-        // const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
-        console.log(event)
-        if(origem !== null) {
+        if (origem !== null) {
             if (event.NR_LOCALIDADE !== origem.NR_LOCALIDADE) {
                 setOrigem(event)
             }
@@ -44,7 +56,7 @@ export default function RegistarViagem() {
     }
     const handleChangeDestino = (event) => {
         // const localidade_selecionada = localidades.find((localidade) => localidade.NR_LOCALIDADE === event.target.value)
-        if(destino !== null) {
+        if (destino !== null) {
             if (event.NR_LOCALIDADE !== destino.NR_LOCALIDADE) {
                 setDestino(event)
             }
@@ -55,8 +67,8 @@ export default function RegistarViagem() {
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'api/localidades', { headers: authHeader() })
-            .then(res => {
+            .get(`${backendUrl}api/localidades`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setLocalidades(res.data.data)
                 }
@@ -65,38 +77,71 @@ export default function RegistarViagem() {
 
     const onFormikSubmit = (values, formikActions) => {
         formikActions.setSubmitting(true)
-        console.log(values)
         return axios
-            .post(backendUrl + 'viagens/registopedidoviagem', values, { headers: authHeader() })
-            .then(() => {
+            .post(`${backendUrl}viagens/registopedidoviagem`, values, { headers: authHeader() })
+            .then((res) => {
+                if (res.data.success) {
+                    formikActions.setSubmitting(false)
+                    formikActions.resetForm()
+                    setMessage('Viagem registada com sucesso')
+                    setSeverity('success')
+                    setOpenAlert(true)
+                } else {
+                    formikActions.setSubmitting(false)
+                    setMessage('Ocorreu um erro ao registar a viagem.')
+                    setSeverity('error')
+                    setOpenAlert(true)
+                }
+            })
+            .catch(() => {
                 formikActions.setSubmitting(false)
-                formikActions.resetForm()
-            }, (reason) => {
-                console.log(reason)
+                setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
             })
     }
 
     return (
         <>
             <div className={classes.root}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    TransitionComponent={Slide}
+                >
+                    <Alert onClose={handleCloseAlert} severity={severity}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant={'h4'}>
+                        <Typography variant="h4">
                             Registar Viagem
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant={'h5'}>
+                        <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small"/>}
-                                aria-label="breadcrumb">
-                                <Link color="inherit" component={RouterLink}
-                                    to='/'>
+                                separator={<NavigateNext fontSize="small" />}
+                                aria-label="breadcrumb"
+                            >
+                                <Link
+                                    color="inherit"
+                                    component={RouterLink}
+                                    to="/"
+                                >
                                     Início
                                 </Link>
-                                <Link color="textPrimary" component={RouterLink}
-                                    to='/Dashboard/RegistarViagem'
-                                    aria-current="page">Registar Viagem</Link>
+                                <Link
+                                    color="textPrimary"
+                                    component={RouterLink}
+                                    to="/Dashboard/RegistarViagem"
+                                    aria-current="page"
+                                >
+                                    Registar Viagem
+                                </Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
@@ -123,18 +168,20 @@ export default function RegistarViagem() {
                             >
                                 {({
                                     submitForm,
-                                    errors: formErrors,
                                 }) => {
                                     return (
                                         <form onSubmit={(event) => {
                                             event.preventDefault()
                                             submitForm()
-                                        }}>
-                                            <FormRegistarViagem classes={classes}
+                                        }}
+                                        >
+                                            <FormRegistarViagem
+                                                classes={classes}
                                                 localidades={localidades}
                                                 distDur={distDur}
                                                 callbackOrigem={handleChangeOrigem}
-                                                callbackDestino={handleChangeDestino}/>
+                                                callbackDestino={handleChangeDestino}
+                                            />
                                         </form>
                                     )
                                 }}
@@ -142,7 +189,8 @@ export default function RegistarViagem() {
                         </Grid>
                         <Grid item sm={6} xs={12}>
                             <LoadScript
-                                googleMapsApiKey={GoogleMapsApiKey}>
+                                googleMapsApiKey={GoogleMapsApiKey}
+                            >
                                 <GoogleMap
                                     mapContainerStyle={{
                                         width: '100%',
@@ -154,9 +202,11 @@ export default function RegistarViagem() {
                                     }}
                                     zoom={10}
                                 >
-                                    <RotaGoogleMap destino={destino}
+                                    <RotaGoogleMap
+                                        destino={destino}
                                         origem={origem}
-                                        onRouteReceived={setDistDur}/>
+                                        onRouteReceived={setDistDur}
+                                    />
                                 </GoogleMap>
                             </LoadScript>
                         </Grid>

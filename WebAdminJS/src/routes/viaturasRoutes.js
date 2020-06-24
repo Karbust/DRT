@@ -1,56 +1,56 @@
-let express = require('express'),
-    router = express.Router(),
-    middleware = require('../middleware/jwt'),
-    Role = require('../middleware/jwt').Role
+import express from 'express'
+import { checkToken, authorize, Role} from '../middleware/jwt.js'
 
-const viaturasController = require('../controllers/viaturasController')
+const viaturasRouter = express.Router()
 
-router.get('/viaturas',
-    middleware.checkToken,
-    middleware.authorize([Role.Administrador,Role.AdministradorOperador,Role.AdministrativoOperador]),
+import { viaturasController } from '../controllers/viaturasController.js'
+
+viaturasRouter.get('/viaturas',
+    checkToken,
+    authorize([Role.Administrador,Role.AdministradorOperador,Role.AdministrativoOperador]),
     viaturasController.listaViaturas
 )
-router.get('/modelos',
-    middleware.checkToken,
+viaturasRouter.get('/modelos',
+    checkToken,
     viaturasController.listaModelos
 )
-router.get('/marcas',
-    middleware.checkToken,
+viaturasRouter.get('/marcas',
+    checkToken,
     viaturasController.listaMarcas
 )
-router.get('/seguradoras',
-    middleware.checkToken,
+viaturasRouter.get('/seguradoras',
+    checkToken,
     viaturasController.listaSeguradoras
 )
-router.get('/cores',
-    middleware.checkToken,
+viaturasRouter.get('/cores',
+    checkToken,
     viaturasController.listaCores
 )
 
-router.post('/adicionarviatura',
-    middleware.checkToken,
-    middleware.authorize([Role.Administrador,Role.AdministradorOperador]),
+viaturasRouter.post('/adicionarviatura',
+    checkToken,
+    authorize([Role.Administrador,Role.AdministradorOperador]),
     viaturasController.adicionarViatura
 )
-router.post('/adicionarmarca',
-    middleware.checkToken,
-    middleware.authorize([Role.Administrador,Role.AdministradorOperador]),
+viaturasRouter.post('/adicionarmarca',
+    checkToken,
+    authorize([Role.Administrador,Role.AdministradorOperador]),
     viaturasController.adicionarMarca
 )
-router.post('/adicionarmodelo',
-    middleware.checkToken,
-    middleware.authorize([middleware.Role.Administrador,Role.AdministradorOperador]),
+viaturasRouter.post('/adicionarmodelo',
+    checkToken,
+    authorize([Role.Administrador,Role.AdministradorOperador]),
     viaturasController.adicionarModelo
 )
-router.post('/adicionarcor',
-    middleware.checkToken,
-    middleware.authorize([middleware.Role.Administrador,Role.AdministradorOperador]),
+viaturasRouter.post('/adicionarcor',
+    checkToken,
+    authorize([Role.Administrador,Role.AdministradorOperador]),
     viaturasController.adicionarCor
 )
-router.post('/adicionarseguradora',
-    middleware.checkToken,
-    middleware.authorize([middleware.Role.Administrador,Role.AdministradorOperador]),
+viaturasRouter.post('/adicionarseguradora',
+    checkToken,
+    authorize([Role.Administrador,Role.AdministradorOperador]),
     viaturasController.adicionarSeguradora
 )
 
-module.exports = router
+export { viaturasRouter }

@@ -1,6 +1,6 @@
-var Sequelize = require('sequelize'),
-    sequelize = require('../config/database'),
-    Utilizadores = require('./Utilizadores')
+import Sequelize from 'sequelize'
+import { sequelize } from '../config/database.js'
+import Utilizadores from './Utilizadores'
 
 var Verificacoes = sequelize.define('VERIFICACOES', {
     NR_VERIFICACAO: {
@@ -41,4 +41,4 @@ var Verificacoes = sequelize.define('VERIFICACOES', {
     timestamps: false
 })
 
-module.exports = Verificacoes
+export { Verificacoes }

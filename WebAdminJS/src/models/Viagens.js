@@ -1,8 +1,8 @@
-var Sequelize = require('sequelize'),
-    sequelize = require('../config/database'),
-    Localidades = require('./Localidades'),
-    Utilizadores = require('./Utilizadores'),
-    { Viaturas } = require('./Viaturas')
+import Sequelize from 'sequelize'
+import { sequelize } from '../config/database.js'
+import { Localidades } from './Localidades.js'
+import { Utilizadores } from './Utilizadores.js'
+import { Viaturas } from './Viaturas.js'
 
 var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
     NR_VIAGEM_PEDIDO: {
@@ -52,7 +52,7 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
     },
     OBSERVACOES: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     DISTANCIA: {
         type: Sequelize.INTEGER,
@@ -63,6 +63,10 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
         allowNull: false,
     },
     CUSTO: {
+        type: Sequelize.DECIMAL(10,2),
+        allowNull: true
+    },
+    COMPARTICIPACAO: {
         type: Sequelize.DECIMAL(10,2),
         allowNull: true
     },
@@ -85,6 +89,14 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
     ESTADO: {
         type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
         allowNull: false
+    },
+    PEDIDA_POR: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR',
+        },
     },
 }, {
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
@@ -157,4 +169,39 @@ var ClientesViagem = sequelize.define('VIAGEM_CLIENTES', {
     timestamps: false
 })
 
-module.exports = { PedidoViagem, ClassificacaoViagem, ClientesViagem }
+var AlteracoesViagem = sequelize.define('VIAGEM_ALTERACOES', {
+    NR_ALTERACAO_VIAGEM: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    NR_VIAGEM: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: PedidoViagem,
+            key: 'NR_VIAGEM_PEDIDO'
+        }
+    },
+    NR_ALTERADOR: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    ESTADO_ANTERIOR: {
+        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
+        allowNull: false
+    },
+    ESTADO_NOVO: {
+        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
+        allowNull: false
+    }
+}, {
+    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    timestamps: false
+})
+
+export { PedidoViagem, ClassificacaoViagem, ClientesViagem, AlteracoesViagem }

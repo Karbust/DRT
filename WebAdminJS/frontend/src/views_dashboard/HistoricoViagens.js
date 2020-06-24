@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { backendUrl } from '../configs'
-import authHeader from '../components/auth-header'
 import {
     useTheme,
     Box,
@@ -18,11 +16,17 @@ import {
     TablePagination,
     TableFooter,
     Chip,
+    Slide,
+    Snackbar,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
-import { useStyles, TablePaginationActions } from '../components/MuiStyles'
 import moment from 'moment'
+
+import { useStyles, TablePaginationActions } from '../components/MuiStyles'
+import authHeader from '../components/auth-header'
+import { backendUrl } from '../configs'
 
 export default function RegistosNaoValidados() {
     const classes = useStyles()
@@ -32,6 +36,17 @@ export default function RegistosNaoValidados() {
     const [page, setPage] = React.useState(0)
     const [rowsPerPage, setRowsPerPage] = React.useState(10)
     const [update, setUpdate] = React.useState(false)
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpenAlert(false)
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
@@ -43,43 +58,72 @@ export default function RegistosNaoValidados() {
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'viagens/historicoviagens', { headers: authHeader() })
-            .then(res => {
+            .get(`${backendUrl}viagens/historicoviagens`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setViagens(res.data.data)
                     setUpdate(false)
+                } else {
+                    setMessage('Não foi possível obter o histórico de viagens.')
+                    setSeverity('error')
+                    setOpenAlert(true)
                 }
+            }).catch(() => {
+                setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
             })
     }, [update])
 
     return (
         <>
             <div className={classes.root}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    TransitionComponent={Slide}
+                >
+                    <Alert onClose={handleCloseAlert} severity={severity}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant={'h4'}>
+                        <Typography variant="h4">
                             Histórico de Viagens
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant={'h5'}>
+                        <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small"/>}
-                                aria-label="breadcrumb">
-                                <Link color="inherit" component={RouterLink}
-                                    to='/'>
+                                separator={<NavigateNext fontSize="small" />}
+                                aria-label="breadcrumb"
+                            >
+                                <Link
+                                    color="inherit"
+                                    component={RouterLink}
+                                    to="/"
+                                >
                                     Início
                                 </Link>
-                                <Link color="textPrimary" component={RouterLink}
-                                    to='/Dashboard/Utilizadores/ValidarRegistoCliente'
-                                    aria-current="page">Histórico de Viagens</Link>
+                                <Link
+                                    color="textPrimary"
+                                    component={RouterLink}
+                                    to="/Dashboard/Utilizadores/ValidarRegistoCliente"
+                                    aria-current="page"
+                                >
+                                    Histórico de Viagens
+                                </Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
                 </Box>
                 <Box mb={2}>
                     <TableContainer component={Paper}>
-                        <Table className={classes.root}
+                        <Table
+                            className={classes.root}
                             aria-label="simple table"
                         >
                             <TableHead>
@@ -93,6 +137,7 @@ export default function RegistosNaoValidados() {
                                     <TableCell>Motivo</TableCell>
                                     <TableCell>Distância</TableCell>
                                     <TableCell>Custo</TableCell>
+                                    <TableCell>Comparticipação CMV</TableCell>
                                     <TableCell>Motorista</TableCell>
                                     <TableCell>Estado</TableCell>
                                 </TableRow>
@@ -113,8 +158,15 @@ export default function RegistosNaoValidados() {
                                         <TableCell>{row.PASSAGEIROS}</TableCell>
                                         <TableCell>{row.MOTIVO}</TableCell>
                                         <TableCell>{row.DISTANCIA}</TableCell>
-                                        <TableCell>{row.CUSTO}</TableCell>
-                                        <TableCell>{row.MOTORISTA}</TableCell>
+                                        <TableCell>
+                                            €
+                                            {row.CUSTO}
+                                        </TableCell>
+                                        <TableCell>
+                                            €
+                                            {row.COMPARTICIPACAO}
+                                        </TableCell>
+                                        <TableCell>{row.Motorista.NOME_UTILIZADOR}</TableCell>
                                         <TableCell>
                                             {row.ESTADO === 'CONCLUIDA' && <Chip style={{ backgroundColor: theme.palette.success.main }} size="small" label={row.ESTADO} />}
                                             {row.ESTADO === 'CANCELADA' && <Chip style={{ backgroundColor: theme.palette.warning.main }} size="small" label={row.ESTADO} />}

@@ -8,30 +8,46 @@ import {
     Stepper,
     Step,
     StepLabel,
-    CircularProgress
+    CircularProgress,
+    Slide,
+    Snackbar,
 } from '@material-ui/core'
+import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
 import 'moment/locale/pt'
 import { Formik } from 'formik'
 import axios from 'axios'
+
 import { FormDadosConta } from '../components/formDadosConta'
 import { FormDadosPessoais } from '../components/formDadosPessoais'
 import { FormDocumentos } from '../components/formDocumentos'
 import { useStyles } from '../components/MuiStyles'
 import { backendUrl } from '../configs'
+import authHeader from '../components/auth-header'
 
-function getSteps () {
+function getSteps() {
     return ['Detalhes Pessoais', 'Detalhes da Conta', 'Documentos']
 }
 
-export default function RegistarMotorista () {
+export default function RegistarMotorista() {
     const classes = useStyles()
 
     // const [message, setMessage] = React.useState('')
     const [activeStep, setActiveStep] = useState(0)
     const [nacionalidades, setNacionalidades] = useState([])
     const [localidades, setLocalidades] = useState([])
+    const [message, setMessage] = useState('')
+    const [severity, setSeverity] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+
+    const handleCloseAlert = (event, reason) => {
+        if (reason === 'clickaway') {
+            return
+        }
+
+        setOpenAlert(false)
+    }
 
     const steps = getSteps()
     const handleNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -40,57 +56,86 @@ export default function RegistarMotorista () {
 
     useEffect(() => {
         axios
-            .get(backendUrl + 'api/nacionalidades'/*, { headers: authHeader() }*/)
-            .then(res => {
+            .get(`${backendUrl}api/nacionalidades`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setNacionalidades(res.data.data)
+                } else {
+                    setMessage('Não foi possível obter a lista de nacionalidades.')
+                    setSeverity('error')
+                    setOpenAlert(true)
                 }
             })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao enviar o pedido de nacionalidades para o servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
+            })
         axios
-            .get(backendUrl + 'api/localidades'/*, { headers: authHeader() }*/)
-            .then(res => {
+            .get(`${backendUrl}api/localidades`, { headers: authHeader() })
+            .then((res) => {
                 if (res.data.success) {
                     setLocalidades(res.data.data)
+                } else {
+                    setMessage('Não foi possível obter a lista de localidades.')
+                    setSeverity('error')
+                    setOpenAlert(true)
                 }
+            })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao enviar o pedido localidades para o servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
             })
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
-    // setMessage('')
         formikActions.setSubmitting(true)
-        let formData = new FormData()
+        const formData = new FormData()
         const { files, ...remaining_values } = values
-        Object.keys(remaining_values).forEach(key => formData.append(key, remaining_values[key]))
-        for(let i = 0; i < files.length; i++){
+        Object.keys(remaining_values).forEach((key) => formData.append(key, remaining_values[key]))
+        for (let i = 0; i < files.length; i++) {
             formData.append('files', files[i])
         }
         return axios
-            .post(backendUrl + 'user/register', formData)
-            .then(() => {
-                formikActions.setSubmitting(false)
-                //setActiveStep(3)
-            }, (reason) => {
-                throw new Error('Utilizador Inválido')
+            .post(`${backendUrl}user/register`, formData)
+            .then((data) => {
+                if (data.data.success) {
+                    setActiveStep(3)
+                    formikActions.setSubmitting(false)
+                    formikActions.resetForm()
+                    setMessage(data.data.message)
+                    setSeverity('success')
+                    setOpenAlert(true)
+                } else {
+                    setMessage(data.data.message)
+                    setSeverity('error')
+                    setOpenAlert(true)
+                }
+            }).catch(() => {
+                setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
             })
     }
 
     const getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <FormDadosPessoais classes={classes} nacionalidades={nacionalidades} localidades={localidades}/>
+                return <FormDadosPessoais classes={classes} nacionalidades={nacionalidades} localidades={localidades} />
             case 1:
-                return <FormDadosConta classes={classes}/>
+                return <FormDadosConta classes={classes} />
             case 2:
                 return (
                     <Box ml={10} mr={10}>
-                        <Typography variant={'h6'} paragraph>
+                        <Typography variant="h6" paragraph>
                             Documentos necessários: carta
                             de condução e cartão de
                             cidadão. Os ficheiros têm de ter os seguintes nomes:
                             carta_conducao e
                             cartao_cidadao
                         </Typography>
-                        <FormDocumentos/>
+                        <FormDocumentos />
                     </Box>
                 )
             default:
@@ -101,29 +146,50 @@ export default function RegistarMotorista () {
     return (
         <>
             <div className={classes.root}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    open={openAlert}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    TransitionComponent={Slide}
+                >
+                    <Alert onClose={handleCloseAlert} severity={severity}>
+                        {message}
+                    </Alert>
+                </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant={'h4'}>
+                        <Typography variant="h4">
                             Registo de Motorista
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant={'h5'}>
-                            <Breadcrumbs separator={<NavigateNext fontSize="small"/>}
-                                aria-label="breadcrumb">
-                                <Link color="inherit" component={RouterLink} to='/'>
+                        <Typography variant="h5">
+                            <Breadcrumbs
+                                separator={<NavigateNext fontSize="small" />}
+                                aria-label="breadcrumb"
+                            >
+                                <Link color="inherit" component={RouterLink} to="/">
                                     Início
                                 </Link>
-                                <Link color="textPrimary" component={RouterLink}
-                                    to='/Dashboard/RegistarMotorista'
-                                    aria-current="page">Registar Motorista</Link>
+                                <Link
+                                    color="textPrimary"
+                                    component={RouterLink}
+                                    to="/Dashboard/RegistarMotorista"
+                                    aria-current="page"
+                                >
+                                    Registar Motorista
+                                </Link>
                             </Breadcrumbs>
                         </Typography>
                     </Box>
                 </Box>
                 <Box mb={2}>
-                    <Stepper className={classes.stepper} alternativeLabel
-                        activeStep={activeStep}>
+                    <Stepper
+                        className={classes.stepper}
+                        alternativeLabel
+                        activeStep={activeStep}
+                    >
                         {steps.map((label) => (
                             <Step key={label} className={classes.step}>
                                 <StepLabel>{label}</StepLabel>
@@ -162,14 +228,13 @@ export default function RegistarMotorista () {
                                         email: '',
                                         utilizador: 'teste',
                                         tipo_utilizador: 5,
-                                        files: null
+                                        files: null,
                                     }}
                                 >
                                     {({
                                         isSubmitting,
                                         submitForm,
                                         isValid,
-                                        errors: formErrors
                                     }) => {
                                         /* console.log(formErrors)
                                         console.log(isValid) */
@@ -178,14 +243,17 @@ export default function RegistarMotorista () {
                                                 <form onSubmit={(event) => {
                                                     event.preventDefault()
                                                     submitForm()
-                                                }}>
+                                                }}
+                                                >
                                                     {
                                                         getStepContent(activeStep)
                                                     }
                                                 </form>
-                                                <Box component="div" align={'right'} mt={5}>
-                                                    <Button disabled={!isValid || activeStep === 0}
-                                                        onClick={handleBack}>
+                                                <Box component="div" align="right" mt={5}>
+                                                    <Button
+                                                        disabled={!isValid || activeStep === 0}
+                                                        onClick={handleBack}
+                                                    >
                                                         Voltar
                                                     </Button>
                                                     <Button
@@ -195,7 +263,7 @@ export default function RegistarMotorista () {
                                                         className={classes.button}
                                                         disabled={!isValid || isSubmitting}
                                                     >
-                                                        {isSubmitting && (<CircularProgress color={'inherit'}/>)}
+                                                        {isSubmitting && (<CircularProgress color="inherit" />)}
                                                         {!isSubmitting && (activeStep === steps.length - 1 ? 'Concluir' : 'Seguinte')}
                                                     </Button>
                                                 </Box>

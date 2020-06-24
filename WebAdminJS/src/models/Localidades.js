@@ -1,5 +1,5 @@
-let Sequelize = require('sequelize'),
-    sequelize = require('../config/database')
+import Sequelize from 'sequelize'
+import { sequelize } from '../config/database.js'
 
 var Localidades = sequelize.define('LOCALIDADES', {
     NR_LOCALIDADE: {
@@ -36,4 +36,4 @@ var Localidades = sequelize.define('LOCALIDADES', {
     timestamps: false,
 })
 
-module.exports = Localidades
+export { Localidades }

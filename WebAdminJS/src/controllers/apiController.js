@@ -1,14 +1,17 @@
-let Localidades = require('../models/Localidades'),
-    Paises = require('../models/Paises'),
-    sequelize = require('../config/database'),
-    NodeCache = require('node-cache')
+import { Localidades } from '../models/Localidades.js'
+import { Paises } from '../models/Paises.js'
+import { sequelize } from '../config/database.js'
+import NodeCache from 'node-cache'
 
-const controllers = {}
+const apiController = {}
 sequelize.sync()
 
-const cache = new NodeCache( { stdTTL: 100, checkperiod: 120 } )
+const cache = new NodeCache( {
+    stdTTL: 100,
+    checkperiod: 120
+})
 
-controllers.localidades = async (req, res) => {
+apiController.localidades = async (req, res) => {
     if(cache.get('localidades') === undefined) {
         await Localidades.findAll({
             where: {
@@ -18,7 +21,7 @@ controllers.localidades = async (req, res) => {
                 ['LOCALIDADE', 'ASC'],
             ],
         }).then((data) => {
-            cache.set('localidades', JSON.stringify(data), 900)
+            cache.set('localidades', JSON.stringify(data), 3600)
             return res.json({
                 success: true,
                 data: data,
@@ -34,14 +37,14 @@ controllers.localidades = async (req, res) => {
     }
 }
 
-controllers.nacionalidades = async (req, res) => {
+apiController.nacionalidades = async (req, res) => {
     if(cache.get('nacionalidades') === undefined) {
         await Paises.findAll({
             order: [
                 ['NR_PAIS', 'ASC'],
             ],
         }).then((data) => {
-            cache.set('nacionalidades', JSON.stringify(data), 900 )
+            cache.set('nacionalidades', JSON.stringify(data), 86400)
             return res.json({
                 success: true,
                 data: data,
@@ -57,4 +60,4 @@ controllers.nacionalidades = async (req, res) => {
     }
 }
 
-module.exports = controllers
+export { apiController }

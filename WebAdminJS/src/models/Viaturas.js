@@ -1,5 +1,5 @@
-var Sequelize = require('sequelize'),
-    sequelize = require('../config/database')
+import Sequelize from 'sequelize'
+import { sequelize } from '../config/database.js'
 
 var Cores = sequelize.define('VIATURAS_CORES', {
     NR_COR: {
@@ -126,6 +126,6 @@ var Viaturas = sequelize.define('VIATURAS', {
     paranoid: true,
 })
 
-module.exports = {
+export {
     Cores, Marcas, Modelos, Seguradoras, Viaturas
 }
