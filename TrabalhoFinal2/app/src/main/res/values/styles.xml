@@ -1,0 +1,99 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- Text style for "esqueceu_a" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="esqueceu_a">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Text style for "no_tem_con" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="no_tem_con">
+        <item name="android:textColor">#fffff700</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <!-- Text style for "no_tem_con" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="aqui">
+        <item name="android:textColor">#ffffffff</item>
+    </style>
+
+    <!-- Text style for "jos_morais" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="jos_morais">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <!-- Text style for "terminar_s" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="terminar_s">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Text style for "perfil" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="perfil">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="perfil1">
+        <item name="android:textColor">#ff585858</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Text style for "viagens" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="viagens">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Text style for "detalhes:" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="detalhes">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Text style for "54_min" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="min">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Text style for "39,3_km" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="km">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Text style for "1_paragem" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="paragem">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!-- Text style for "1_paragem" -->
+    <!-- Add this snippet to styles.xml. -->
+    <style name="paragems">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+</resources>
