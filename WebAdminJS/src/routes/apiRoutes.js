@@ -5,7 +5,7 @@ const apiRouter = express.Router()
 
 import { apiController } from '../controllers/apiController.js'
 
-apiRouter.get('/localidades', /*checkToken,*/ apiController.localidades)
-apiRouter.get('/nacionalidades', /*checkToken,*/ apiController.nacionalidades)
+apiRouter.get('/localidades', apiController.localidades)
+apiRouter.get('/nacionalidades', apiController.nacionalidades)
 
 export { apiRouter }

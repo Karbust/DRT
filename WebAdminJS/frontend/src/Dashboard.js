@@ -29,6 +29,7 @@ import {
     MapTwoTone,
     MapOutlined,
     DirectionsCar,
+    DirectionsCarTwoTone,
     NearMe,
     ExitToApp,
     ExpandLess,
@@ -139,7 +140,7 @@ export default function Dashboard() {
                             <ListItemText primary="Dashboard" />
                         </ListItem>
                         {
-                            ([Role.Administrador, Role.AdministradorOperador, Role.Telefonista].includes(currentUser.tipoUser))
+                            ([Role.Administrador, Role.AdministradorOperador, Role.Telefonista, Role.AdministrativoOperador].includes(currentUser.tipoUser))
                                 && (
                                     <>
                                         <ListItem button onClick={handleClickViagens}>
@@ -186,7 +187,7 @@ export default function Dashboard() {
                                             )
                                                 }
                                                 {
-                                                    ([Role.Administrador, Role.AdministradorOperador].includes(currentUser.tipoUser))
+                                                    ([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador].includes(currentUser.tipoUser))
                                             && (
                                                 <ListItem
                                                     button
@@ -209,7 +210,7 @@ export default function Dashboard() {
                         }
 
                         {
-                            ([Role.Administrador, Role.AdministradorOperador].includes(currentUser.tipoUser))
+                            ([Role.Administrador, Role.Administrativo, Role.AdministradorOperador].includes(currentUser.tipoUser))
                             && (
                                 <>
                                     <ListItem button onClick={handleClickUsers}>
@@ -222,7 +223,7 @@ export default function Dashboard() {
                                     <Collapse in={openNestedUsers} timeout="auto" unmountOnExit>
                                         <List component="div" disablePadding>
                                             {
-                                                ([Role.Administrador, Role.AdministradorOperador].includes(currentUser.tipoUser))
+                                                ([Role.Administrador, Role.Administrativo].includes(currentUser.tipoUser))
                                             && (
                                                 <ListItem
                                                     button
@@ -239,7 +240,7 @@ export default function Dashboard() {
                                             )
                                             }
                                             {
-                                                ([Role.Administrador, Role.AdministradorOperador].includes(currentUser.tipoUser))
+                                                ([Role.Administrador, Role.Administrativo].includes(currentUser.tipoUser))
                                             && (
                                                 <ListItem
                                                     button
@@ -256,7 +257,7 @@ export default function Dashboard() {
                                             )
                                             }
                                             {
-                                                ([Role.Administrador, Role.AdministradorOperador].includes(currentUser.tipoUser))
+                                                ([Role.Administrador, Role.Administrativo].includes(currentUser.tipoUser))
                                             && (
                                                 <ListItem
                                                     button
@@ -353,7 +354,7 @@ export default function Dashboard() {
                                 <>
                                     <ListItem button onClick={handleClickViaturas}>
                                         <ListItemIcon>
-                                            <MapTwoTone />
+                                            <DirectionsCar />
                                         </ListItemIcon>
                                         <ListItemText primary="Viaturas" />
                                         {openNestedViaturas ? <ExpandLess /> : <ExpandMore />}
@@ -389,7 +390,7 @@ export default function Dashboard() {
                                                     activeStyle={{ backgroundColor: theme.palette.primary.main }}
                                                     exact
                                                 >
-                                                    <ListItemIcon><Map /></ListItemIcon>
+                                                    <ListItemIcon><DirectionsCarTwoTone /></ListItemIcon>
                                                     <ListItemText primary="Lista Viaturas" />
                                                 </ListItem>
                                             )
@@ -423,7 +424,7 @@ export default function Dashboard() {
                         <PrivateRoute exact path={`${path}/Viagens`} component={DashboardView} />
                         <PrivateRoute exact path={`${path}/Viagens/RegistarViagem`} roles={[Role.Administrador, Role.AdministradorOperador, Role.Telefonista]} component={RegistarViagem} />
                         <PrivateRoute exact path={`${path}/Viagens/PedidosViagem`} roles={[Role.Administrador, Role.AdministradorOperador, Role.Telefonista]} component={PedidosViagem} />
-                        <PrivateRoute exact path={`${path}/Viagens/HistoricoViagens`} roles={[Role.Administrador, Role.AdministradorOperador]} component={HistoricoViagens} />
+                        <PrivateRoute exact path={`${path}/Viagens/HistoricoViagens`} roles={[Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador]} component={HistoricoViagens} />
 
                         <PrivateRoute exact path={`${path}/Utilizadores`} component={DashboardView} />
                         <PrivateRoute exact path={`${path}/Utilizadores/ValidarRegistoCliente`} roles={[Role.Administrador, Role.Administrativo]} component={ValidarRegistos} />
