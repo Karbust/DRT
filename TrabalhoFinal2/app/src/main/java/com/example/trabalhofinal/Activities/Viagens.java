@@ -29,35 +29,9 @@ public class Viagens extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viagens);
-        applicationContext = (ApplicationContext) getApplicationContext();
-        fetchLocations();
 
     }
 
-    private void fetchLocations() {
-        if (applicationContext.getLocations() == null) {
-            Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
-
-            call.enqueue(new Callback<LocationsResponse>() {
-                @Override
-                public void onResponse(Call<LocationsResponse> call, Response<LocationsResponse> response) {
-                    LocationsResponse locationsResponse = response.body();
-
-                    if (locationsResponse != null && locationsResponse.isSuccess()) {
-                        Log.i(TAG, "Request success");
-                        applicationContext.setLocations(locationsResponse.getLocations());
-                    } else {
-                        Log.i(TAG, "Request Failed");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LocationsResponse> call, Throwable t) {
-                    Log.i(TAG, "Request onFailure" + t);
-                }
-            });
-        }
-    }
 
     public void process(View view)
     {

@@ -2,6 +2,7 @@ package com.example.trabalhofinal.Api;
 
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
+import com.example.trabalhofinal.Models.Responses.NationalityResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,9 @@ public interface Api {
 
     @GET("api/localidades")
     Call<LocationsResponse> locations();
+
+    @GET("api/nacionalidades")
+    Call<NationalityResponse> nationalities();
 
     @Multipart
     @POST("user/registarapp")

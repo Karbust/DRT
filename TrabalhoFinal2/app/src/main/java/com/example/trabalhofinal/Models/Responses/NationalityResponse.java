@@ -6,7 +6,7 @@ import java.util.List;
 
 public class NationalityResponse {
     private boolean success;
-    private List<Nationality> data;
+    private List<Nationality> nationalities;
 
     public NationalityResponse(boolean success) {
         this.success = success;
@@ -16,7 +16,7 @@ public class NationalityResponse {
         return success;
     }
 
-    public List<Nationality> getData() {
-        return data;
+    public List<Nationality> getNationalities() {
+        return nationalities;
     }
 }

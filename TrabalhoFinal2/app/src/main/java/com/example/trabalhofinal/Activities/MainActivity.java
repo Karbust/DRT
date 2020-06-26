@@ -1,7 +1,5 @@
 package com.example.trabalhofinal.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,9 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.R;
+import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
 import retrofit2.Call;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.iniciar_sessao).setOnClickListener(this);
         findViewById(R.id.registe_se_aqui).setOnClickListener(this);
+
+
     }
 
     @Override
