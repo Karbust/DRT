@@ -1,7 +1,6 @@
-package com.example.trabalhofinal.Models;
+package com.example.trabalhofinal.Models.Responses;
 
 public class LoginResponse {
-
     private boolean success;
     private String message;
     private String token;

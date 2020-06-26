@@ -3,8 +3,6 @@ package com.example.trabalhofinal.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.trabalhofinal.Models.LoginResponse;
-
 public class SharedPrefManager {
 
     private static String SHARED_PREF_NAME="my_shared_preff";

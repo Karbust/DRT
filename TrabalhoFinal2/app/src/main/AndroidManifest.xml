@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".storage.ApplicationContext"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,7 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activitys.Registo"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -36,16 +36,17 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".Activitys.Perfil" />
-        <activity android:name=".Activitys.Viagens" />
-        <activity android:name=".Activitys.Home" />
-        <activity android:name=".Activitys.MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.Registo" />
+        <activity android:name=".Activities.Perfil" />
+        <activity android:name=".Activities.Viagens" />
+        <activity android:name=".Activities.Home" />
     </application>
 
 </manifest>

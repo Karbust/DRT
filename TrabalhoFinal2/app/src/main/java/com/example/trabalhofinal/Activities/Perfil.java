@@ -1,10 +1,8 @@
-package com.example.trabalhofinal.Activitys;
+package com.example.trabalhofinal.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import com.example.trabalhofinal.R;
 

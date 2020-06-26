@@ -1,20 +1,13 @@
-package com.example.trabalhofinal.Activitys;
+package com.example.trabalhofinal.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.SharedPrefManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
 

@@ -1,32 +1,18 @@
-package com.example.trabalhofinal.Activitys;
+package com.example.trabalhofinal.Activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
-import com.example.trabalhofinal.Models.LoginResponse;
+import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.SharedPrefManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,8 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         username=findViewById(R.id.Utilizador);
         password=findViewById(R.id.passe);
 
-        findViewById(R.id.button).setOnClickListener(this);
-        findViewById(R.id.textView2).setOnClickListener(this);
+        findViewById(R.id.iniciar_sessao).setOnClickListener(this);
+        findViewById(R.id.registe_se_aqui).setOnClickListener(this);
     }
 
     @Override
@@ -64,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void userLogin(){
         String user = username.getText().toString().trim();
-        String passe =password.getText().toString().trim();
+        String passe = password.getText().toString().trim();
 
         if(user.isEmpty()){
             username.setError("User is required");
@@ -83,10 +69,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                LoginResponse loginResponse=response.body();
+                LoginResponse loginResponse = response.body();
 
-                Log.i(TAG, "Request body"+response);
-                Log.i(TAG, "Request body"+response.body());
+                Log.i(TAG, "Request body" + response);
+                Log.i(TAG, "Request body" + response.body());
 
                 if(loginResponse != null && loginResponse.isSuccess()){
                     SharedPrefManager.getInstance(MainActivity.this).saveToken(loginResponse.getToken());
@@ -94,9 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent=new Intent(MainActivity.this,Home.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    Log.i(TAG, "Request Succefull"+token);
+                    Log.i(TAG, "Request Successful"+token);
                     Toast.makeText(getApplicationContext(),loginResponse.getMessage(),Toast.LENGTH_LONG).show();
-                    Log.i(TAG, "Request Succefull");
                 }else{
 
                     Toast.makeText(getApplicationContext(),loginResponse.getMessage(),Toast.LENGTH_LONG).show();
@@ -115,8 +100,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v){
         switch(v.getId()){
-            case R.id.button:
+            case R.id.iniciar_sessao:
                 userLogin();
+                break;
+            case R.id.registe_se_aqui:
+                startActivity(new Intent(MainActivity.this, Registo.class));
                 break;
         }
     }
