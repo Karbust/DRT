@@ -95,5 +95,11 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="bemvindo">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:textSize">26sp</item>
+
+    </style>
+
 
 </resources>

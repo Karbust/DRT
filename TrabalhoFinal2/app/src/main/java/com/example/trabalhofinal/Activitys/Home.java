@@ -28,6 +28,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         findViewById(R.id.button2).setOnClickListener(this);
         findViewById(R.id.terminar).setOnClickListener(this);
+        findViewById(R.id.perfil).setOnClickListener(this);
     }
 
     @Override
@@ -54,6 +55,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.button2:
                 startActivity(new Intent(Home.this,Viagens.class));
+                break;
+            case R.id.perfil:
+                startActivity(new Intent(Home.this,Perfil.class));
                 break;
         }
     }
