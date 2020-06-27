@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,6 +34,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "HomeActivity";
     private ApplicationContext applicationContext;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +44,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         findViewById(R.id.button2).setOnClickListener(this);
         findViewById(R.id.terminar).setOnClickListener(this);
         findViewById(R.id.perfil).setOnClickListener(this);
+        TextView name=findViewById(R.id.Nome);
 
         applicationContext = (ApplicationContext) getApplicationContext();
+        sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
         fetchLocations();
         fetchNationalities();
+
+        name.setText(sharedPrefManager.getNome());
     }
 
 

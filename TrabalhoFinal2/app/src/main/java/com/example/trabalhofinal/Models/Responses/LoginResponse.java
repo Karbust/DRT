@@ -6,13 +6,13 @@ public class LoginResponse {
     private boolean success;
     private String message;
     private String token;
-    private User user;
+    private User data;
 
-    public LoginResponse(boolean success,String message,String token,User user){
+    public LoginResponse(boolean success, String message, String token, String nome, int tipo, String email, int telemovel,User data){
         this.success=success;
         this.message=message;
         this.token=token;
-        this.user=user;
+        this.data=data;
     }
 
     public boolean isSuccess() {
@@ -25,5 +25,7 @@ public class LoginResponse {
 
     public String getToken(){return token;}
 
-    public User getUser(){return user;}
+    public User getUser() {
+        return data;
+    }
 }

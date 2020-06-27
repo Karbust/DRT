@@ -22,7 +22,7 @@ import retrofit2.http.PartMap;
 public interface Api {
 
     @FormUrlEncoded
-    @POST("user/login")
+    @POST("user/loginapp")
     Call<LoginResponse> login(
       @Field("username") String username,
       @Field("password") String password

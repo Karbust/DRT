@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
+import com.example.trabalhofinal.Models.Domain.User;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         username=findViewById(R.id.Utilizador);
         password=findViewById(R.id.passe);
 
+        applicationContext = (ApplicationContext) getApplicationContext();
         findViewById(R.id.iniciar_sessao).setOnClickListener(this);
         findViewById(R.id.registe_se_aqui).setOnClickListener(this);
     }
@@ -51,55 +53,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void userLogin(){
+    private void userLogin() {
         String user = username.getText().toString().trim();
         String passe = password.getText().toString().trim();
 
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             username.setError("User is required");
             username.requestFocus();
             return;
         }
 
-        if(passe.isEmpty()){
+        if (passe.isEmpty()) {
             password.setError("Password is required");
             password.requestFocus();
             return;
         }
 
-        Call<LoginResponse> call = RetrofitClient.getInstance().getApi().login(user,passe);
-        Log.i(TAG, "Request enqueue");
-        call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                LoginResponse loginResponse = response.body();
+            Call<LoginResponse> call = RetrofitClient.getInstance().getApi().login(user, passe);
+            Log.i(TAG, "Request enqueue");
+            call.enqueue(new Callback<LoginResponse>() {
 
-                Log.i(TAG, "Request body" + response);
-                Log.i(TAG, "Request body" + response.body());
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    LoginResponse loginResponse = response.body();
 
-                if(loginResponse != null && loginResponse.isSuccess()){
-                    SharedPrefManager.getInstance(MainActivity.this).saveToken(loginResponse.getToken());
-                    String token=SharedPrefManager.getInstance(MainActivity.this).getToken();
-                    applicationContext.setUser(loginResponse.getUser());
-                    Log.i(TAG,"User: "+loginResponse.getUser());
-                    Intent intent=new Intent(MainActivity.this,Home.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    Log.i(TAG, "Request Successful"+token);
-                    Toast.makeText(getApplicationContext(),loginResponse.getMessage(),Toast.LENGTH_LONG).show();
-                }else{
+                    Log.i(TAG, "Request body" + response);
+                    Log.i(TAG, "Request body" + response.body().toString());
 
-                    Toast.makeText(getApplicationContext(),loginResponse.getMessage(),Toast.LENGTH_LONG).show();
-                    Log.i(TAG, "Request Failed");
+                    if (loginResponse != null && loginResponse.isSuccess()) {
+
+                        SharedPrefManager.getInstance(applicationContext).saveSession(loginResponse.getToken(),loginResponse.getUser());
+                        String token = SharedPrefManager.getInstance(applicationContext).getToken();
+                        Intent intent = new Intent(MainActivity.this, Home.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        Log.i(TAG, "Request Successful" + token);
+                        Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+
+                    } else {
+
+                        Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.i(TAG, "Request Failed");
+
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Log.i(TAG, "Request erro");
-                Log.i(TAG, "Request failure"+t);
-            }
-        });
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    Log.i(TAG, "Request erro");
+                    Log.i(TAG, "Request failure" + t);
+                }
+            });
     }
 
     @Override
