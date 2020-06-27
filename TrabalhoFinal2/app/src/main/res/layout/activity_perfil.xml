@@ -9,9 +9,9 @@
 
     <ImageView
         android:id="@+id/imageView20"
-        android:layout_width="416dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="411dp"
+        android:layout_height="154dp"
+        android:layout_marginTop="66dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView"
         app:srcCompat="@drawable/autocarros_muv_viagens" />
@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/custom_input" />
+        app:srcCompat="@drawable/backgound_viagens" />
 
     <TextView
         android:id="@+id/textView21"
@@ -202,11 +202,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="20dp"
         android:hint="Perfil"
         app:layout_constraintStart_toEndOf="@+id/imageView21"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 
 
 

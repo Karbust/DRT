@@ -20,8 +20,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Telefone"
+            android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/telemovel" />
@@ -33,8 +33,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Localidade"
+            android:inputType="textPersonName"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/postal" />
@@ -46,8 +46,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Username"
+            android:inputType="textPersonName"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email" />
@@ -76,34 +76,33 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/caminho_77" />
 
+
         <Button
             android:id="@+id/select_cc_image"
             android:layout_width="160dp"
             android:layout_height="41dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="120dp"
             android:background="@drawable/botao_cc"
-            android:hint="Cartão de Cidadão"
+            android:text="Cartão de Cidadão"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.935"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pass" />
+            app:layout_constraintStart_toEndOf="@+id/select_cm_image"
+            app:layout_constraintTop_toBottomOf="@+id/pass"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/select_cm_image"
             android:layout_width="200dp"
             android:layout_height="41dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/botao_cm"
             android:editable="false"
             android:gravity="center"
-            android:hint="Comprovativo de Morada"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.081"
+            android:text="Comprovativo de Morada"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pass" />
-
 
         <EditText
             android:id="@+id/pass"
@@ -113,11 +112,11 @@
             android:layout_marginTop="16dp"
             android:drawablePadding="12dp"
             android:ems="10"
+            android:hint="Password"
             android:inputType="textPassword"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/utilizador"
-            android:hint="Password" />
+            app:layout_constraintTop_toBottomOf="@+id/utilizador" />
 
         <EditText
             android:id="@+id/telemovel"
@@ -126,11 +125,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="Telemóvel"
             android:inputType="phone"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/localidade"
-            android:hint="Telemóvel" />
+            app:layout_constraintTop_toBottomOf="@+id/localidade" />
 
         <EditText
             android:id="@+id/morada"
@@ -139,11 +138,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="Morada"
             android:inputType="textPostalAddress"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nif"
-            android:hint="Morada" />
+            app:layout_constraintTop_toBottomOf="@+id/nif" />
 
         <EditText
             android:id="@+id/nome"
@@ -152,8 +151,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="23dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Nome"
+            android:inputType="textPersonName"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -166,11 +165,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="Cartão de Cidadão"
             android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
-            android:hint="Cartão de Cidadão" />
+            app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
 
         <EditText
@@ -180,11 +179,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="NIF"
             android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/niss"
-            android:hint="NIF" />
+            app:layout_constraintTop_toBottomOf="@+id/niss" />
 
         <EditText
             android:id="@+id/niss"
@@ -193,11 +192,11 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
+            android:hint="NISS"
             android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cc"
-            android:hint="NISS" />
+            app:layout_constraintTop_toBottomOf="@+id/cc" />
 
         <EditText
             android:id="@+id/email"
@@ -206,8 +205,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="textEmailAddress"
             android:hint="Email"
+            android:inputType="textEmailAddress"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/telefone" />
@@ -218,8 +217,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="23dp"
-            android:hint="Criar Conta"
-            android:textColor="@color/cardview_dark_background"
+            android:text="Criar Conta"
+            android:textColor="@android:color/black"
             android:textSize="28dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView9" />
@@ -231,8 +230,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="textPersonName"
             android:hint="Data Nasc."
+            android:inputType="textPersonName"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nome" />
@@ -244,8 +243,8 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:inputType="number"
             android:hint="Código Postal"
+            android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/morada" />
@@ -258,6 +257,20 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/datanasc" />
+
+        <Button
+            android:id="@+id/submeter"
+            android:layout_width="366dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginEnd="27dp"
+            android:layout_marginBottom="44dp"
+            android:background="@drawable/botao_sub"
+            android:text="SUBMETER"
+            android:textColor="@color/colorYellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

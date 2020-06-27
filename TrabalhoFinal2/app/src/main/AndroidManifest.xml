@@ -24,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Activities.Estatistica"></activity>
+        <activity android:name=".Activities.Ajuda" />
+        <activity android:name=".Activities.Notificacoes" />
 
         <uses-library
             android:name="org.apache.http.legacy"
