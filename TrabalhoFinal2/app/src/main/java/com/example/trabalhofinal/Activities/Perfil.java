@@ -13,6 +13,5 @@ public class Perfil extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-
     }
 }

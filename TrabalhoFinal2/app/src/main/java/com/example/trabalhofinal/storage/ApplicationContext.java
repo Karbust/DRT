@@ -7,6 +7,7 @@ import androidx.constraintlayout.solver.Cache;
 
 import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Nationality;
+import com.example.trabalhofinal.Models.Domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +15,14 @@ import java.util.List;
 public class ApplicationContext extends Application {
     private ArrayList<Location> locations;
     private ArrayList<Nationality> nationalities;
+    private User user;
 
     @Override
     public void onCreate() {
         super.onCreate();
         locations = null;
         nationalities=null;
+        user=null;
     }
 
     public ArrayList<Location> getLocations() { return locations; }
@@ -33,6 +36,10 @@ public class ApplicationContext extends Application {
     public void setNationalities(ArrayList<Nationality> nationalities) {
         this.nationalities = nationalities;
     }
+
+    public User getUser(){return user;}
+
+    public void setUser(User user){this.user = user;}
 
 //    private static final int CACHE_SIZE = 4*1024*1024;
 //    private Cache cache;
