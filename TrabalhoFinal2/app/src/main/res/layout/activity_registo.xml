@@ -21,7 +21,7 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="Telefone"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/telemovel" />
@@ -76,34 +76,33 @@
             app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/caminho_77" />
 
+
         <Button
             android:id="@+id/select_cc_image"
             android:layout_width="160dp"
             android:layout_height="41dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="120dp"
             android:background="@drawable/botao_cc"
-            android:hint="Cartão de Cidadão"
+            android:text="Cartão de Cidadão"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.935"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pass" />
+            app:layout_constraintStart_toEndOf="@+id/select_cm_image"
+            app:layout_constraintTop_toBottomOf="@+id/pass"
+            app:layout_constraintVertical_bias="1.0" />
 
         <Button
             android:id="@+id/select_cm_image"
             android:layout_width="200dp"
             android:layout_height="41dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/botao_cm"
             android:editable="false"
             android:gravity="center"
-            android:hint="Comprovativo de Morada"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.081"
+            android:text="Comprovativo de Morada"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pass" />
-
 
         <EditText
             android:id="@+id/pass"
@@ -218,8 +217,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginTop="23dp"
-            android:hint="Criar Conta"
-            android:textColor="@color/cardview_dark_background"
+            android:text="Criar Conta"
+            android:textColor="@android:color/black"
             android:textSize="28dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView9" />
@@ -258,6 +257,20 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/datanasc" />
+
+        <Button
+            android:id="@+id/submeter"
+            android:layout_width="366dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginEnd="27dp"
+            android:layout_marginBottom="44dp"
+            android:background="@drawable/botao_sub"
+            android:text="SUBMETER"
+            android:textColor="@color/colorYellow"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
