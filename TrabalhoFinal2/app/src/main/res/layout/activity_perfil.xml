@@ -224,9 +224,5 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/caminho_77" />
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 8bb46c23d3dcbd8d4f5a7e49e960ab4dd5aff6fd
 </androidx.constraintlayout.widget.ConstraintLayout>
