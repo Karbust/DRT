@@ -2,6 +2,7 @@ package com.example.trabalhofinal.Utils;
 
 import android.net.Uri;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.example.trabalhofinal.storage.ApplicationContext;
 

@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findViewById(R.id.iniciar_sessao).setOnClickListener(this);
         findViewById(R.id.registe_se_aqui).setOnClickListener(this);
-
-
     }
 
     @Override

@@ -4,27 +4,34 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import org.apache.commons.io.FileUtils;
 import com.example.trabalhofinal.Api.RetrofitClient;
+import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
+import com.example.trabalhofinal.Models.Responses.NationalityResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.Utils.RetrofitUtils;
 import com.example.trabalhofinal.storage.ApplicationContext;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -32,38 +39,300 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Registo extends AppCompatActivity implements View.OnClickListener {
+public class Registo extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final int REQUEST_CODE_CARTAO_DE_CIDADAO = 100;
     private static final int REQUEST_CODE_COMPROVATIVO_DE_MORADA = 101;
     private static final String TAG = "Registo";
     private ArrayList<Uri> listUri = new ArrayList<>();
     private ApplicationContext applicationContext;
+    private Nationality nationality;
+
+    private EditText nome;
+    private EditText ncc;
+    private EditText nss;
+    private EditText morada;
+    private EditText telemovel;
+    private EditText nif;
+    private EditText email;
+    private EditText password;
+    private TextView mdatanascimento;
+    private Spinner spinner;
+    private EditText postal;
+    private EditText utilizador;
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
+    private String date;
+    private EditText telefone;
+    private String genero;
+    private static final String[] paths = {"Masculino","Feminino","Outro"};
+    //private Spinner spiner_nacionalidades;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registo);
+
+        nome=findViewById(R.id.nome);
+        ncc=findViewById(R.id.ncc);
+        nss=findViewById(R.id.nss);
+        morada=findViewById(R.id.morada);
+        telemovel=findViewById(R.id.telemovel);
+        nif=findViewById(R.id.nif);
+        email=findViewById(R.id.email);
+        password=findViewById(R.id.password);
+        mdatanascimento=findViewById(R.id.datanascimento);
+        utilizador=findViewById(R.id.utilizador);
+        postal=findViewById(R.id.codigopostal);
+        telefone=findViewById(R.id.telefone);
+
+        spinner =findViewById(R.id.genero);
+        //spiner_nacionalidades=findViewById(R.id.nacionalidade);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, paths);
+        //set the spinners adapter to the previously created one.
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+
+
         applicationContext = (ApplicationContext) getApplicationContext();
+        //fetchLocations();
+        //fetchNationalities();
+
+        //ArrayAdapter<ApplicationContext> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, applicationContext.getNationalities());
+        //set the spinners adapter to the previously created one.
+        //spiner_nacionalidades.setAdapter(adapter1);
+        //spiner_nacionalidades.setOnItemSelectedListener(this);
 
         findViewById(R.id.imageView).setOnClickListener(this);
         findViewById(R.id.select_cc_image).setOnClickListener(this);
         findViewById(R.id.select_cm_image).setOnClickListener(this);
+        findViewById(R.id.datanascimento).setOnClickListener(this);
+    }
+
+    private void fetchLocations() {
+        if (applicationContext.getLocations() == null) {
+            Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
+
+            call.enqueue(new Callback<LocationsResponse>() {
+                @Override
+                public void onResponse(Call<LocationsResponse> call, Response<LocationsResponse> response) {
+                    LocationsResponse locationsResponse = response.body();
+
+                    if (locationsResponse != null && locationsResponse.isSuccess()) {
+                        Log.i(TAG, "Request success");
+                        applicationContext.setLocations(locationsResponse.getLocations());
+                    } else {
+                        Log.i(TAG, "Request Failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LocationsResponse> call, Throwable t) {
+                    Log.i(TAG, "Request onFailure" + t);
+                }
+            });
+        }
+    }
+
+    private void fetchNationalities() {
+        if (applicationContext.getNationalities() == null) {
+            Call<NationalityResponse> call = RetrofitClient.getInstance().getApi().nationalities();
+
+            call.enqueue(new Callback<NationalityResponse>() {
+                @Override
+                public void onResponse(Call<NationalityResponse> call, Response<NationalityResponse> response) {
+                    NationalityResponse nationalityResponse = response.body();
+
+                    if (nationalityResponse != null && nationalityResponse.isSuccess()) {
+                        Log.i(TAG, "Request success");
+                        applicationContext.setNationalities((ArrayList<Nationality>) nationalityResponse.getNationalities());
+                    } else {
+                        Log.i(TAG, "Request Failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<NationalityResponse> call, Throwable t) {
+                    Log.i(TAG, "Request onFailure" + t);
+                }
+            });
+        }
+    }
+
+    private void regist() {
+        Log.i(TAG,"Passei aqui:");
+        HashMap<String, RequestBody> map = new HashMap<>();
+
+        String user_name = nome.getText().toString().trim();
+        String birth = mdatanascimento.getText().toString().trim();
+        String cartao_cidado=ncc.getText().toString().trim();
+        String seguranca_social=nss.getText().toString().trim();
+        String NIF=nif.getText().toString().trim();
+        String tele=telemovel.getText().toString().trim();
+        String address=morada.getText().toString().trim();
+        String mail=email.getText().toString().trim();
+        String user=utilizador.getText().toString().trim();
+        String passe=password.getText().toString().trim();
+        String codigo_postal=postal.getText().toString().trim();
+        String phone=telefone.getText().toString().trim();
+
+
+        if(user_name.isEmpty()){
+            nome.setError("Em falta!");
+            nome.requestFocus();
+            return;
+        }
+
+        if(cartao_cidado.isEmpty()){
+            ncc.setError("Em falta!");
+            ncc.requestFocus();
+            return;
+        }
+
+        if(seguranca_social.isEmpty()){
+            nss.setError("Em falta!");
+            nss.requestFocus();
+            return;
+        }
+
+        if(NIF.isEmpty()){
+            nif.setError("Em falta!");
+            nif.requestFocus();
+            return;
+        }
+
+        if(address.isEmpty()){
+            morada.setError("Em falta!");
+            morada.requestFocus();
+            return;
+        }
+
+        if(mail.isEmpty()){
+            email.setError("Em falta!");
+            email.requestFocus();
+            return;
+        }
+
+        if(user.isEmpty()){
+            utilizador.setError("Em falta!");
+            utilizador.requestFocus();
+            return;
+        }
+
+        if(passe.isEmpty()){
+            password.setError("Em falta!");
+            password.requestFocus();
+            return;
+        }
+
+        if(phone.isEmpty()){
+            telefone.setError("Em falta!");
+            telefone.requestFocus();
+            return;
+        }
+
+
+        if(birth.isEmpty()){
+            mdatanascimento.setError("Em falta!");
+            mdatanascimento.requestFocus();
+            return;
+        }
+
+
+
+        map.put("nome", RetrofitUtils.createPartFromString(user_name));
+        map.put("datanascimento", RetrofitUtils.createPartFromString(date));
+        map.put("genero", RetrofitUtils.createPartFromString(genero));
+        map.put("ncc", RetrofitUtils.createPartFromString(cartao_cidado));
+        map.put("nss", RetrofitUtils.createPartFromString(seguranca_social));
+        map.put("nif", RetrofitUtils.createPartFromString(NIF));
+        map.put("telemovel", RetrofitUtils.createPartFromString(tele));
+        map.put("telefone", RetrofitUtils.createPartFromString(phone));
+        map.put("nacionalidade", RetrofitUtils.createPartFromString("cona"));
+        map.put("morada", RetrofitUtils.createPartFromString(address));
+        map.put("codpostal", RetrofitUtils.createPartFromString(codigo_postal));
+        map.put("localidade", RetrofitUtils.createPartFromString("cona"));
+        map.put("email", RetrofitUtils.createPartFromString(mail));
+        map.put("utilizador", RetrofitUtils.createPartFromString(user));
+        map.put("password", RetrofitUtils.createPartFromString(passe));
+
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for (Uri uri : listUri) {
+            Log.i(TAG, "getPathSegments: " + uri.getPathSegments());
+        }
+
+        parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(0), "cartao_cidadao"));
+        parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(1), "comprovativo_morada"));
+
+        Log.i(TAG, "data: " + map);
+        Log.i(TAG, "files: " + parts);
+
+        Call<ResponseBody> call = RetrofitClient.getInstance().getApi().regist(map, parts);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    Log.i(TAG, "Request success: " + response.body());
+                } else {
+                    Log.i(TAG, "Request Failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.i(TAG, "Request onFailure" + t);
+            }
+        });
+    }
+
+
+    public void Data(){
+        Calendar cal= Calendar.getInstance();
+        int ano = cal.get(Calendar.YEAR);
+        int mes = cal.get(Calendar.MONTH);
+        int dia = cal.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(Registo.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth,onDateSetListener,ano,mes,dia);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+
+        onDateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month=month+1;
+                if(month < 10) {
+                    Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
+                    date = year + "-0" + month + "-" + dayOfMonth;
+                    mdatanascimento.setText(date);
+                }else{
+                    Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
+                    date = year + "-" + month + "-" + dayOfMonth;
+                    mdatanascimento.setText(date);
+                }
+            }
+        };
     }
 
     @Override
-    public void onClick(View v){
-        switch(v.getId()){
-            case R.id.imageView:
-                regist();
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Log.i(TAG,"Passei item selected");
+        switch (position){
+            case 0:
+                genero="M";
                 break;
-            case R.id.select_cc_image:
-                triggerSelectImagesIntent(true);
+            case 1:
+                genero="F";
                 break;
-            case R.id.select_cm_image:
-                triggerSelectImagesIntent(false);
+            case 2:
+                genero="O";
                 break;
         }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
 
     private void triggerSelectImagesIntent(boolean isCartaoDeCidadao) {
@@ -110,53 +379,26 @@ public class Registo extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    private void regist() {
-        HashMap<String, RequestBody> map = new HashMap<>();
 
-        map.put("nome", RetrofitUtils.createPartFromString("boda"));
-        map.put("datanascimento", RetrofitUtils.createPartFromString("2012-12-12"));
-        map.put("genero", RetrofitUtils.createPartFromString("M"));
-        map.put("ncc", RetrofitUtils.createPartFromString("1"));
-        map.put("nss", RetrofitUtils.createPartFromString("123"));
-        map.put("nif", RetrofitUtils.createPartFromString("123"));
-        map.put("telemovel", RetrofitUtils.createPartFromString("123"));
-        map.put("telefone", RetrofitUtils.createPartFromString("123"));
-        map.put("nacionalidade", RetrofitUtils.createPartFromString("189"));
-        map.put("morada", RetrofitUtils.createPartFromString("esquina"));
-        map.put("codpostal", RetrofitUtils.createPartFromString("2100-100"));
-        map.put("localidade", RetrofitUtils.createPartFromString("boda"));
-        map.put("email", RetrofitUtils.createPartFromString("boda@gmail.com"));
-        map.put("utilizador", RetrofitUtils.createPartFromString("ola"));
-        map.put("password", RetrofitUtils.createPartFromString("adeus"));
-
-        List<MultipartBody.Part> parts = new ArrayList<>();
-        for (Uri uri : listUri) {
-            Log.i(TAG, "getPathSegments: " + uri.getPathSegments());
+    @Override
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.imageView:
+                Log.i(TAG,"Passei em regist");
+                regist();
+                break;
+            case R.id.select_cc_image:
+                triggerSelectImagesIntent(true);
+                break;
+            case R.id.select_cm_image:
+                triggerSelectImagesIntent(false);
+                break;
+            case R.id.datanascimento:
+               Data();
+                break;
         }
-
-        parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(0), "cartao_cidadao"));
-        parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(1), "comprovativo_morada"));
-
-        Log.i(TAG, "data: " + map);
-        Log.i(TAG, "files: " + parts);
-
-        Call<ResponseBody> call = RetrofitClient.getInstance().getApi().regist(map, parts);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.body() != null && response.isSuccessful()) {
-                    Log.i(TAG, "Request success: " + response.body());
-                } else {
-                    Log.i(TAG, "Request Failed");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.i(TAG, "Request onFailure" + t);
-            }
-        });
     }
+
 
 //    private int uploadPhoto(File file) {
 //        int returnValue;
