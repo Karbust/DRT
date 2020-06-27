@@ -1,7 +1,7 @@
 package com.example.trabalhofinal.Models.Domain;
 
 public class Location {
-    private int NR_LOCALIDADE;
+    private    int NR_LOCALIDADE;
     private String LOCALIDADE;
     private int TARIFA;
     private String COD_POSTAL;

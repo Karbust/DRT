@@ -1,6 +1,7 @@
 package com.example.trabalhofinal.Activities;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private EditText username;
     private EditText password;
+    private ApplicationContext applicationContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(loginResponse != null && loginResponse.isSuccess()){
                     SharedPrefManager.getInstance(MainActivity.this).saveToken(loginResponse.getToken());
                     String token=SharedPrefManager.getInstance(MainActivity.this).getToken();
+                    applicationContext.setUser(loginResponse.getUser());
+                    Log.i(TAG,"User: "+loginResponse.getUser());
                     Intent intent=new Intent(MainActivity.this,Home.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

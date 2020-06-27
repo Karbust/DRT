@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
+import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.NationalityResponse;
@@ -16,10 +18,14 @@ import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.R.layout.simple_spinner_dropdown_item;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,7 +49,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
 
     private void fetchLocations() {
-        if (applicationContext.getLocations() == null) {
+        List<Location> locations = applicationContext.getLocations();
+        if (locations == null) {
             Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
 
             call.enqueue(new Callback<LocationsResponse>() {
@@ -52,8 +59,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     LocationsResponse locationsResponse = response.body();
 
                     if (locationsResponse != null && locationsResponse.isSuccess()) {
+
                         Log.i(TAG, "Request success");
+
                         applicationContext.setLocations(locationsResponse.getLocations());
+
+                        Log.i(TAG,"onResponse:"+locationsResponse.getLocations());
+
+
                     } else {
                         Log.i(TAG, "Request Failed");
                     }
@@ -64,11 +77,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     Log.i(TAG, "Request onFailure" + t);
                 }
             });
+        }else{
+
         }
     }
 
     private void fetchNationalities() {
-        if (applicationContext.getNationalities() == null) {
+        List<Nationality> nationalities = applicationContext.getNationalities();
+        if (nationalities == null) {
             Call<NationalityResponse> call = RetrofitClient.getInstance().getApi().nationalities();
 
             call.enqueue(new Callback<NationalityResponse>() {
@@ -77,8 +93,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     NationalityResponse nationalityResponse = response.body();
 
                     if (nationalityResponse != null && nationalityResponse.isSuccess()) {
+
                         Log.i(TAG, "Request success");
-                        applicationContext.setNationalities((ArrayList<Nationality>) nationalityResponse.getNationalities());
+
+                        applicationContext.setNationalities(nationalityResponse.getNationalities());
+
+                        Log.i(TAG,"onResponse:"+nationalityResponse.getNationalities());
+                        List<String> nacionalidades = nationalityResponse.getNationalities().stream().map(nationality1 -> nationality1.getNOME()).collect(Collectors.toList());
+
                     } else {
                         Log.i(TAG, "Request Failed");
                     }
@@ -89,6 +111,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                     Log.i(TAG, "Request onFailure" + t);
                 }
             });
+        }else{
+            List<String> nacionalidades = nationalities.stream().map(nationality1 -> nationality1.getNOME()).collect(Collectors.toList());
+
         }
     }
 

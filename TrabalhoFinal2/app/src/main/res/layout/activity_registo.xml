@@ -48,7 +48,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        android:background="@android:drawable/btn_dropdown"
+        android:background="@drawable/login"
         app:layout_constraintEnd_toEndOf="@+id/nome"
         app:layout_constraintTop_toBottomOf="@+id/nome" />
 
@@ -118,7 +118,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nacionalidade" />
+        app:layout_constraintTop_toBottomOf="@+id/localidade" />
 
     <EditText
         android:id="@+id/email"
@@ -185,16 +185,17 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_cc_image"
-        app:srcCompat="@drawable/avatar" />
+        app:srcCompat="@drawable/send" />
 
     <EditText
         android:id="@+id/codigopostal"
+        style="@style/utilizador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -208,6 +209,7 @@
 
     <EditText
         android:id="@+id/telefone"
+        style="@style/utilizador"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -217,13 +219,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/telemovel" />
 
-    <Spinner
-        android:id="@+id/nacionalidade"
-        android:layout_width="170dp"
-        android:layout_height="50dp"
+    <EditText
+        android:id="@+id/localidade"
+        style="@style/utilizador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@android:drawable/btn_dropdown"
-        app:layout_constraintStart_toStartOf="@+id/nif"
+        android:background="@drawable/login"
+        android:hint="Localidade"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nif" />
 
 

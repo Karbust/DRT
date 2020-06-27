@@ -224,15 +224,4 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/caminho_77" />
 
-    <ImageView
-        android:id="@+id/imageView22"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView21"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/avatar" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

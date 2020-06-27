@@ -2,11 +2,12 @@ package com.example.trabalhofinal.Models.Responses;
 
 import com.example.trabalhofinal.Models.Domain.Nationality;
 
-import java.util.List;
+import java.util.ArrayList;
+
 
 public class NationalityResponse {
     private boolean success;
-    private List<Nationality> nationalities;
+    private ArrayList<Nationality> data;
 
     public NationalityResponse(boolean success) {
         this.success = success;
@@ -16,7 +17,7 @@ public class NationalityResponse {
         return success;
     }
 
-    public List<Nationality> getNationalities() {
-        return nationalities;
+    public ArrayList<Nationality> getNationalities() {
+        return data;
     }
 }

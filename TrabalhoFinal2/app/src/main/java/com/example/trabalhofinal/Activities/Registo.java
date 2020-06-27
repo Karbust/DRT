@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
+import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.NationalityResponse;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -38,6 +41,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.R.layout.simple_spinner_dropdown_item;
 
 public class Registo extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -65,8 +70,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private EditText telefone;
     private String genero;
     private static final String[] paths = {"Masculino","Feminino","Outro"};
-    //private Spinner spiner_nacionalidades;
-
+    private EditText localidade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,24 +89,19 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         utilizador=findViewById(R.id.utilizador);
         postal=findViewById(R.id.codigopostal);
         telefone=findViewById(R.id.telefone);
+        localidade=findViewById(R.id.localidade);
 
         spinner =findViewById(R.id.genero);
-        //spiner_nacionalidades=findViewById(R.id.nacionalidade);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, paths);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
         //set the spinners adapter to the previously created one.
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
 
         applicationContext = (ApplicationContext) getApplicationContext();
-        //fetchLocations();
-        //fetchNationalities();
 
-        //ArrayAdapter<ApplicationContext> adapter1 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, applicationContext.getNationalities());
-        //set the spinners adapter to the previously created one.
-        //spiner_nacionalidades.setAdapter(adapter1);
-        //spiner_nacionalidades.setOnItemSelectedListener(this);
 
         findViewById(R.id.imageView).setOnClickListener(this);
         findViewById(R.id.select_cc_image).setOnClickListener(this);
@@ -110,55 +109,6 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         findViewById(R.id.datanascimento).setOnClickListener(this);
     }
 
-    private void fetchLocations() {
-        if (applicationContext.getLocations() == null) {
-            Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
-
-            call.enqueue(new Callback<LocationsResponse>() {
-                @Override
-                public void onResponse(Call<LocationsResponse> call, Response<LocationsResponse> response) {
-                    LocationsResponse locationsResponse = response.body();
-
-                    if (locationsResponse != null && locationsResponse.isSuccess()) {
-                        Log.i(TAG, "Request success");
-                        applicationContext.setLocations(locationsResponse.getLocations());
-                    } else {
-                        Log.i(TAG, "Request Failed");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<LocationsResponse> call, Throwable t) {
-                    Log.i(TAG, "Request onFailure" + t);
-                }
-            });
-        }
-    }
-
-    private void fetchNationalities() {
-        if (applicationContext.getNationalities() == null) {
-            Call<NationalityResponse> call = RetrofitClient.getInstance().getApi().nationalities();
-
-            call.enqueue(new Callback<NationalityResponse>() {
-                @Override
-                public void onResponse(Call<NationalityResponse> call, Response<NationalityResponse> response) {
-                    NationalityResponse nationalityResponse = response.body();
-
-                    if (nationalityResponse != null && nationalityResponse.isSuccess()) {
-                        Log.i(TAG, "Request success");
-                        applicationContext.setNationalities((ArrayList<Nationality>) nationalityResponse.getNationalities());
-                    } else {
-                        Log.i(TAG, "Request Failed");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<NationalityResponse> call, Throwable t) {
-                    Log.i(TAG, "Request onFailure" + t);
-                }
-            });
-        }
-    }
 
     private void regist() {
         Log.i(TAG,"Passei aqui:");
@@ -176,6 +126,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         String passe=password.getText().toString().trim();
         String codigo_postal=postal.getText().toString().trim();
         String phone=telefone.getText().toString().trim();
+        String location=localidade.getText().toString().trim();
 
 
         if(user_name.isEmpty()){
@@ -249,10 +200,10 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         map.put("nif", RetrofitUtils.createPartFromString(NIF));
         map.put("telemovel", RetrofitUtils.createPartFromString(tele));
         map.put("telefone", RetrofitUtils.createPartFromString(phone));
-        map.put("nacionalidade", RetrofitUtils.createPartFromString("cona"));
+        map.put("nacionalidade", RetrofitUtils.createPartFromString("189"));
         map.put("morada", RetrofitUtils.createPartFromString(address));
         map.put("codpostal", RetrofitUtils.createPartFromString(codigo_postal));
-        map.put("localidade", RetrofitUtils.createPartFromString("cona"));
+        map.put("localidade", RetrofitUtils.createPartFromString(location));
         map.put("email", RetrofitUtils.createPartFromString(mail));
         map.put("utilizador", RetrofitUtils.createPartFromString(user));
         map.put("password", RetrofitUtils.createPartFromString(passe));
@@ -362,6 +313,9 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                         listUri.add(imageUri);
                         currentItem++;
                     }
+                }else if(data.getData() != null){
+                    Uri imageUri = data.getData();
+                    listUri.add(imageUri);
                 }
             }
         } else if (requestCode == REQUEST_CODE_COMPROVATIVO_DE_MORADA) {
@@ -374,6 +328,9 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                         listUri.add(imageUri);
                         currentItem++;
                     }
+                }else if(data.getData() != null){
+                    Uri imageUri = data.getData();
+                    listUri.add(imageUri);
                 }
             }
         }
