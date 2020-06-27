@@ -172,6 +172,7 @@
             app:layout_constraintTop_toBottomOf="@+id/spinner"
             android:hint="Cartão de Cidadão" />
 
+
         <EditText
             android:id="@+id/nif"
             android:layout_width="360dp"
