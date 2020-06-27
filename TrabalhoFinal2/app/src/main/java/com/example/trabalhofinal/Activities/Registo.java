@@ -68,7 +68,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private String date;
     private EditText telefone;
     private String genero;
-    private static final String[] paths = {"Masculino","Feminino","Outro"};
+    private static final String[] paths = {"Genero:","Masculino","Feminino","Outro"};
     private EditText localidade;
 
     @Override
@@ -90,13 +90,13 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         telefone=findViewById(R.id.telefone);
         localidade=findViewById(R.id.localidade);
 
-        //spinner =findViewById(R.id.genero);
+        spinner =findViewById(R.id.spinner);
 
 
-        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
         //set the spinners adapter to the previously created one.
-        //spinner.setAdapter(adapter);
-        //spinner.setOnItemSelectedListener(this);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
 
         applicationContext = (ApplicationContext) getApplicationContext();
@@ -270,12 +270,14 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         Log.i(TAG,"Passei item selected");
         switch (position){
             case 0:
-                genero="M";
                 break;
             case 1:
-                genero="F";
+                genero="M";
                 break;
             case 2:
+                genero="F";
+                break;
+            case 3:
                 genero="O";
                 break;
         }
