@@ -181,7 +181,7 @@
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/genero"
-            android:hint="Cartão de Cidadão" />
+            android:text="Cartão de Cidadão" />
 
         <EditText
             android:id="@+id/nif"
