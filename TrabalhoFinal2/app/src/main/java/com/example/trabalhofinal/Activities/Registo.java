@@ -51,7 +51,6 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private static final String TAG = "Registo";
     private ArrayList<Uri> listUri = new ArrayList<>();
     private ApplicationContext applicationContext;
-    private Nationality nationality;
 
     private EditText nome;
     private EditText ncc;
@@ -78,35 +77,35 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_registo);
 
         nome=findViewById(R.id.nome);
-        ncc=findViewById(R.id.ncc);
-        nss=findViewById(R.id.nss);
+        ncc=findViewById(R.id.cc);
+        nss=findViewById(R.id.niss);
         morada=findViewById(R.id.morada);
         telemovel=findViewById(R.id.telemovel);
         nif=findViewById(R.id.nif);
         email=findViewById(R.id.email);
-        password=findViewById(R.id.password);
-        mdatanascimento=findViewById(R.id.datanascimento);
+        password=findViewById(R.id.pass);
+        mdatanascimento=findViewById(R.id.datanasc);
         utilizador=findViewById(R.id.utilizador);
-        postal=findViewById(R.id.codigopostal);
+        postal=findViewById(R.id.postal);
         telefone=findViewById(R.id.telefone);
         localidade=findViewById(R.id.localidade);
 
-        spinner =findViewById(R.id.genero);
+        //spinner =findViewById(R.id.genero);
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
         //set the spinners adapter to the previously created one.
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        //spinner.setAdapter(adapter);
+        //spinner.setOnItemSelectedListener(this);
 
 
         applicationContext = (ApplicationContext) getApplicationContext();
 
 
-        findViewById(R.id.imageView).setOnClickListener(this);
+
         findViewById(R.id.select_cc_image).setOnClickListener(this);
         findViewById(R.id.select_cm_image).setOnClickListener(this);
-        findViewById(R.id.datanascimento).setOnClickListener(this);
+        findViewById(R.id.datanasc).setOnClickListener(this);
     }
 
 
@@ -340,19 +339,19 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v){
         switch(v.getId()){
-            case R.id.imageView:
-                Log.i(TAG,"Passei em regist");
-                regist();
-                break;
+            //case R.id.imageView:
+              //  Log.i(TAG,"Passei em regist");
+                //regist();
+                //break;
             case R.id.select_cc_image:
                 triggerSelectImagesIntent(true);
                 break;
             case R.id.select_cm_image:
                 triggerSelectImagesIntent(false);
                 break;
-            case R.id.datanascimento:
-               Data();
-                break;
+            case R.id.datanasc:
+              Data();
+               break;
         }
     }
 
