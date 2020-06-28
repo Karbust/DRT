@@ -24,7 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.Estatistica"></activity>
+        <activity android:name=".Viagens2"></activity>
+        <activity android:name=".Activities.Estatistica" />
         <activity android:name=".Activities.Ajuda" />
         <activity android:name=".Activities.Notificacoes" />
 
