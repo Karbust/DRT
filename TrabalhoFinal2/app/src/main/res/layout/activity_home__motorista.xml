@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context=".Activities.Home">
-
+    tools:context=".Activities.Home_Motorista">
 
     <TextView
         android:id="@+id/Nome"
@@ -88,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="40dp"
-        android:text="Histórico Viagens"
+        android:text="Viagens"
         app:layout_constraintStart_toEndOf="@+id/imageView8"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -96,10 +95,10 @@
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/perfil"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8"
         app:srcCompat="@drawable/boneco" />
 
     <TextView
@@ -108,9 +107,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="48dp"
-        android:text="Marcar Viagem"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        android:layout_marginTop="46dp"
+        android:text="Perfil"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toBottomOf="@+id/viagens" />
 
     <TextView
@@ -118,21 +117,11 @@
         style="@style/perfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="131dp"
-        android:text="Perfil"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="46dp"
+        android:text="Informação"
+        app:layout_constraintStart_toEndOf="@+id/imageView26"
         app:layout_constraintTop_toBottomOf="@+id/marcar" />
-
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="17dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="55dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8"
-        app:srcCompat="@drawable/agenda" />
 
     <ImageView
         android:id="@+id/imageView11"
@@ -166,5 +155,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imageView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:srcCompat="@drawable/info_branco" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
