@@ -29,8 +29,6 @@
         <activity android:name=".Activities.Perfil_Motorista" />
         <activity android:name=".Activities.Home_Motorista" />
         <activity android:name=".Activities.Viagens2" />
-        <activity android:name=".Activities.Viagens2"></activity>
-
         <activity android:name=".Activities.Estatistica" />
         <activity android:name=".Activities.Ajuda" />
         <activity android:name=".Activities.Notificacoes" />
