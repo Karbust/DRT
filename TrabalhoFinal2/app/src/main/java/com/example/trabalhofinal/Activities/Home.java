@@ -15,6 +15,7 @@ import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.NationalityResponse;
+import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
@@ -50,8 +51,43 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
         fetchLocations();
         fetchNationalities();
+        fetchviagens();
+
 
         name.setText(sharedPrefManager.getNome());
+    }
+
+    private void fetchviagens() {
+
+        int user=sharedPrefManager.getUser();
+        String key=sharedPrefManager.getToken();
+
+        Call<ViagensResponse> call = RetrofitClient.getInstance().getApi().viagens(user,key);
+        Log.i(TAG, "Request enqueue");
+        call.enqueue(new Callback<ViagensResponse>() {
+
+            @Override
+            public void onResponse(Call<ViagensResponse> call, Response<ViagensResponse> response) {
+                ViagensResponse viagensResponse = response.body();
+                if (viagensResponse != null && viagensResponse.isSuccess()) {
+
+                    applicationContext.setViagens(viagensResponse.getViagens());
+                    Log.i(TAG, "Request Successful" );
+
+                } else {
+
+
+                    Log.i(TAG, "Request Failed");
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ViagensResponse> call, Throwable t) {
+                Log.i(TAG, "Request erro");
+                Log.i(TAG, "Request failure" + t);
+            }
+        });
     }
 
 
@@ -145,7 +181,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.button2:
-                startActivity(new Intent(Home.this,Viagens.class));
+                startActivity(new Intent(Home.this,Viagens2.class));
                 break;
             case R.id.perfil:
                 startActivity(new Intent(Home.this,Perfil.class));
