@@ -61,13 +61,11 @@
             android:layout_width="359dp"
             android:layout_height="92dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="100dp"
             android:ems="10"
             android:gravity="start"
             android:hint="Dados"
             android:inputType="textPersonName"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nome5" />
@@ -216,25 +214,30 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner2"
         app:srcCompat="@drawable/divider" />
 
-    <Switch
-        android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="Ida/Volta?"
-        app:layout_constraintTop_toBottomOf="@+id/nome3"
-        tools:layout_editor_absoluteX="32dp" />
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="13dp"
+            android:text="Ida/Volta?"
+            app:layout_constraintEnd_toStartOf="@+id/nome4"
+            app:layout_constraintTop_toBottomOf="@+id/nome3" />
 
         <Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/botao_sub"
             android:backgroundTint="@color/colorYellow"
-            android:text="Button"
+            android:text="submeter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/nome7"
+            app:layout_constraintStart_toStartOf="@+id/nome7"
             app:layout_constraintTop_toBottomOf="@+id/nome7"
-            tools:layout_editor_absoluteX="27dp" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
