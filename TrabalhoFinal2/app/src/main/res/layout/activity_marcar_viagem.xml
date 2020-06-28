@@ -75,12 +75,11 @@
             android:layout_width="230dp"
             android:layout_height="39dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="26dp"
             android:ems="10"
             android:inputType="textPersonName"
             android:text="Data e Hora - Volta"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/spinner4"
             app:layout_constraintTop_toBottomOf="@+id/nome3" />
 
     <Spinner
@@ -92,18 +91,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nome2" />
 
-    <EditText
-        android:id="@+id/nome3"
-        android:layout_width="360dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Data e Hora - Ida"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner4" />
+        <TextView
+            android:id="@+id/nome3"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:gravity="center"
+            android:text="Data Ida"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintStart_toStartOf="@+id/spinner4"
+            app:layout_constraintTop_toBottomOf="@+id/spinner4" />
 
         <EditText
             android:id="@+id/nome2"
@@ -112,7 +110,7 @@
             android:layout_marginTop="46dp"
             android:ems="10"
             android:hint="Nº Passageiros"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -219,9 +217,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="17dp"
-            android:layout_marginEnd="13dp"
             android:text="Ida/Volta?"
-            app:layout_constraintEnd_toStartOf="@+id/nome4"
+            app:layout_constraintStart_toStartOf="@+id/nome3"
             app:layout_constraintTop_toBottomOf="@+id/nome3" />
 
         <Button
@@ -238,6 +235,16 @@
             app:layout_constraintStart_toStartOf="@+id/nome7"
             app:layout_constraintTop_toBottomOf="@+id/nome7"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:text="Hora Ida"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="@+id/spinner4"
+            app:layout_constraintTop_toTopOf="@+id/nome3" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -19,6 +19,7 @@ import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
+import com.example.trabalhofinal.Activities.MarcarViagem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,12 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         findViewById(R.id.button2).setOnClickListener(this);
         findViewById(R.id.terminar).setOnClickListener(this);
         findViewById(R.id.perfil).setOnClickListener(this);
+        findViewById(R.id.marcar).setOnClickListener(this);
         TextView name=findViewById(R.id.Nome);
 
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
+
         fetchLocations();
         fetchNationalities();
         fetchviagens();
@@ -155,7 +158,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 }
             });
         }else{
-            List<String> nacionalidades = nationalities.stream().map(nationality1 -> nationality1.getNOME()).collect(Collectors.toList());
+
 
         }
     }
@@ -181,11 +184,13 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.button2:
-                startActivity(new Intent(Home.this,Viagens2.class));
+                    startActivity(new Intent(Home.this, Viagens2.class));
                 break;
             case R.id.perfil:
                 startActivity(new Intent(Home.this,Perfil.class));
                 break;
+            case R.id.marcar:
+                startActivity(new Intent(Home.this,MarcarViagem.class));
         }
     }
 }

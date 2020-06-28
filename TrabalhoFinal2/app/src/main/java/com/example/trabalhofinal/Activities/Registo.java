@@ -326,21 +326,12 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
 
-        onDateSetListener= (view, year, month, dayOfMonth) -> {
-            month=month+1;
-            if(month < 10) {
-                Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
-                date = year + "-0" + month + "-" + dayOfMonth;
-                mdatanascimento.setText(date);
-            }else{
-                Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
-                date = year + "-" + month + "-" + dayOfMonth;
-                mdatanascimento.setText(date);
+        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                mdatanascimento.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
             }
-        };
-
-        DatePickerDialog dialog = new DatePickerDialog(Registo.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth,onDateSetListener,ano,mes,dia);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        },ano,mes,dia);
         dialog.show();
     }
 

@@ -50,4 +50,19 @@ public interface Api {
             @Header("authorization") String key
     );
 
+    @FormUrlEncoded
+    @POST("/viagens/registopedidoviagem")
+    Call<ResponseBody> registoviagem(
+            @Field("origem") String origem,
+            @Field("destino") String destino,
+            @Field("passageiros") String passageiros,
+            @Field("motivo") String motivo,
+            @Field("datahora_ida") String datahora_ida,
+            @Field("datahora_volta") String datahora_volta,
+            @Field("nrcliente") String nrcliente,
+            @Field("observacoes") String observacoes,
+            @Field("distancia") String distancia,
+            @Field("duracao") String duracao
+    );
+
 }
