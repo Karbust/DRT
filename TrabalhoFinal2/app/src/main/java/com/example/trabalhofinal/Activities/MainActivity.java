@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.User;
-import com.example.trabalhofinal.Activities.Home_Motorista;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
 
         if(SharedPrefManager.getInstance(this).isLoggedIn()){
-            Intent intent= new Intent(MainActivity.this,Home_Motorista.class);
+            Intent intent= new Intent(MainActivity.this,Home.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         SharedPrefManager.getInstance(applicationContext).saveSession(loginResponse.getToken(),loginResponse.getUser());
                         String token = SharedPrefManager.getInstance(applicationContext).getToken();
-                        Intent intent = new Intent(MainActivity.this,Home_Motorista.class);
+                        Intent intent = new Intent(MainActivity.this, Home.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         Log.i(TAG, "Request Successful" + token);
