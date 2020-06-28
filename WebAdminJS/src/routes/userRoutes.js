@@ -30,70 +30,19 @@ var upload = multer({
 })
 
 import { userController } from '../controllers/utilizadoresController.js'
-
-userRouter.get('/listar',
-    checkToken,
-    userController.listar,
-    authorize([Role.Administrador, Role.Administrativo]),
-)
-userRouter.get('/motoristas',
-    checkToken,
-    authorize([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador]),
-    userController.listarMotoristas
-)
-userRouter.get('/utilizadoresnaovalidados',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.listaUtilizadoresNaoValidados
-)
-userRouter.get('/registosnaovalidados',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.listaRegistosNaoValidados
-)
-userRouter.get('/apagarregistonaovalidado',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.apagarRegistoNaoValidado
-)
-userRouter.post('/validacaoconta',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.validacaoConta
-)
-userRouter.post('/verificarconta',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.verificarConta
-)
-userRouter.post('/verificarcontalink',
-    userController.verificarContaLink
-)
-userRouter.post('/verificarcontaenvioemail',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.verificarContaEnvioEmail
-)
-userRouter.post('/listarncc',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.listarNcc
-)
-userRouter.post('/registar',
-    checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    upload.array('files', 2),
-    userController.registar
-)
-userRouter.post('/registarapp',
-    upload.array('files', 2),
-    userController.registarApp
-)
-userRouter.post('/login',
-    userController.login
-)
-userRouter.post('/verificar_login',
-    userController.verificar_login
-)
+userRouter.get('/listar', checkToken, userController.listar)
+userRouter.get('/motoristas', /*checkToken,*/ userController.listarMotoristas)
+userRouter.get('/utilizadoresnaovalidados', checkToken, userController.listaUtilizadoresNaoValidados)
+userRouter.get('/registosnaovalidados', /*checkToken,*/ userController.listaRegistosNaoValidados)
+userRouter.get('/apagarregistonaovalidado', checkToken, userController.apagarRegistoNaoValidado)
+userRouter.post('/validacaoconta', checkToken, userController.validacaoConta)
+userRouter.post('/verificarconta', checkToken, userController.verificarConta)
+userRouter.post('/verificarcontalink', userController.verificarContaLink)
+userRouter.post('/verificarcontaenvioemail', checkToken, userController.verificarContaEnvioEmail)
+userRouter.post('/listarncc', /*checkToken,*/ userController.listarNcc)
+userRouter.post('/register', upload.array('files', 2), userController.registar)
+userRouter.post('/login', userController.login)
+userRouter.post('/verificar_login', userController.verificar_login)
+userRouter.post('/testes', userController.testes)
 
 export { userRouter }

@@ -90,7 +90,15 @@ export const muiTheme = createMuiTheme({
 export const useStyles = makeStyles((theme) => ({
     root: {
         'height': 180,
-        'width': '100%'
+        'width': '100%',
+        /* '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+                borderColor: '#FFD400'
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: amber.A400
+            }
+        } */
     },
     login: {
         flexGrow: 1,
@@ -98,6 +106,9 @@ export const useStyles = makeStyles((theme) => ({
     dashboard: {
         display: 'flex',
     },
+    /* gold: {
+        backgroundColor: amber['A400']
+    }, */
     button: {
         marginLeft: theme.spacing(2),
         background: 'linear-gradient(45deg, #FFB554 30%, #FFD400 90%)',

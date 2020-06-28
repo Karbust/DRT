@@ -98,7 +98,7 @@ export default function RegistarMotorista() {
             formData.append('files', files[i])
         }
         return axios
-            .post(`${backendUrl}user/registar`, formData)
+            .post(`${backendUrl}user/register`, formData)
             .then((data) => {
                 if (data.data.success) {
                     setActiveStep(3)

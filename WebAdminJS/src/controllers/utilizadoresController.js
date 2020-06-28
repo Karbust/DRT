@@ -418,60 +418,6 @@ userController.registar = async (req, res) => {
     })
 }
 
-userController.registarApp = async (req, res) => {
-    let {
-        nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, password
-    } = req.body
-    if(req.files === undefined){
-        return res.json({
-            success: false,
-            message: 'Erro ao efetuar o upload dos ficheiros.',
-        })
-    }
-    let imagens = req.files.map((file) => file.filename)
-    let token = uuidv4()
-
-    await Utilizadores.create({
-        NOME_UTILIZADOR: nome,
-        DATA_NASCIMENTO: moment(datanascimento).format('YYYY-MM-DD'),
-        N_CC: ncc,
-        N_CC_COMPROVATIVO: imagens.find(imagem => imagem.includes('cartao_cidadao')),
-        N_SEGSOCIAL: nss,
-        NIF: nif,
-        N_TELEMOVEL: telemovel,
-        N_TELEFONE: telefone,
-        GENERO: genero,
-        MORADA_UTILIZADOR: morada,
-        COD_POSTAL: codpostal,
-        MORADA_COMPROVATIVO: imagens.find(imagem => imagem.includes('comprovativo_morada')) || null,
-        FREGUESIA: localidade,
-        NACIONALIDADE: nacionalidade,
-        CARTA_CONDUCAO_COMPROVATIVO: imagens.find(imagem => imagem.includes('carta_conducao')) || null,
-        TIPO_UTILIZADOR: 7,
-        EMAIL: email,
-        LOGIN_USER: utilizador,
-        PASSWORD: password,
-        VALIDADO: false,
-        VERIFICADO: false,
-        TOKEN: token,
-        DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
-    }).then((data) => {
-        sendEmail(data.EMAIL,
-            'Conta criada no DRT',
-            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'ativacao/' + token)
-
-        return res.json({
-            success: true,
-            data: data,
-            message: 'Utilizador adicionado com sucesso',
-        })
-    }).catch(Sequelize.UniqueConstraintError, () => {
-        return res.json({
-            success: false,
-            message: 'Email ou Utilizador já registado',
-        })
-    })
-}
 userController.login = async (req, res) => {
     if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
         return res.status(403).json({
@@ -559,6 +505,16 @@ userController.verificar_login = async (req, res) => {
             })
         }
     })
+}
+
+userController.testes = async (req, res) => {
+    /*setTimeout(function() {
+        console.log(req.body)
+        res.json({ success: true })
+    }, 3000);*/
+
+    /*console.log(req.body);
+    res.json({success:true});*/
 }
 
 export { userController }
