@@ -1,18 +1,15 @@
-package com.example.trabalhofinal.Models.Responses;
-
-import com.example.trabalhofinal.Models.Domain.User;
+package com.example.trabalhofinal.Models;
 
 public class LoginResponse {
+
     private boolean success;
     private String message;
     private String token;
-    private User data;
 
-    public LoginResponse(boolean success, String message, String token, String nome, int tipo, String email, int telemovel,User data){
+    public LoginResponse(boolean success,String message,String token){
         this.success=success;
         this.message=message;
         this.token=token;
-        this.data=data;
     }
 
     public boolean isSuccess() {
@@ -24,8 +21,4 @@ public class LoginResponse {
     }
 
     public String getToken(){return token;}
-
-    public User getUser() {
-        return data;
-    }
 }

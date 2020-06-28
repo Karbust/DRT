@@ -3,10 +3,9 @@ package com.example.trabalhofinal.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.trabalhofinal.Models.Domain.User;
+import com.example.trabalhofinal.Models.LoginResponse;
 
 public class SharedPrefManager {
-
 
     private static String SHARED_PREF_NAME="my_shared_preff";
 
@@ -15,10 +14,7 @@ public class SharedPrefManager {
     private static SharedPreferences.Editor editor;
     private static final String TOKEN="token";
     private static SharedPrefManager mInstance;
-    private static final String NOME="nome";
-    private static final String TIPOUTILIZADOR="tipoutilizador";
-    private static final String EMAIL="email";
-    private static final String TELEMOVEL="telemovel";
+
 
     private SharedPrefManager(Context mCtx) {
         this.mCtx = mCtx;
@@ -33,30 +29,14 @@ public class SharedPrefManager {
         return  mInstance;
     }
 
-    public void saveSession(String token,User user){
+    public void saveToken(String token){
         editor.putString(TOKEN,token);
-        editor.putString(NOME,user.getNome());
-        editor.putInt(TIPOUTILIZADOR,user.getTipo());
-        editor.putString(EMAIL,user.getEmail());
-        editor.putInt(TELEMOVEL,user.getTelemovel());
-        editor.commit();
+        editor.apply();
     }
 
     public String getToken(){
         return preferences.getString(TOKEN,null);
     }
-
-    public String getNome(){
-        return preferences.getString(NOME,null);
-    }
-
-    public int getTipoutilizador(){ return preferences.getInt(TIPOUTILIZADOR,-1); }
-
-    public String getEmail(){
-        return preferences.getString(EMAIL,null);
-    }
-
-    public int getTelemovel(){ return preferences.getInt(TELEMOVEL,-1); }
 
     public boolean isLoggedIn(){
         if(getToken()!=null){
@@ -69,5 +49,4 @@ public class SharedPrefManager {
         editor.remove(TOKEN);
         editor.commit();
     }
-
 }

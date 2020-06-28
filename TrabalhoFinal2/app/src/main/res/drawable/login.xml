@@ -11,10 +11,10 @@
         android:bottomLeftRadius="5dp"
         android:topLeftRadius="5dp"
         android:topRightRadius="5dp"/>
-    <item android:name="android:shadowColor">#33000000</item>
+    <item name="android:shadowColor">#33000000</item>
     <!-- TextView shadow offsets do not respect scale. -->
-    <item android:name="android:shadowDx">0</item>
-    <item android:name="android:shadowDy">1</item>
+    <item name="android:shadowDx">0</item>
+    <item name="android:shadowDy">1</item>
   </shape>
 </item>
 </layer-list>

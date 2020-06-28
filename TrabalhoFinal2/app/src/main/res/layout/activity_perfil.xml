@@ -4,17 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".Activities.Perfil">
+    tools:context=".Activitys.Perfil">
 
-    <ImageView
-        android:id="@+id/imageView20"
-        android:layout_width="411dp"
-        android:layout_height="154dp"
-        android:layout_marginTop="66dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        app:srcCompat="@drawable/autocarros_muv_viagens" />
 
     <TextView
         android:id="@+id/textView"
@@ -27,16 +18,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView23"
-        android:layout_width="414dp"
-        android:layout_height="550dp"
-        android:layout_marginTop="184dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/backgound_viagens" />
 
     <TextView
         android:id="@+id/textView21"
@@ -160,9 +141,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="51dp"
+        android:layout_marginBottom="10dp"
         android:text="Email:"
+        app:layout_constraintBottom_toTopOf="@+id/imageView19"
         app:layout_constraintStart_toStartOf="@+id/imageView17"
-        app:layout_constraintTop_toBottomOf="@+id/imageView17" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView17"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView24"
@@ -174,6 +158,16 @@
         app:layout_constraintStart_toStartOf="@+id/imageView17"
         app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
+    <ImageView
+        android:id="@+id/imageView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="286dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView21"
+        app:srcCompat="@drawable/divider" />
+
     <TextView
         android:id="@+id/textView25"
         style="@style/email"
@@ -182,7 +176,6 @@
         android:layout_marginStart="120dp"
         android:layout_marginLeft="120dp"
         android:text=" passa@geiro.com"
-        android:gravity="right"
         app:layout_constraintStart_toEndOf="@+id/textView23"
         app:layout_constraintTop_toTopOf="@+id/textView23" />
 
@@ -194,7 +187,6 @@
         android:layout_marginStart="140dp"
         android:layout_marginLeft="140dp"
         android:text="912 345 678"
-        android:gravity="right"
         app:layout_constraintStart_toEndOf="@+id/textView24"
         app:layout_constraintTop_toTopOf="@+id/textView24" />
 
@@ -204,12 +196,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="25dp"
         android:hint="Perfil"
         app:layout_constraintStart_toEndOf="@+id/imageView21"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-
+    <ImageView
+        android:id="@+id/imageView20"
+        android:layout_width="416dp"
+        android:layout_height="157dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@drawable/autocarros_muv_viagens" />
 
     <ImageView
         android:id="@+id/imageView21"
@@ -225,5 +224,15 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/caminho_77" />
 
+    <ImageView
+        android:id="@+id/imageView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView21"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/avatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
