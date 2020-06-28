@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.Activities;
+package com.example.trabalhofinal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD:TrabalhoFinal2/app/src/main/java/com/example/trabalhofinal/Activities/Viagens2.java
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Viagem;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
@@ -31,6 +32,9 @@ public class Viagens2 extends AppCompatActivity implements View.OnClickListener 
     private static final String TAG = "Viagens2:";
     private ApplicationContext applicationContext;
     private SharedPrefManager sharedPrefManager;
+=======
+public class Viagens2 extends AppCompatActivity {
+>>>>>>> parent of 26a9067... 28/06 20:38:TrabalhoFinal2/app/src/main/java/com/example/trabalhofinal/Viagens2.java
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -7,27 +7,16 @@
     tools:context=".Activities.Viagens">
 
     <TextView
-        android:id="@+id/textView12"
-        style="@style/paragems"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="5dp"
-        android:text="26 min (20,2 km)"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
-        app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-    <TextView
         android:id="@+id/textView3"
         style="@style/viagens"
         android:layout_width="424dp"
         android:layout_height="68dp"
         android:background="@drawable/top"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="-2dp" />
 
     <TextView
         android:id="@+id/viagens"
