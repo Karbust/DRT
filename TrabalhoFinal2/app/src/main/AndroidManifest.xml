@@ -24,7 +24,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activities.MarcarViagem"></activity>
+        <activity android:name=".Activities.Critica"></activity>
+        <activity android:name=".Activities.MarcarViagem" />
         <activity android:name=".Activities.Estat_Municipe" />
         <activity android:name=".Activities.Perfil_Motorista" />
         <activity android:name=".Activities.Home_Motorista" />
