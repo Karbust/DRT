@@ -186,57 +186,6 @@ viagensController.editarViagem = async (req, res) => {
 }
 
 // TODO: ROTAS ANDROID - CLASSIFICAÇÃO VIAGEM - VIAGENS CONTROLLER
-viagensController.pedidosViagemMotorista = async (req, res) => {
-    await PedidoViagem.findAll({
-        where: {
-            MOTORISTA: req.body.motorista,
-            ESTADO: {
-                [op.or]: ['PEDIDO', 'PENDENTE']
-            }
-        },
-        order: [
-            ['DATAHORA_IDA', 'ASC'],
-            ['createdAt', 'ASC']
-        ],
-        include: [{
-            model: Localidades,
-            as: 'Origem'
-        }, {
-            model: Localidades,
-            as: 'Destino'
-        }, {
-            model: Viaturas,
-            as: 'ViagemViatura'
-        }],
-    }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
-    })
-}
-viagensController.pedidosViagemDetalhes = async (req, res) => {
-    await PedidoViagem.findAll({
-        where: {
-            NR_VIAGEM_PEDIDO: req.body.viagem,
-        },
-        include: [{
-            model: Localidades,
-            as: 'Origem'
-        }, {
-            model: Localidades,
-            as: 'Destino'
-        }, {
-            model: Viaturas,
-            as: 'ViagemViatura'
-        }],
-    }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
-    })
-}
 viagensController.classificacaoViagem = async (req, res) => {
     /*setTimeout(function() {
         console.log(req.body)

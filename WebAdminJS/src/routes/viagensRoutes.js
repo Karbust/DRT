@@ -23,8 +23,6 @@ viagensRouter.post('/editarviagem',
 )
 
 // TODO: ROTAS ANDROID - CLASSIFICAÇÃO VIAGEM - VIAGENS ROUTES
-viagensRouter.post('/pedidosviagemmotorista', viagensController.pedidosViagemMotorista)
-viagensRouter.post('/pedidosviagemdetalhes', viagensController.pedidosViagemDetalhes)
 viagensRouter.post('/classificacaoviagem', viagensController.classificacaoViagem)
 viagensRouter.get('/classificacoesviagens', viagensController.classificacoesViagens)
 

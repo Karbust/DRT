@@ -92,9 +92,6 @@ userRouter.post('/registarapp',
 userRouter.post('/login',
     userController.login
 )
-userRouter.post('/loginapp',
-    userController.loginApp
-)
 userRouter.post('/verificar_login',
     userController.verificar_login
 )
