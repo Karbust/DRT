@@ -544,6 +544,81 @@ userController.login = async (req, res) => {
     }
 }
 
+userController.loginApp = async (req, res) => {
+    if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
+        return res.status(403).json({
+            success: false,
+            message: 'Campos em Branco',
+        })
+    } else if (req.body.username && req.body.password) {
+        var username = req.body.username
+        var password = req.body.password
+
+        await Utilizadores.findOne({
+            where: {
+                EMAIL: username,
+                /*TIPO_UTILIZADOR: {
+                    [op.in]: [5, 7],
+                },*/
+            },
+        }).then((data) => {
+            if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
+                return res.json({
+                    success: false,
+                    message: 'Dados de autenticação inválidos.',
+                })
+            }
+
+            if (!data.VALIDADO) {
+                return res.json({
+                    success: false,
+                    message: 'Conta não validada.',
+                })
+            }
+
+            if (!data.VERIFICADO) {
+                return res.json({
+                    success: false,
+                    message: 'Conta não verificada.',
+                })
+            }
+
+            let token
+            if (req.body.remember) {
+                token = jwt.sign({
+                    nr_user: data.NR_UTILIZADOR,
+                    email: username,
+                    tipo_utilizador: data.TIPO_UTILIZADOR
+                }, jwtSecret, {})
+            } else {
+                token = jwt.sign({
+                    nr_user: data.NR_UTILIZADOR,
+                    email: username,
+                    tipo_utilizador: data.TIPO_UTILIZADOR
+                }, jwtSecret, { expiresIn: '1h' })
+            }
+
+            return res.json({
+                success: true,
+                message: 'Autenticação realizada com sucesso!',
+                token: token,
+                data: {
+                    nrUser: data.NR_UTILIZADOR,
+                    tipoUser: data.TIPO_UTILIZADOR,
+                    nome: data.NOME_UTILIZADOR,
+                    email: data.EMAIL,
+                    telemovel: data.N_TELEMOVEL
+                }
+            })
+        }).catch(() => {
+            return res.json({
+                success: false,
+                message: 'Erro no processo de autenticação. Tente de novo mais tarde.',
+            })
+        })
+    }
+}
+
 userController.verificar_login = async (req, res) => {
     jwt.verify(req.body.token.Authorization.split(' ')[1], jwtSecret, (err, decoded) => {
         if (decoded) {
