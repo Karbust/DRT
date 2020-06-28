@@ -1,16 +1,14 @@
-package com.example.trabalhofinal.Activities;
+package com.example.trabalhofinal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.trabalhofinal.R;
-
-public class Home_Motorista extends AppCompatActivity {
+public class Viagens2 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home__motorista);
+        setContentView(R.layout.activity_viagens2);
     }
 }
