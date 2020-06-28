@@ -27,8 +27,10 @@ public class Perfil extends AppCompatActivity  {
 
 
 
+        String aux=""+sharedPrefManager.getTelemovel();
+
         nome.setText(sharedPrefManager.getNome());
         email.setText(sharedPrefManager.getEmail());
-        //telemovel.setText(sharedPrefManager.getTelemovel(),toString());
+        telemovel.setText(aux);
     }
 }

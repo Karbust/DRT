@@ -12,9 +12,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -70,6 +72,9 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private String genero;
     private static final String[] paths = {"Masculino","Feminino","Outro"};
     private EditText localidade;
+    Button cc;
+    Button cm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,9 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         postal=findViewById(R.id.postal);
         telefone=findViewById(R.id.telefone);
         localidade=findViewById(R.id.localidade);
+        cc=findViewById(R.id.select_cc_image);
+        cm=findViewById(R.id.select_cm_image);
+
 
         spinner =findViewById(R.id.spinner);
 
@@ -100,11 +108,10 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         spinner.setOnItemSelectedListener(this);
 
 
-
         applicationContext = (ApplicationContext) getApplicationContext();
 
 
-
+        findViewById(R.id.submeter).setOnClickListener(this);
         findViewById(R.id.select_cc_image).setOnClickListener(this);
         findViewById(R.id.select_cm_image).setOnClickListener(this);
         findViewById(R.id.datanasc).setOnClickListener(this);
@@ -130,14 +137,27 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         String location=localidade.getText().toString().trim();
 
 
+
         if(user_name.isEmpty()){
             nome.setError("Em falta!");
             nome.requestFocus();
             return;
         }
 
+        if(birth.isEmpty()){
+            mdatanascimento.setError("Em falta!");
+            mdatanascimento.requestFocus();
+            return;
+        }
+
         if(cartao_cidado.isEmpty()){
             ncc.setError("Em falta!");
+            ncc.requestFocus();
+            return;
+        }
+
+        if(cartao_cidado.length() != 8){
+            ncc.setError("Em invalido!");
             ncc.requestFocus();
             return;
         }
@@ -148,8 +168,20 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             return;
         }
 
+        if(seguranca_social.length() != 11){
+            nss.setError("NISS invalido!");
+            nss.requestFocus();
+            return;
+        }
+
         if(NIF.isEmpty()){
             nif.setError("Em falta!");
+            nif.requestFocus();
+            return;
+        }
+
+        if(NIF.length() != 9){
+            nif.setError("NIF invalido!");
             nif.requestFocus();
             return;
         }
@@ -160,11 +192,49 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             return;
         }
 
+        if(codigo_postal.isEmpty()){
+            postal.setError("Em falta!");
+            postal.requestFocus();
+            return;
+        }
+
+        if(codigo_postal.length() != 8){
+            postal.setError("Codigo Postal Invalido!");
+            postal.requestFocus();
+            return;
+        }
+
+        if(tele.isEmpty()){
+            telemovel.setError("Em falta!");
+            telemovel.requestFocus();
+            return;
+        }
+
+        if(tele.length() != 9){
+            telemovel.setError("Telemovel invalido!");
+            telemovel.requestFocus();
+            return;
+        }
+
+
+        if(phone.isEmpty()){
+            telefone.setError("Em falta!");
+            telefone.requestFocus();
+            return;
+        }
+
         if(mail.isEmpty()){
             email.setError("Em falta!");
             email.requestFocus();
             return;
         }
+
+        if(!Patterns.EMAIL_ADDRESS.matcher(mail).matches()){
+            email.setError("Email invalido");
+            email.requestFocus();
+            return;
+        }
+
 
         if(user.isEmpty()){
             utilizador.setError("Em falta!");
@@ -177,21 +247,6 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             password.requestFocus();
             return;
         }
-
-        if(phone.isEmpty()){
-            telefone.setError("Em falta!");
-            telefone.requestFocus();
-            return;
-        }
-
-
-        if(birth.isEmpty()){
-            mdatanascimento.setError("Em falta!");
-            mdatanascimento.requestFocus();
-            return;
-        }
-
-
 
         map.put("nome", RetrofitUtils.createPartFromString(user_name));
         map.put("datanascimento", RetrofitUtils.createPartFromString(date));
@@ -212,6 +267,14 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         List<MultipartBody.Part> parts = new ArrayList<>();
         for (Uri uri : listUri) {
             Log.i(TAG, "getPathSegments: " + uri.getPathSegments());
+        }
+
+        if(listUri.size() != 2){
+            cc.setError("Em falta!");
+            cc.requestFocus();
+            cm.setError("Em falta!");
+            cm.requestFocus();
+            return;
         }
 
         parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(0), "cartao_cidadao"));
@@ -341,10 +404,10 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v){
         switch(v.getId()){
-            //case R.id.imageView:
-              //  Log.i(TAG,"Passei em regist");
-                //regist();
-                //break;
+            case R.id.submeter:
+                Log.i(TAG,"Passei em regist");
+                regist();
+                break;
             case R.id.select_cc_image:
                 triggerSelectImagesIntent(true);
                 break;
