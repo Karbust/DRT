@@ -2,13 +2,13 @@ package com.example.trabalhofinal.Models.Domain;
 
 public class User {
 
-    private int tipo;
+    private int tipoUser;
     private String nome;
     private String email;
     private int telemovel;
 
-    public User(String nome, int tipo, String email, int telemovel) {
-        this.tipo = tipo;
+    public User(String nome, int tipoUser, String email, int telemovel) {
+        this.tipoUser = tipoUser;
         this.nome = nome;
         this.email = email;
         this.telemovel = telemovel;
@@ -19,7 +19,7 @@ public class User {
     }
 
     public int getTipo() {
-        return tipo;
+        return tipoUser;
     }
 
     public String getEmail() {
@@ -34,8 +34,8 @@ public class User {
         this.nome = nome;
     }
 
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
+    public void setTipo(int tipoUser) {
+        this.tipoUser = tipoUser;
     }
 
     public void setEmail(String email) {

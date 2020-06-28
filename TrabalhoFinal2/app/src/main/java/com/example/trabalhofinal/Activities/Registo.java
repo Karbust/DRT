@@ -51,7 +51,8 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private static final int REQUEST_CODE_CARTAO_DE_CIDADAO = 100;
     private static final int REQUEST_CODE_COMPROVATIVO_DE_MORADA = 101;
     private static final String TAG = "Registo";
-    private ArrayList<Uri> listUri = new ArrayList<>();
+    private Uri Uricc = null;
+    private Uri Urimorada = null;
     private ApplicationContext applicationContext;
 
     private EditText nome;
@@ -65,6 +66,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private TextView mdatanascimento;
     private Spinner spinner;
     private EditText postal;
+    private EditText codigo;
     private EditText utilizador;
     private DatePickerDialog.OnDateSetListener onDateSetListener;
     private String date;
@@ -72,8 +74,8 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     private String genero;
     private static final String[] paths = {"Masculino","Feminino","Outro"};
     private EditText localidade;
-    Button cc;
-    Button cm;
+    private Button cc;
+    private Button cm;
 
 
     @Override
@@ -91,11 +93,12 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         password=findViewById(R.id.pass);
         mdatanascimento=findViewById(R.id.datanasc);
         utilizador=findViewById(R.id.utilizador);
-        postal=findViewById(R.id.postal);
+        codigo=findViewById(R.id.postal);
         telefone=findViewById(R.id.telefone);
         localidade=findViewById(R.id.localidade);
         cc=findViewById(R.id.select_cc_image);
         cm=findViewById(R.id.select_cm_image);
+        postal=findViewById(R.id.postal2);
 
 
         spinner =findViewById(R.id.spinner);
@@ -132,9 +135,10 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         String mail=email.getText().toString().trim();
         String user=utilizador.getText().toString().trim();
         String passe=password.getText().toString().trim();
-        String codigo_postal=postal.getText().toString().trim();
+        String c_postal=postal.getText().toString().trim();
         String phone=telefone.getText().toString().trim();
         String location=localidade.getText().toString().trim();
+        String code=codigo.getText().toString().trim();
 
 
 
@@ -192,13 +196,25 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             return;
         }
 
-        if(codigo_postal.isEmpty()){
+        if(code.isEmpty()){
+            codigo.setError("Em falta!");
+            codigo.requestFocus();
+            return;
+        }
+
+        if(code.length() != 4){
+            codigo.setError("Codigo Postal Invalido!");
+            codigo.requestFocus();
+            return;
+        }
+
+        if(c_postal.isEmpty()){
             postal.setError("Em falta!");
             postal.requestFocus();
             return;
         }
 
-        if(codigo_postal.length() != 8){
+        if(c_postal.length() != 3){
             postal.setError("Codigo Postal Invalido!");
             postal.requestFocus();
             return;
@@ -248,6 +264,8 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             return;
         }
 
+        String codigo_postal=code+"-"+c_postal;
+
         map.put("nome", RetrofitUtils.createPartFromString(user_name));
         map.put("datanascimento", RetrofitUtils.createPartFromString(date));
         map.put("genero", RetrofitUtils.createPartFromString(genero));
@@ -264,21 +282,21 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         map.put("utilizador", RetrofitUtils.createPartFromString(user));
         map.put("password", RetrofitUtils.createPartFromString(passe));
 
-        List<MultipartBody.Part> parts = new ArrayList<>();
-        for (Uri uri : listUri) {
-            Log.i(TAG, "getPathSegments: " + uri.getPathSegments());
-        }
-
-        if(listUri.size() != 2){
-            cc.setError("Em falta!");
-            cc.requestFocus();
-            cm.setError("Em falta!");
-            cm.requestFocus();
+        if(Uricc == null || Urimorada == null){
+            if(Uricc == null){
+                cc.setError("Em falta!");
+                cc.requestFocus();
+            }
+            if(Urimorada == null){
+                cm.setError("Em falta!");
+                cm.requestFocus();
+            }
             return;
         }
 
-        parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(0), "cartao_cidadao"));
-        parts.add(RetrofitUtils.prepareFilePart(applicationContext, listUri.get(1), "comprovativo_morada"));
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        parts.add(RetrofitUtils.prepareFilePart(applicationContext, Uricc, "cartao_cidadao"));
+        parts.add(RetrofitUtils.prepareFilePart(applicationContext, Urimorada, "comprovativo_morada"));
 
         Log.i(TAG, "data: " + map);
         Log.i(TAG, "files: " + parts);
@@ -308,26 +326,22 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
 
+        onDateSetListener= (view, year, month, dayOfMonth) -> {
+            month=month+1;
+            if(month < 10) {
+                Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
+                date = year + "-0" + month + "-" + dayOfMonth;
+                mdatanascimento.setText(date);
+            }else{
+                Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
+                date = year + "-" + month + "-" + dayOfMonth;
+                mdatanascimento.setText(date);
+            }
+        };
+
         DatePickerDialog dialog = new DatePickerDialog(Registo.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth,onDateSetListener,ano,mes,dia);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
-
-
-        onDateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                month=month+1;
-                if(month < 10) {
-                    Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
-                    date = year + "-0" + month + "-" + dayOfMonth;
-                    mdatanascimento.setText(date);
-                }else{
-                    Log.d(TAG, "onDateSet:date: " + year + "-" + month + "-" + dayOfMonth);
-                    date = year + "-" + month + "-" + dayOfMonth;
-                    mdatanascimento.setText(date);
-                }
-            }
-        };
     }
 
     @Override
@@ -374,12 +388,14 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                     int currentItem = 0;
                     while (currentItem < count) {
                         Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
-                        listUri.add(imageUri);
+                        Uricc = imageUri;
                         currentItem++;
                     }
+                    cc.setError(null);
                 }else if(data.getData() != null){
                     Uri imageUri = data.getData();
-                    listUri.add(imageUri);
+                    Uricc = imageUri;
+                    cc.setError(null);
                 }
             }
         } else if (requestCode == REQUEST_CODE_COMPROVATIVO_DE_MORADA) {
@@ -389,12 +405,14 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                     int currentItem = 0;
                     while (currentItem < count) {
                         Uri imageUri = data.getClipData().getItemAt(currentItem).getUri();
-                        listUri.add(imageUri);
+                        Urimorada = imageUri;
                         currentItem++;
                     }
+                    cm.setError(null);
                 }else if(data.getData() != null){
                     Uri imageUri = data.getData();
-                    listUri.add(imageUri);
+                    Urimorada = imageUri;
+                    cm.setError(null);
                 }
             }
         }
@@ -415,8 +433,8 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                 triggerSelectImagesIntent(false);
                 break;
             case R.id.datanasc:
-              Data();
-               break;
+                Data();
+                break;
         }
     }
 

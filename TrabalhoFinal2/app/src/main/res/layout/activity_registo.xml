@@ -21,7 +21,7 @@
             android:layout_marginEnd="19dp"
             android:ems="10"
             android:hint="Postal"
-            android:maxLength="8"
+            android:maxLength="3"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintEnd_toStartOf="@+id/localidade"
             app:layout_constraintTop_toBottomOf="@+id/morada" />
@@ -248,7 +248,8 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="Data Nasc."
-            android:inputType="textPersonName"
+            android:inputType="date"
+            android:focusable="false"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nome" />
@@ -261,7 +262,7 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="Código"
-            android:maxLength="8"
+            android:maxLength="4"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/morada" />
@@ -293,6 +294,7 @@
             android:id="@+id/textView33"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
+            android:layout_marginTop="5dp"
             android:text="-"
             android:textColor="@color/colorBlack"
             android:textSize="24sp"
