@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context=".Activities.Perfil">
+    tools:context=".Activities.Perfil_Motorista">
 
     <ImageView
         android:id="@+id/imageView20"
@@ -34,6 +33,7 @@
         android:layout_height="550dp"
         android:layout_marginTop="184dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/backgound_viagens" />
@@ -54,8 +54,7 @@
         android:id="@+id/textView22"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginStart="28dp"
         android:text="Passageiro"
         android:textColor="#ff000000"
         android:textSize="20sp"
@@ -159,9 +158,11 @@
         style="@style/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="51dp"
-        android:text="Email:"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="34dp"
+        android:text="Carlos Silva"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/imageView23"
         app:layout_constraintTop_toBottomOf="@+id/imageView17" />
 
     <TextView
@@ -169,34 +170,34 @@
         style="@style/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Contacto:"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="7dp"
+        android:text="Ótimo transporte!"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
     <TextView
         android:id="@+id/textView25"
         style="@style/email"
-        android:layout_width="168dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginLeft="120dp"
-        android:text=" passa@geiro.com"
-        android:gravity="right"
-        app:layout_constraintStart_toEndOf="@+id/textView23"
-        app:layout_constraintTop_toTopOf="@+id/textView23" />
+        android:layout_width="338dp"
+        android:layout_height="79dp"
+        android:layout_marginTop="7dp"
+        android:text="Motorista bastante simpático e com uma condução segura. Bom trabalho."
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
     <TextView
         android:id="@+id/textView26"
         style="@style/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginLeft="140dp"
-        android:text="912 345 678"
-        android:gravity="right"
-        app:layout_constraintStart_toEndOf="@+id/textView24"
-        app:layout_constraintTop_toTopOf="@+id/textView24" />
+        android:layout_marginStart="175dp"
+        android:text="dez 25 2019"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@+id/textView23"
+        app:layout_constraintTop_toTopOf="@+id/textView23" />
 
     <TextView
         android:id="@+id/perfil"
@@ -225,5 +226,12 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/caminho_77" />
 
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="244dp"
+        android:layout_height="46dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="573dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

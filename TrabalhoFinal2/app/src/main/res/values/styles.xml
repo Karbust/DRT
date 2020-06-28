@@ -5,7 +5,8 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorYellow</item>
+
     </style>
 
     <!-- Text style for "esqueceu_a" -->
@@ -43,9 +44,9 @@
 
     <!-- Text style for "perfil" -->
     <!-- Add this snippet to styles.xml. -->
-    <style name="perfil">
+    p<style name="perfil">
         <item name="android:textColor">#ffffffff</item>
-        <item name="android:textSize">p18s</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="perfil1">
@@ -100,6 +101,7 @@
         <item name="android:textSize">26sp</item>
 
     </style>
+
 
 
 </resources>
