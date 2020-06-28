@@ -24,7 +24,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Viagens2"></activity>
+        <activity android:name=".Activities.MarcarViagem"></activity>
+        <activity android:name=".Activities.Estat_Municipe" />
+        <activity android:name=".Activities.Perfil_Motorista" />
+        <activity android:name=".Activities.Home_Motorista" />
+        <activity android:name=".Activities.Viagens2" />
         <activity android:name=".Activities.Estatistica" />
         <activity android:name=".Activities.Ajuda" />
         <activity android:name=".Activities.Notificacoes" />

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Viagens2">
+    tools:context=".Activities.Viagens2">
 
     <ImageView
         android:id="@+id/imageView20"
@@ -120,7 +120,6 @@
         android:layout_width="401dp"
         android:layout_height="167dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView45"
         app:srcCompat="@drawable/viagens_branco" />
