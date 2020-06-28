@@ -19,6 +19,7 @@ public class SharedPrefManager {
     private static final String TIPOUTILIZADOR="tipoutilizador";
     private static final String EMAIL="email";
     private static final String TELEMOVEL="telemovel";
+    private static final String NRUSER="nruser";
 
     private SharedPrefManager(Context mCtx) {
         this.mCtx = mCtx;
@@ -39,6 +40,7 @@ public class SharedPrefManager {
         editor.putInt(TIPOUTILIZADOR,user.getTipo());
         editor.putString(EMAIL,user.getEmail());
         editor.putInt(TELEMOVEL,user.getTelemovel());
+        editor.putInt(NRUSER,user.getNrUser());
         editor.commit();
     }
 
@@ -49,6 +51,8 @@ public class SharedPrefManager {
     public String getNome(){
         return preferences.getString(NOME,null);
     }
+
+    public int getUser(){return preferences.getInt(NRUSER,-1);}
 
     public int getTipoutilizador(){ return preferences.getInt(TIPOUTILIZADOR,-1); }
 
@@ -67,6 +71,11 @@ public class SharedPrefManager {
 
     public void clearSession(){
         editor.remove(TOKEN);
+        editor.remove(NOME);
+        editor.remove(NRUSER);
+        editor.remove(TIPOUTILIZADOR);
+        editor.remove(EMAIL);
+        editor.remove(TELEMOVEL);
         editor.commit();
     }
 

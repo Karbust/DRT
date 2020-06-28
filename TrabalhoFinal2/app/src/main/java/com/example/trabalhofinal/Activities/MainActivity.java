@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.User;
-import com.example.trabalhofinal.Activities.Home_Motorista;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
 
         if(SharedPrefManager.getInstance(this).isLoggedIn()){
-            Intent intent= new Intent(MainActivity.this,Home_Motorista.class);
+            Intent intent= new Intent(MainActivity.this,Home.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
@@ -70,41 +69,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-            Call<LoginResponse> call = RetrofitClient.getInstance().getApi().login(user, passe);
-            Log.i(TAG, "Request enqueue");
-            call.enqueue(new Callback<LoginResponse>() {
+        Call<LoginResponse> call = RetrofitClient.getInstance().getApi().login(user, passe);
+        Log.i(TAG, "Request enqueue");
+        call.enqueue(new Callback<LoginResponse>() {
 
-                @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    LoginResponse loginResponse = response.body();
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                LoginResponse loginResponse = response.body();
 
-                    Log.i(TAG, "Request body" + response);
-                    Log.i(TAG, "Request body" + response.body().toString());
+                Log.i(TAG, "Request body" + response);
+                Log.i(TAG, "Request body" + response.body().toString());
 
-                    if (loginResponse != null && loginResponse.isSuccess()) {
+                if (loginResponse != null && loginResponse.isSuccess()) {
 
-                        SharedPrefManager.getInstance(applicationContext).saveSession(loginResponse.getToken(),loginResponse.getUser());
-                        String token = SharedPrefManager.getInstance(applicationContext).getToken();
-                        Intent intent = new Intent(MainActivity.this,Home_Motorista.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        Log.i(TAG, "Request Successful" + token);
-                        Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    SharedPrefManager.getInstance(applicationContext).saveSession(loginResponse.getToken(),loginResponse.getUser());
+                    String token = SharedPrefManager.getInstance(applicationContext).getToken();
+                    Intent intent = new Intent(MainActivity.this, Home.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    Log.i(TAG, "Request Successful" + token);
+                    Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
 
-                    } else {
+                } else {
 
-                        Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
-                        Log.i(TAG, "Request Failed");
+                    Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.i(TAG, "Request Failed");
 
-                    }
                 }
+            }
 
-                @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Log.i(TAG, "Request erro");
-                    Log.i(TAG, "Request failure" + t);
-                }
-            });
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.i(TAG, "Request erro");
+                Log.i(TAG, "Request failure" + t);
+            }
+        });
     }
 
     @Override
