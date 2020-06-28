@@ -28,12 +28,12 @@ import { emailRouter } from './routes/emailRoutes.js'
 import { apiRouter } from './routes/apiRoutes.js'
 import { firstRunRouter } from './routes/firstRunRoutes.js'
 
-app.use('/mail', emailRouter)
+app.use('/mail', checkToken, emailRouter) // rota de testes de envio de email
 app.use('/public', checkToken, express.static('src/public'))
 app.use('/user', userRouter)
-app.use('/viagens', viagensRouter)
-app.use('/viaturas', viaturasRouter)
-app.use('/api', apiRouter)
+app.use('/viagens', checkToken, viagensRouter)
+app.use('/viaturas', checkToken, viaturasRouter)
+app.use('/api', checkToken, apiRouter)
 
 app.use('/firstrun',
     checkToken,
