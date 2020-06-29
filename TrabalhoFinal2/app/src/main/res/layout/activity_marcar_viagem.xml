@@ -49,37 +49,24 @@
             android:ems="10"
             android:gravity="start"
             android:hint="Observações"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:textColor="@android:color/darker_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nome4" />
 
-        <EditText
-            android:id="@+id/nome7"
-            android:layout_width="359dp"
-            android:layout_height="92dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:gravity="start"
-            android:hint="Dados"
-            android:inputType="textPersonName"
-            android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nome5" />
-
-        <EditText
+        <TextView
             android:id="@+id/nome4"
-            android:layout_width="230dp"
+            android:layout_width="100dp"
             android:layout_height="39dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Data e Hora - Volta"
+            android:text="Data Volta"
+            android:visibility="invisible"
+            android:gravity="center"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="@+id/spinner4"
+            app:layout_constraintStart_toEndOf="@+id/nome3"
             app:layout_constraintTop_toBottomOf="@+id/nome3" />
 
     <Spinner
@@ -135,16 +122,16 @@
             app:layout_constraintStart_toEndOf="@+id/imageView29"
             app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
-    <Spinner
-        android:id="@+id/spinner2"
-        android:layout_width="286dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="3dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView29"
-        app:layout_constraintTop_toBottomOf="@+id/textView40" />
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="286dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/imageView29"
+            app:layout_constraintTop_toBottomOf="@+id/textView40" />
 
-    <TextView
+        <TextView
         android:id="@+id/textView48"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -231,10 +218,9 @@
             android:backgroundTint="@color/colorYellow"
             android:text="submeter"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/nome7"
-            app:layout_constraintStart_toStartOf="@+id/nome7"
-            app:layout_constraintTop_toBottomOf="@+id/nome7"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nome5" />
 
         <TextView
             android:id="@+id/textView15"
@@ -245,6 +231,18 @@
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="@+id/spinner4"
             app:layout_constraintTop_toTopOf="@+id/nome3" />
+
+        <TextView
+            android:id="@+id/textView46"
+            android:layout_width="100dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Hora volta"
+            android:visibility="invisible"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

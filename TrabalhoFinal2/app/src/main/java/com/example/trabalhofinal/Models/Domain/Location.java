@@ -57,15 +57,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return "<" +
-                "name=" + this.LOCALIDADE +
-                " nr=" + this.NR_LOCALIDADE +
-                " tax=" + this.TARIFA +
-                " postal code=" + this.COD_POSTAL +
-                " latitude=" + this.LATITUDE +
-                " longitude=" + this.LONGITUDE +
-                " active=" + this.ATIVO
-                + " >"
-                ;
+        return LOCALIDADE;
     }
 }

@@ -184,7 +184,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.button2:
-                    startActivity(new Intent(Home.this, Viagens2.class));
+                    startActivity(new Intent(Home.this, Home_Motorista.class));
                 break;
             case R.id.perfil:
                 startActivity(new Intent(Home.this,Perfil.class));

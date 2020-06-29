@@ -3,6 +3,7 @@ package com.example.trabalhofinal.Api;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.Models.Responses.NationalityResponse;
+import com.example.trabalhofinal.Models.Responses.SuccessMessageResponses;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public interface Api {
 
     @Multipart
     @POST("user/registarapp")
-    Call<ResponseBody> regist(
+    Call<SuccessMessageResponses> regist(
             @PartMap() Map<String, RequestBody> partMap,
             @Part List<MultipartBody.Part> files
     );
@@ -53,16 +54,17 @@ public interface Api {
     @FormUrlEncoded
     @POST("/viagens/registopedidoviagem")
     Call<ResponseBody> registoviagem(
-            @Field("origem") String origem,
-            @Field("destino") String destino,
+            @Field("origem") int origem,
+            @Field("destino") int destino,
             @Field("passageiros") String passageiros,
             @Field("motivo") String motivo,
             @Field("datahora_ida") String datahora_ida,
             @Field("datahora_volta") String datahora_volta,
-            @Field("nrcliente") String nrcliente,
+            @Field("nrcliente") int nrcliente,
             @Field("observacoes") String observacoes,
             @Field("distancia") String distancia,
-            @Field("duracao") String duracao
+            @Field("duracao") String duracao,
+            @Header("authorization") String key
     );
 
 }

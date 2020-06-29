@@ -5,7 +5,7 @@
 <!-- Add this snippet to layer-list xml in drawable. -->
 <item android:width="414dp" android:height="550dp">
   <shape android:shape="rectangle">
-    <gradient android:type="linear" android:useLevel="false" android:startColor="#ffffffff" android:endColor="#fff7f7fa" android:angle="-90" />
+    <gradient android:type="linear" android:useLevel="false" android:startColor="#ffffffff" android:endColor="#ffffffff" android:angle="-90" />
      <corners
         android:topLeftRadius="20dp"
         android:topRightRadius="20dp"/>

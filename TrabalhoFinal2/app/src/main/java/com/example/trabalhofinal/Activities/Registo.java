@@ -6,10 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -21,12 +18,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
-import com.example.trabalhofinal.Models.Domain.Location;
-import com.example.trabalhofinal.Models.Domain.Nationality;
-import com.example.trabalhofinal.Models.Responses.LocationsResponse;
-import com.example.trabalhofinal.Models.Responses.NationalityResponse;
+import com.example.trabalhofinal.Models.Responses.SuccessMessageResponses;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.Utils.RetrofitUtils;
 import com.example.trabalhofinal.storage.ApplicationContext;
@@ -35,11 +30,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -301,20 +294,28 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         Log.i(TAG, "data: " + map);
         Log.i(TAG, "files: " + parts);
 
-        Call<ResponseBody> call = RetrofitClient.getInstance().getApi().regist(map, parts);
-        call.enqueue(new Callback<ResponseBody>() {
+        Call<SuccessMessageResponses> call = RetrofitClient.getInstance().getApi().regist(map, parts);
+        call.enqueue(new Callback<SuccessMessageResponses>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.body() != null && response.isSuccessful()) {
+            public void onResponse(Call<SuccessMessageResponses> call, Response<SuccessMessageResponses> response) {
+                SuccessMessageResponses successMessageResponses = response.body();
+                if (successMessageResponses != null && response.isSuccessful()) {
                     Log.i(TAG, "Request success: " + response.body());
+                    Intent intent = new Intent(Registo.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    Toast.makeText(getApplicationContext(),successMessageResponses.getMessage() , Toast.LENGTH_LONG).show();
+
                 } else {
                     Log.i(TAG, "Request Failed");
+                    Toast.makeText(getApplicationContext(), successMessageResponses.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<SuccessMessageResponses> call, Throwable t) {
                 Log.i(TAG, "Request onFailure" + t);
+                Toast.makeText(getApplicationContext(), "Nao foi possivel efetuar registo, por favor tente mais tarde!", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -329,7 +330,12 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mdatanascimento.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                if(monthOfYear < 10){
+                    date=dayOfMonth + "-0" + (monthOfYear + 1) + "-" + year;
+                }else{
+                    date=dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                }
+                mdatanascimento.setText(date);
             }
         },ano,mes,dia);
         dialog.show();
@@ -337,7 +343,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.i(TAG,"Passei item selected");
+        Log.i(TAG,"Passei item selected aqui");
         switch (position){
             case 0:
                 genero="M";
@@ -414,7 +420,6 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
     public void onClick(View v){
         switch(v.getId()){
             case R.id.submeter:
-                Log.i(TAG,"Passei em regist");
                 regist();
                 break;
             case R.id.select_cc_image:
