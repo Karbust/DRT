@@ -43,7 +43,6 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
         fetchLocations();
-        fetchNationalities();
         fetchviagens();
 
         findViewById(R.id.viagens).setOnClickListener(this);
@@ -53,6 +52,7 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
     }
 
     private void fetchviagens() {
+        Log.i(TAG,"Passei fetch viagens ");
 
         int user=sharedPrefManager.getUser();
         String key=sharedPrefManager.getToken();
@@ -87,6 +87,7 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
 
 
     private void fetchLocations() {
+        Log.i(TAG,"Passei fetch locations ");
         List<Location> locations = applicationContext.getLocations();
         if (locations == null) {
             Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
@@ -120,40 +121,6 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void fetchNationalities() {
-        List<Nationality> nationalities = applicationContext.getNationalities();
-        if (nationalities == null) {
-            Call<NationalityResponse> call = RetrofitClient.getInstance().getApi().nationalities();
-
-            call.enqueue(new Callback<NationalityResponse>() {
-                @Override
-                public void onResponse(Call<NationalityResponse> call, Response<NationalityResponse> response) {
-                    NationalityResponse nationalityResponse = response.body();
-
-                    if (nationalityResponse != null && nationalityResponse.isSuccess()) {
-
-                        Log.i(TAG, "Request success");
-
-                        applicationContext.setNationalities(nationalityResponse.getNationalities());
-
-                        Log.i(TAG,"onResponse:"+nationalityResponse.getNationalities());
-                        List<String> nacionalidades = nationalityResponse.getNationalities().stream().map(nationality1 -> nationality1.getNOME()).collect(Collectors.toList());
-
-                    } else {
-                        Log.i(TAG, "Request Failed");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<NationalityResponse> call, Throwable t) {
-                    Log.i(TAG, "Request onFailure" + t);
-                }
-            });
-        }else{
-            List<String> nacionalidades = nationalities.stream().map(nationality1 -> nationality1.getNOME()).collect(Collectors.toList());
-
-        }
-    }
 
     @Override
     protected void onStart(){

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,8 +27,11 @@ import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.Utils.RetrofitUtils;
 import com.example.trabalhofinal.storage.ApplicationContext;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -113,9 +117,39 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
         findViewById(R.id.datanasc).setOnClickListener(this);
     }
 
+    public boolean compareDates(String d1)
+    {
+        try{
+            // If you already have date objects then skip 1
+
+            //1
+            // Create 2 dates starts
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date1 = sdf.parse(d1);
+            Date date= new Date();
+
+            Log.i(TAG,"Date1"+sdf.format(date1));
+
+            // Create 2 dates ends
+            //1
+
+            // Date object is having 3 methods namely after,before and equals for comparing
+            // after() will return true if and only if date1 is after date 2
+            if(date1.after(date)){
+                return true;
+            }
+        }
+        catch(ParseException ex){
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
 
     private void regist() {
         Log.i(TAG,"Passei aqui:");
+
+
         HashMap<String, RequestBody> map = new HashMap<>();
 
         String user_name = nome.getText().toString().trim();
@@ -143,6 +177,14 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
 
         if(birth.isEmpty()){
             mdatanascimento.setError("Em falta!");
+            mdatanascimento.requestFocus();
+            return;
+        }
+
+        if(compareDates(date) != false){
+            mdatanascimento.setError("");
+            mdatanascimento.setText("Data Inválida");
+            mdatanascimento.setTextColor(Color.parseColor("#FF0000"));
             mdatanascimento.requestFocus();
             return;
         }
@@ -232,6 +274,13 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             return;
         }
 
+        if(phone.length() != 9){
+            telefone.setError("Telefone invalido!");
+            telefone.requestFocus();
+            return;
+        }
+
+
         if(mail.isEmpty()){
             email.setError("Em falta!");
             email.requestFocus();
@@ -256,6 +305,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             password.requestFocus();
             return;
         }
+
 
         String codigo_postal=code+"-"+c_postal;
 
@@ -331,9 +381,9 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 if(monthOfYear < 10){
-                    date=dayOfMonth + "-0" + (monthOfYear + 1) + "-" + year;
+                    date=year + "-0" + (monthOfYear + 1) + "-" + dayOfMonth;
                 }else{
-                    date=dayOfMonth + "-" + (monthOfYear + 1) + "-" + year;
+                    date=year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                 }
                 mdatanascimento.setText(date);
             }

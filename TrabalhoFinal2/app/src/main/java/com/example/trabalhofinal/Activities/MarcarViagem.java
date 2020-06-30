@@ -34,8 +34,11 @@ import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -99,12 +102,15 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
 
-        ArrayList<Location> localizacoes = applicationContext.getLocations();
+
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
         //set the spinners adapter to the previously created one.
         motivo.setAdapter(adapter);
         motivo.setOnItemSelectedListener(this);
+
+        ArrayList<Location> localizacoes = applicationContext.getLocations();
+
 
         ArrayAdapter<Location> adapter1=new ArrayAdapter<Location>(this,simple_spinner_item,localizacoes);
         adapter1.setDropDownViewResource(simple_spinner_dropdown_item);
@@ -114,6 +120,7 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         origem.setOnItemSelectedListener(this);
         destino.setAdapter(adapter2);
         destino.setOnItemSelectedListener(this);
+
 
         aSwitch.setOnCheckedChangeListener(this);
 
@@ -217,9 +224,9 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
             for (DistanceMatrixRow var : result.rows)
             {
                 for (DistanceMatrixElement val : var.elements)
-                {
-                   distancia = val.distance.toString();
-                   duracao = val.duration.toString();
+                    {
+                   distancia = String.valueOf(val.distance.inMeters);
+                   duracao = String.valueOf(val.duration.inSeconds);
                 }
             }
         } catch (ApiException | InterruptedException | IOException e) {
@@ -227,10 +234,49 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    public boolean compareDates(String d1,String d2)
+    {
+        try{
+            // If you already have date objects then skip 1
+
+            //1
+            // Create 2 dates starts
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date1 = sdf.parse(d1);
+            Date date2 = sdf.parse(d2);
+
+            Log.i(TAG,"Date1"+sdf.format(date1));
+            Log.i(TAG,"Date2"+sdf.format(date2));
+
+            // Create 2 dates ends
+            //1
+
+            // Date object is having 3 methods namely after,before and equals for comparing
+            // after() will return true if and only if date1 is after date 2
+            if(date1.after(date2)){
+                return true;
+            }
+        }
+        catch(ParseException ex){
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
     private void registo() {
         Log.i(TAG,"Passei em regist:");
 
+
+        if(start == end){
+            TextView errorText = (TextView)destino.getSelectedView();
+            errorText.setError("");
+            errorText.setText("Destino igual a origem!");
+            errorText.requestFocus();
+            return;
+        }
+
         getdados();
+
 
         String pessoas=passageiros.getText().toString().trim();
         String data_hora_ida=data_escolhida+" "+hora_escolhida;
@@ -238,6 +284,23 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         int nrcliente=sharedPrefManager.getUser();
         String obs=observacoes.getText().toString().trim();
         String key=sharedPrefManager.getToken();
+
+
+        if(pessoas.isEmpty()){
+            passageiros.setError("Em falta!");
+            passageiros.requestFocus();
+            return;
+        }
+
+        if(data_hora_volta != null){
+            if(compareDates(data_hora_ida,data_hora_volta)){
+                data_volta.setError("Data de volta tem de ser superior á de ida!");
+                data_volta.requestFocus();
+                return;
+            }
+        }
+
+
 
         Call<ResponseBody> call = RetrofitClient.getInstance().getApi().registoviagem(start,end,pessoas,motives,data_hora_ida,data_hora_volta,nrcliente,obs,distancia,duracao,key);
         Log.i(TAG,"Origem="+start+" Destino="+end+" NrPassageiros:"+pessoas+" Motivo:"+motives+" Ida="+data_hora_ida+ " Volta="+data_hora_volta+ " CienteNr="+nrcliente+" Observacoes="+obs+" Distancia="+distancia+" Duracao="+duracao+" Key:"+key);
@@ -266,6 +329,7 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        ArrayList<Location> locals = applicationContext.getLocations();
         switch (parent.getId()){
             case R.id.spinner4:
                 if(position == 0){
@@ -331,6 +395,8 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
             tempo_volta.setVisibility(View.INVISIBLE);
             data_volta.setText("Data Volta");
             tempo_volta.setText("Hora Volta");
+            data_escolida_volta=null;
+            hora_escolida_volta=null;
         }
     }
 }
