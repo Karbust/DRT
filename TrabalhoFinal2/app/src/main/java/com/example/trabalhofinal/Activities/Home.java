@@ -4,32 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Location;
-import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
-import com.example.trabalhofinal.Models.Responses.NationalityResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
-import com.example.trabalhofinal.Activities.MarcarViagem;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.R.layout.simple_spinner_dropdown_item;
 
 public class Home extends AppCompatActivity implements View.OnClickListener {
 

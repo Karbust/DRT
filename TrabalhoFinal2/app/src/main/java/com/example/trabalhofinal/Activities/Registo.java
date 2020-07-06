@@ -413,7 +413,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
 
     private void triggerSelectImagesIntent(boolean isCartaoDeCidadao) {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
         getIntent.setType("image/*");
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");

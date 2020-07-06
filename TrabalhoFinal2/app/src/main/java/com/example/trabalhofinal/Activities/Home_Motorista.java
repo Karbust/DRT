@@ -7,20 +7,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Location;
-import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
-import com.example.trabalhofinal.Models.Responses.NationalityResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;

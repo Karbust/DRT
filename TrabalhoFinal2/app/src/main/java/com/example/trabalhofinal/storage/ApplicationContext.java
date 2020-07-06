@@ -3,14 +3,12 @@ package com.example.trabalhofinal.storage;
 import android.app.Application;
 
 import com.example.trabalhofinal.Models.Domain.Location;
-import com.example.trabalhofinal.Models.Domain.Nationality;
 import com.example.trabalhofinal.Models.Domain.Viagem;
 
 import java.util.ArrayList;
 
 public class ApplicationContext extends Application {
     private ArrayList<Location> locations;
-    private ArrayList<Nationality> nationalities;
     private ArrayList<Viagem> viagens;
 
 
@@ -18,7 +16,6 @@ public class ApplicationContext extends Application {
     public void onCreate() {
         super.onCreate();
         locations = null;
-        nationalities=null;
         viagens=null;
     }
 
@@ -26,13 +23,13 @@ public class ApplicationContext extends Application {
 
     public void setLocations(ArrayList<Location> locations) { this.locations = locations; }
 
-    public ArrayList<Nationality> getNationalities() { return nationalities; }
-
-    public void setNationalities(ArrayList<Nationality> nationalities) { this.nationalities = nationalities; }
-
     public ArrayList<Viagem> getViagens() { return viagens; }
 
     public void setViagens(ArrayList<Viagem> viagens) { this.viagens = viagens; }
+
+    public void adicionaViagem(Viagem viagem){
+        viagens.add(viagem);
+    }
 
 
 
