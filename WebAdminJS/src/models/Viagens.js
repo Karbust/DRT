@@ -87,7 +87,7 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
         },
     },
     ESTADO: {
-        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
+        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'PENDENTE_VOLTA', 'DECORRER_IDA', 'DECORRER_VOLTA', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
         allowNull: false
     },
     PEDIDA_POR: {
@@ -136,6 +136,10 @@ var ClassificacaoViagem = sequelize.define('VIAGEM_CLASSIFICACAO', {
     COMENTARIO: {
         type: Sequelize.STRING,
         allowNull: true
+    },
+    IP: {
+        type: Sequelize.INET,
+        allowNull: false
     }
 }, {
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
@@ -192,16 +196,20 @@ var AlteracoesViagem = sequelize.define('VIAGEM_ALTERACOES', {
         }
     },
     ESTADO_ANTERIOR: {
-        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
+        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'PENDENTE_VOLTA', 'DECORRER_IDA', 'DECORRER_VOLTA', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
         allowNull: false
     },
     ESTADO_NOVO: {
-        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
+        type: Sequelize.ENUM('PEDIDO', 'PENDENTE', 'PENDENTE_VOLTA', 'DECORRER_IDA', 'DECORRER_VOLTA', 'FALTA', 'CANCELADA', 'CONCLUIDA'),
+        allowNull: false
+    },
+    IP: {
+        type: Sequelize.INET,
         allowNull: false
     }
 }, {
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
-    timestamps: false
+    timestamps: true
 })
 
 export { PedidoViagem, ClassificacaoViagem, ClientesViagem, AlteracoesViagem }

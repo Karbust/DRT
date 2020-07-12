@@ -31,10 +31,45 @@ var upload = multer({
 
 import { userController } from '../controllers/utilizadoresController.js'
 
-userRouter.get('/listar',
+userRouter.get('/listaadministradores',
     checkToken,
-    userController.listar,
+    authorize([Role.Administrador]),
+    userController.listaAdministradores,
+)
+userRouter.get('/listaadministrativos',
+    checkToken,
+    authorize([Role.Administrador]),
+    userController.listaAdministrativos,
+)
+userRouter.get('/listaadministradoresoperador',
+    checkToken,
+    authorize([Role.Administrador]),
+    userController.ListaAdministradoresOperador,
+)
+userRouter.get('/listatelefonistas',
+    checkToken,
+    authorize([Role.Administrador, Role.AdministradorOperador]),
+    userController.listaTelefonistas,
+)
+userRouter.get('/listamotoristas',
+    checkToken,
+    authorize([Role.Administrador, Role.AdministradorOperador]),
+    userController.listaMotoristas,
+)
+userRouter.get('/listaadministrativosoperador',
+    checkToken,
+    authorize([Role.Administrador, Role.AdministradorOperador]),
+    userController.listaAdministrativosOperador,
+)
+userRouter.get('/listaclientes',
+    checkToken,
     authorize([Role.Administrador, Role.Administrativo]),
+    userController.listaClientes,
+)
+userRouter.post('/editarutilizador',
+    checkToken,
+    authorize([Role.Administrador, Role.Administrativo]),
+    userController.editarUtilizador,
 )
 userRouter.get('/motoristas',
     checkToken,

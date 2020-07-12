@@ -35,10 +35,16 @@ viaturasController.listaViaturas = async (req, res) => {
             as: 'Seguradora'
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
+        res.json({
+            success:true,
+            data: data
+        })
     }).catch((error) => {
         console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao pedir a lista de viaturas.'
+        })
     })
 }
 viaturasController.listaModelos = async (req, res) => {
@@ -119,7 +125,6 @@ viaturasController.adicionarViatura = async (req, res) => {
             message: 'Ocorreu um erro ao adicionar a viatura. Motivo: duplicada.',
         })
     }).catch((error) => {
-        console.log(error)
         return res.json({
             success: false,
             message: 'Ocorreu um erro ao adicionar a viatura.',

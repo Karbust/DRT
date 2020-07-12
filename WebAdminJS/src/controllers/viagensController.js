@@ -44,6 +44,17 @@ sequelize.sync()
 
 viagensController.historicoViagens = async (req, res) => {
     await PedidoViagem.findAll({
+        attributes: [
+            'NR_VIAGEM_PEDIDO',
+            'DATAHORA_IDA',
+            'DATAHORA_VOLTA',
+            'PASSAGEIROS',
+            'MOTIVO',
+            'DISTANCIA',
+            'CUSTO',
+            'COMPARTICIPACAO',
+            'ESTADO',
+        ],
         where: {
             ESTADO: {
                 [op.or]: ['DECORRER', 'FALTA', 'CANCELADA', 'CONCLUIDA']
@@ -55,12 +66,27 @@ viagensController.historicoViagens = async (req, res) => {
         include: [{
             model: Localidades,
             as: 'Origem',
+            attributes: [
+                'LOCALIDADE'
+            ],
         }, {
             model: Localidades,
             as: 'Destino',
+            attributes: [
+                'LOCALIDADE'
+            ],
         }, {
             model: Utilizadores,
-            as: 'Motorista'
+            as: 'Motorista',
+            attributes: [
+                'NOME_UTILIZADOR'
+            ],
+        }, {
+            model: Viaturas,
+            as: 'ViagemViatura',
+            attributes: [
+                'MATRICULA'
+            ],
         }],
     }).then((data) => {
         res.json({ success:true, data: data })
@@ -113,16 +139,37 @@ viagensController.pedidoViagem = async (req, res) => {
         ],
         include: [{
             model: Localidades,
-            as: 'Origem'
+            as: 'Origem',
+            attributes: [
+                'NR_LOCALIDADE',
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
         }, {
             model: Localidades,
-            as: 'Destino'
+            as: 'Destino',
+            attributes: [
+                'NR_LOCALIDADE',
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
         }, {
             model: Viaturas,
-            as: 'ViagemViatura'
+            as: 'ViagemViatura',
+            attributes: [
+                'NR_VIATURA',
+                'MATRICULA'
+            ],
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
+        setTimeout(() => {
+            res.json({
+                success: true,
+                data: data
+            })
+        }, 3000)
     }).catch((error) => {
         console.log(error)
         return res.json({ success: false })
@@ -188,25 +235,42 @@ viagensController.editarViagem = async (req, res) => {
 // TODO: ROTAS ANDROID - CLASSIFICAÇÃO VIAGEM - VIAGENS CONTROLLER
 viagensController.pedidosViagemMotorista = async (req, res) => {
     await PedidoViagem.findAll({
+        attributes: [
+            'NR_VIAGEM_PEDIDO',
+            'PASSAGEIROS',
+            'DATAHORA_IDA',
+            'DATAHORA_VOLTA',
+            'OBSERVACOES',
+            'DISTANCIA',
+            'DURACAO',
+            'CUSTO',
+            'ESTADO',
+        ],
         where: {
             MOTORISTA: req.body.motorista,
             ESTADO: {
-                [op.or]: ['PEDIDO', 'PENDENTE']
+                [op.or]: ['PENDENTE', 'PENDENTE_VOLTA', 'DECORRER_IDA', 'DECORRER_VOLTA']
             }
         },
         order: [
-            ['DATAHORA_IDA', 'ASC'],
-            ['createdAt', 'ASC']
+            ['DATAHORA_IDA', 'ASC']
         ],
         include: [{
             model: Localidades,
-            as: 'Origem'
+            as: 'Origem',
+            attributes: [
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
         }, {
             model: Localidades,
-            as: 'Destino'
-        }, {
-            model: Viaturas,
-            as: 'ViagemViatura'
+            as: 'Destino',
+            attributes: [
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
         }],
     }).then((data) => {
         res.json({ success:true, data: data })
@@ -215,20 +279,87 @@ viagensController.pedidosViagemMotorista = async (req, res) => {
         return res.json({ success: false })
     })
 }
-viagensController.pedidosViagemDetalhes = async (req, res) => {
+/*viagensController.pedidosViagemDetalhes = async (req, res) => {
     await PedidoViagem.findAll({
         where: {
             NR_VIAGEM_PEDIDO: req.body.viagem,
         },
         include: [{
             model: Localidades,
-            as: 'Origem'
+            as: 'Origem',
+            attributes: [
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
         }, {
             model: Localidades,
-            as: 'Destino'
+            as: 'Destino',
+            attributes: [
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
         }, {
             model: Viaturas,
-            as: 'ViagemViatura'
+            as: 'ViagemViatura',
+            attributes: [
+                'MATRICULA'
+            ],
+        }],
+    }).then((data) => {
+        res.json({ success:true, data: data })
+    }).catch((error) => {
+        console.log(error)
+        return res.json({ success: false })
+    })
+}*/
+viagensController.historicoViagensUtilizador = async (req, res) => {
+    const { nr_utilizador } = req.body
+    await PedidoViagem.findAll({
+        attributes: [
+            'NR_VIAGEM_PEDIDO',
+            'DATAHORA_IDA',
+            'DATAHORA_VOLTA',
+            'PASSAGEIROS',
+            'MOTIVO',
+            'DISTANCIA',
+            'CUSTO',
+            'ESTADO',
+        ],
+        where: {
+            NR_CLIENTE_PEDIDO: nr_utilizador,
+            ESTADO: {
+                [op.or]: ['FALTA', 'CONCLUIDA']
+            }
+        },
+        order: [
+            ['DATAHORA_IDA', 'DESC']
+        ],
+        include: [{
+            model: Localidades,
+            as: 'Origem',
+            attributes: [
+                'LOCALIDADE'
+            ],
+        }, {
+            model: Localidades,
+            as: 'Destino',
+            attributes: [
+                'LOCALIDADE'
+            ],
+        }, {
+            model: Utilizadores,
+            as: 'Motorista',
+            attributes: [
+                'NOME_UTILIZADOR'
+            ],
+        }, {
+            model: Viaturas,
+            as: 'ViagemViatura',
+            attributes: [
+                'MATRICULA'
+            ],
         }],
     }).then((data) => {
         res.json({ success:true, data: data })
@@ -237,14 +368,161 @@ viagensController.pedidosViagemDetalhes = async (req, res) => {
         return res.json({ success: false })
     })
 }
-viagensController.classificacaoViagem = async (req, res) => {
-    /*setTimeout(function() {
-        console.log(req.body)
-        res.json({ success: true })
-    }, 3000);*/
+viagensController.historicoViagensMotorista = async (req, res) => {
+    const { nr_utilizador } = req.body
+    await PedidoViagem.findAll({
+        attributes: [
+            'NR_VIAGEM_PEDIDO',
+            'DATAHORA_IDA',
+            'DATAHORA_VOLTA',
+            'PASSAGEIROS',
+            'MOTIVO',
+            'DISTANCIA',
+            'ESTADO',
+        ],
+        where: {
+            MOTORISTA: nr_utilizador,
+            ESTADO: {
+                [op.or]: ['FALTA', 'CONCLUIDA']
+            }
+        },
+        order: [
+            ['DATAHORA_IDA', 'DESC']
+        ],
+        include: [{
+            model: Localidades,
+            as: 'Origem',
+            attributes: [
+                'LOCALIDADE'
+            ],
+        }, {
+            model: Localidades,
+            as: 'Destino',
+            attributes: [
+                'LOCALIDADE'
+            ],
+        }, {
+            model: Utilizadores,
+            as: 'Motorista',
+            attributes: [
+                'NOME_UTILIZADOR'
+            ],
+        }, {
+            model: Viaturas,
+            as: 'ViagemViatura',
+            attributes: [
+                'MATRICULA'
+            ],
+        }],
+    }).then((data) => {
+        res.json({ success:true, data: data })
+    }).catch((error) => {
+        console.log(error)
+        return res.json({ success: false })
+    })
+}
+viagensController.pedidosViagemCliente = async (req, res) => {
+    await PedidoViagem.findAll({
+        attributes: [
+            'NR_VIAGEM_PEDIDO',
+            'PASSAGEIROS',
+            'DATAHORA_IDA',
+            'DATAHORA_VOLTA',
+            'OBSERVACOES',
+            'DISTANCIA',
+            'CUSTO',
+            'ESTADO',
+        ],
+        where: {
+            NR_CLIENTE_PEDIDO: req.body.cliente,
+        },
+        order: [
+            ['DATAHORA_IDA', 'ASC']
+        ],
+        include: [{
+            model: Localidades,
+            as: 'Origem',
+            attributes: [
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
+        }, {
+            model: Localidades,
+            as: 'Destino',
+            attributes: [
+                'LOCALIDADE',
+                'LATITUDE',
+                'LONGITUDE',
+            ],
+        }],
+    }).then((data) => {
+        res.json({ success:true, data: data })
+    }).catch((error) => {
+        console.log(error)
+        return res.json({ success: false })
+    })
+}
+viagensController.atualizarEstadoViagem = async (req, res) => {
+    const { nr_viagem, estado } = req.body
 
-    /*console.log(req.body);*/
-    res.json({ success:true })
+    await sequelize.transaction(async (t) => {
+        let promises = []
+        promises.push(
+            PedidoViagem.update({
+                ESTADO: estado
+            }, {
+                where: {
+                    NR_VIAGEM_PEDIDO: nr_viagem,
+                },
+                returning: true,
+                plain: true,
+                transaction: t,
+            }),
+        )
+
+        promises.push(
+            PedidoViagem.findOne({
+                attributes: ['ESTADO'],
+                where: {
+                    NR_VIAGEM_PEDIDO: nr_viagem,
+                },
+            }, {
+                transaction: t,
+            }).then((data) => {
+                AlteracoesViagem.create({
+                    NR_VIAGEM: nr_viagem,
+                    NR_ALTERADOR: req.decoded.nr_user,
+                    ESTADO_ANTERIOR: data.ESTADO,
+                    ESTADO_NOVO: estado,
+                    IP: req.ip_address
+                }, {
+                    transaction: t,
+                })
+            }),
+        )
+
+        return Promise.all(promises)
+    }).then(() => {
+        return res.json({ success: true })
+    }).catch(() => {
+        return res.json({ success: false })
+    })
+}
+viagensController.classificacaoViagem = async (req, res) => {
+    const { nr_viagem, nr_cliente, classificacao, comentario } = req.body
+
+    ClassificacaoViagem.create({
+        NR_VIAGEM: nr_viagem,
+        NR_CLIENTE: nr_cliente,
+        CLASSIFICACAO: classificacao,
+        COMENTARIO: comentario,
+        IP: req.ip_address
+    }).then(() => {
+        return res.json({ success: true })
+    }).catch(() => {
+        return res.json({ success: false })
+    })
 }
 viagensController.classificacoesViagens = async (req, res) => {
     /*setTimeout(function() {

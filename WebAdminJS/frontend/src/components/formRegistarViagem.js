@@ -222,7 +222,7 @@ export const FormRegistarViagem = ({
                                             } else if (moment(values.datahora_volta).diff(value.format('YYYY-MM-DD HH:mm'), 'minutes') < 30) {
                                                 errors.datahora_volta = 'Hora inválida (+30 minutos diferença)'
                                             } else {
-                                                errors.datahora_volta = undefined
+                                                delete errors.datahora_volta
                                             }
                                         }
                                     }}
@@ -254,7 +254,7 @@ export const FormRegistarViagem = ({
                                 if (moment(datahora_volta).isSameOrBefore(values.datahora_ida)) {
                                     return 'Hora inválida (igual/inferior hora ida)'
                                 }
-                                if (moment(datahora_volta).diff(values.datahora_ida, 'minutes') < 30) {
+                                if (values.datahora_ida && moment(datahora_volta).diff(values.datahora_ida, 'minutes') < 30) {
                                     return 'Hora inválida (+30 minutos diferença)'
                                 }
                                 return undefined
@@ -284,7 +284,7 @@ export const FormRegistarViagem = ({
                                         } else if (value && moment(value).diff(values.datahora_ida, 'minutes') < 30) {
                                             errors.datahora_ida = 'Hora inválida (30 minutos diferença)'
                                         } else {
-                                            errors.datahora_ida = undefined
+                                            delete errors.datahora_ida
                                         }
                                     }}
                                     className={clsx(classes.textField, {

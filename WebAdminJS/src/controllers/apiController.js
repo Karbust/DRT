@@ -27,7 +27,10 @@ apiController.localidades = async (req, res) => {
                 data: data,
             })
         }).catch(() => {
-            return res.json({ success: false })
+            return res.json({
+                success: false,
+                message: 'Ocorreu um erro ao obter a lista de localidades.'
+            })
         })
     } else {
         return res.json({

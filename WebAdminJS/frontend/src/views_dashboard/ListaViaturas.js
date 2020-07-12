@@ -16,6 +16,7 @@ import {
     TableFooter,
     Slide,
     Snackbar,
+    Backdrop, CircularProgress,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
@@ -29,13 +30,17 @@ export default function ValidarRegistos() {
     const classes = useStyles()
 
     const [viaturas, setViaturas] = useState([])
-    const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(10)
-    const [update, setUpdate] = React.useState(false)
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [update, setUpdate] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
+    const [openBackdrop, setOpenBackdrop] = useState(true)
 
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false)
+    }
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
             return
@@ -64,15 +69,22 @@ export default function ValidarRegistos() {
                     setSeverity('error')
                     setOpenAlert(true)
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                 setSeverity('error')
                 setOpenAlert(true)
+            })
+            .finally(() => {
+                setOpenBackdrop(false)
             })
     }, [update])
 
     return (
         <>
+            <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className={classes.root}>
                 <Snackbar
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -87,14 +99,14 @@ export default function ValidarRegistos() {
                 </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
-                            Lista de Viaturas
+                        <Typography variant="h5">
+                            Viaturas
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link
@@ -110,7 +122,7 @@ export default function ValidarRegistos() {
                                     to="/Dashboard/Utilizadores/ListaViaturas"
                                     aria-current="page"
                                 >
-                                    Lista de Viaturas
+                                    Viaturas
                                 </Link>
                             </Breadcrumbs>
                         </Typography>

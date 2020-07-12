@@ -32,9 +32,9 @@ export default function RegistosNaoValidados() {
     // const theme = useTheme()
 
     const [utilizadores, setUtilizadores] = useState([])
-    const [page, setPage] = React.useState(0)
-    const [rowsPerPage, setRowsPerPage] = React.useState(10)
-    const [update, setUpdate] = React.useState(false)
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [update, setUpdate] = useState(false)
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage)
@@ -92,14 +92,14 @@ export default function RegistosNaoValidados() {
             <div className={classes.root}>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                        <Typography variant="h5">
                             Registos Não Validados
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link
@@ -112,7 +112,7 @@ export default function RegistosNaoValidados() {
                                 <Link
                                     color="textPrimary"
                                     component={RouterLink}
-                                    to="/Dashboard/Utilizadores/RegistosNaoValidados"
+                                    to="/Dashboard/Clientes/RegistosNaoValidados"
                                     aria-current="page"
                                 >
                                     Registos Não Validados

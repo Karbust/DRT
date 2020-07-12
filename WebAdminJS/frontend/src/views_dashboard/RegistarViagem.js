@@ -7,6 +7,7 @@ import {
     Link,
     Grid, Slide,
     Snackbar,
+    Backdrop, CircularProgress,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
@@ -36,7 +37,11 @@ export default function RegistarViagem() {
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
+    const [openBackdrop, setOpenBackdrop] = useState(true)
 
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false)
+    }
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
             return
@@ -73,6 +78,7 @@ export default function RegistarViagem() {
                     setLocalidades(res.data.data)
                 }
             })
+        setOpenBackdrop(false)
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
@@ -85,18 +91,18 @@ export default function RegistarViagem() {
                     formikActions.resetForm()
                     setMessage('Viagem registada com sucesso')
                     setSeverity('success')
-                    setOpenAlert(true)
                 } else {
                     formikActions.setSubmitting(false)
                     setMessage('Ocorreu um erro ao registar a viagem.')
                     setSeverity('error')
-                    setOpenAlert(true)
                 }
             })
             .catch(() => {
                 formikActions.setSubmitting(false)
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                 setSeverity('error')
+            })
+            .finally(() => {
                 setOpenAlert(true)
             })
     }
@@ -104,6 +110,9 @@ export default function RegistarViagem() {
     return (
         <>
             <div className={classes.root}>
+                <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
                 <Snackbar
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                     open={openAlert}
@@ -117,14 +126,14 @@ export default function RegistarViagem() {
                 </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                        <Typography variant="h5">
                             Registar Viagem
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link

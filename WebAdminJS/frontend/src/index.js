@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
+import './css/index.css'
 import { MuiThemeProvider } from '@material-ui/core'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ConfirmProvider } from 'material-ui-confirm'

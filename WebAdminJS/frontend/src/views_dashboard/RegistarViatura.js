@@ -21,6 +21,7 @@ import { backendUrl } from '../configs'
 import authHeader from '../components/auth-header'
 import { FormRegistarViatura } from '../components/formRegistarViatura'
 import { MiniFormAdicionarMarca, MiniFormAdicionarModelo, MiniFormAdicionarCor, MiniFormAdicionarSeguradora } from '../components/miniFormsRegistosViaturas'
+import { getUrl } from '../components/functions'
 
 export default function RegistarViatura() {
     const classes = useStyles()
@@ -111,57 +112,57 @@ export default function RegistarViatura() {
     }
 
     useEffect(() => {
-        axios
-            .get(`${backendUrl}viaturas/marcas`, { headers: authHeader() })
+        getUrl('viaturas/marcas')
             .then((res) => {
                 if (res.data.success) {
                     setMarcas(res.data.data)
                 }
             })
-        axios
-            .get(`${backendUrl}viaturas/modelos`, { headers: authHeader() })
+    }, [isSubmittingNomeMarca])
+    useEffect(() => {
+        getUrl('viaturas/modelos')
             .then((res) => {
                 if (res.data.success) {
                     setModelos(res.data.data)
                 }
             })
-        axios
-            .get(`${backendUrl}viaturas/cores`, { headers: authHeader() })
+    }, [isSubmittingNomeModelo])
+    useEffect(() => {
+        getUrl('viaturas/cores')
             .then((res) => {
                 if (res.data.success) {
                     setCores(res.data.data)
                 }
             })
-        axios
-            .get(`${backendUrl}viaturas/seguradoras`, { headers: authHeader() })
+    }, [isSubmittingNomeCor])
+    useEffect(() => {
+        getUrl('viaturas/seguradoras')
             .then((res) => {
                 if (res.data.success) {
                     setSeguradoras(res.data.data)
                 }
             })
-    }, [isSubmittingNomeSeguradora, isSubmittingNomeCor, isSubmittingNomeModelo, isSubmittingNomeMarca])
+    }, [isSubmittingNomeSeguradora])
 
     const onFormikSubmit = (values, formikActions) => {
-        formikActions.setSubmitting(true)
         return axios
             .post(`${backendUrl}viaturas/adicionarviatura`, values, { headers: authHeader() })
             .then((data) => {
                 if (data.data.success) {
-                    formikActions.setSubmitting(false)
                     formikActions.resetForm()
                     setMessage(data.data.message)
                     setSeverity('success')
-                    setOpenAlert(true)
                     setIsSubmittingNomeMarca(true)
                 } else {
                     setMessage(data.data.message)
                     setSeverity('error')
-                    setOpenAlert(true)
                 }
             })
             .catch(() => {
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                 setSeverity('error')
+            })
+            .finally(() => {
                 setOpenAlert(true)
             })
     }
@@ -183,14 +184,14 @@ export default function RegistarViatura() {
 
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                        <Typography variant="h5">
                             Registar Viatura
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link

@@ -29,20 +29,164 @@ const cache = new NodeCache({
     checkperiod: 120,
 })
 
-userController.listar = async (req, res) => {
-    const data = await Utilizadores.findAll()
-        .then((data) => {
-            return data
+userController.listaAdministradores = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 1,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
         })
-        .catch(error => {
-            return error
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de administradores.",
         })
-    res.json({
-        success: true,
-        data: data,
     })
 }
+userController.listaAdministrativos = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 2,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de administrativos.",
+        })
+    })
+}
+userController.ListaAdministradoresOperador = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 3,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de administradores do operador.",
+        })
+    })
+}
+userController.listaTelefonistas = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 4,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de telefonistas.",
+        })
+    })
+}
+userController.listaMotoristas = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 5,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de motoristas.",
+        })
+    })
+}
+userController.listaAdministrativosOperador = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 6,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de administrativos do operador.",
+        })
+    })
+}
+userController.listaClientes = async (req, res) => {
+    Utilizadores.findAll({
+        where: {
+            TIPO_UTILIZADOR: 7,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de utilizadores.",
+        })
+    })
+}
+userController.editarUtilizador = async (req, res) => {
+    let { nome, telemovel, telefone, morada, codpostal, localidade, email, utilizador, password } = req.body.values
 
+    Utilizadores.update({
+        NOME_UTILIZADOR: nome,
+        N_TELEMOVEL: telemovel,
+        N_TELEFONE: telefone,
+        MORADA_UTILIZADOR: morada,
+        COD_POSTAL: codpostal,
+        FREGUESIA: localidade,
+        EMAIL: email,
+        LOGIN_USER: utilizador,
+        PASSWORD: password
+    }, {
+        where: {
+            NR_UTILIZADOR: req.body.nr_user,
+        },
+        individualHooks: true
+    }).then(() => {
+        return res.json({ success: true })
+    }).catch((err) => {
+        console.log(err)
+        return res.json({ success: false })
+    })
+}
 userController.listarMotoristas = async (req, res) => {
     if (cache.get('motoristas') === undefined) {
         await Utilizadores.findAll({
@@ -60,7 +204,10 @@ userController.listarMotoristas = async (req, res) => {
                 data: data,
             })
         }).catch(() => {
-            return res.json({ success: false })
+            return res.json({
+                success: false,
+                message: 'Ocorreu um erro ao pedir a lista de motoristas.'
+            })
         })
     } else {
         return res.json({
@@ -399,7 +546,8 @@ userController.registar = async (req, res) => {
         VALIDADO: tipo_utilizador !== 7,
         VERIFICADO: false,
         TOKEN: token,
-        DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
+        DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss'),
+        IP_REGISTO: req.ip_address
     }).then((data) => {
         sendEmail(data.EMAIL,
             'Conta criada no DRT',
@@ -456,9 +604,9 @@ userController.registarApp = async (req, res) => {
         TOKEN: token,
         DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
     }).then((data) => {
-        sendEmail(data.EMAIL,
+        /*sendEmail(data.EMAIL,
             'Conta criada no DRT',
-            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'ativacao/' + token)
+            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'ativacao/' + token)*/
 
         return res.json({
             success: true,
@@ -469,6 +617,12 @@ userController.registarApp = async (req, res) => {
         return res.json({
             success: false,
             message: 'Email ou Utilizador já registado',
+        })
+    }).catch((error) => {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: 'Não foi possível efetuar o registo.',
         })
     })
 }
@@ -483,6 +637,14 @@ userController.login = async (req, res) => {
         var password = req.body.password
 
         await Utilizadores.findOne({
+            attributes: [
+                'NR_UTILIZADOR',
+                'NOME_UTILIZADOR',
+                'TIPO_UTILIZADOR',
+                'PASSWORD',
+                'VALIDADO',
+                'VERIFICADO',
+            ],
             where: {
                 EMAIL: username,
                 TIPO_UTILIZADOR: {
@@ -510,6 +672,14 @@ userController.login = async (req, res) => {
                     message: 'Conta não verificada.',
                 })
             }
+
+            Utilizadores.update({
+                IP_ULTIMO_LOGIN: req.ip_address,
+            }, {
+                where: {
+                    NR_UTILIZADOR: data.NR_UTILIZADOR,
+                }
+            })
 
             let token
             if (req.body.remember) {
@@ -557,9 +727,9 @@ userController.loginApp = async (req, res) => {
         await Utilizadores.findOne({
             where: {
                 EMAIL: username,
-                /*TIPO_UTILIZADOR: {
+                TIPO_UTILIZADOR: {
                     [op.in]: [5, 7],
-                },*/
+                },
             },
         }).then((data) => {
             if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
@@ -582,6 +752,14 @@ userController.loginApp = async (req, res) => {
                     message: 'Conta não verificada.',
                 })
             }
+
+            Utilizadores.update({
+                IP_ULTIMO_LOGIN: req.ip_address,
+            }, {
+                where: {
+                    NR_UTILIZADOR: data.NR_UTILIZADOR,
+                }
+            })
 
             let token
             if (req.body.remember) {

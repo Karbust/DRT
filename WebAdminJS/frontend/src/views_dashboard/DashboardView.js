@@ -15,13 +15,13 @@ export default function DashboardView() {
             <div className={classes.root}>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                        <Typography variant="h5">
                             Dashboard
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
-                            <Breadcrumbs separator={<NavigateNext fontSize="small" />} aria-label="breadcrumb">
+                            <Breadcrumbs separator="›" aria-label="breadcrumb">
                                 <Link color="inherit" component={RouterLink} to="/">
                                     Início
                                 </Link>
