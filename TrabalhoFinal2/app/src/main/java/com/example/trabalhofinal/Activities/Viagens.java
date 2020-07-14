@@ -77,18 +77,18 @@ public class Viagens extends AppCompatActivity implements View.OnClickListener {
 
         update.setVisibility(View.VISIBLE);
 
+        if(viagem.getESTADO().equals("DECORRER_IDA" )|| viagem.getESTADO().equals("DECORRER_VOLTA")){
+            update.setText("Finalizar Viagem");
+        }
+
         tempo.setText(time);
         distancia.setText(distance);
         passageiros.setText(pessoas);
         price.setText(viagem.getCUSTO());
 
-        if(viagem.getESTADO() == "DECORRER_IDA" || viagem.getESTADO() == "DECORRER_VOLTA"){
-            update.setText("Finalizar Viagem");
-        }
 
         update.setOnClickListener(this);
     }
-
 
     public void process(View view)
     {

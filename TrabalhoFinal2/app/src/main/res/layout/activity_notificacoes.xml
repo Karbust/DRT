@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Notificacoes">
+    tools:context=".Activities.NotificacoesActivity">
 
     <ImageView
         android:id="@+id/imageView20"
@@ -65,64 +65,12 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/caminho_77" />
 
-    <ImageView
-        android:id="@+id/imageView22"
-        android:layout_width="44dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="62dp"
-        android:src="@drawable/taxi"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView23" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleview_notificacoes"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="64dp"
-        android:text="Veículo"
-        android:textColor="@color/colorBlack"
-        android:textSize="24dp"
-        app:layout_constraintStart_toEndOf="@+id/imageView22"
-        app:layout_constraintTop_toTopOf="@+id/imageView23" />
-
-    <TextView
-        android:id="@+id/textView30"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:text="dez 10 2019"
-        android:textColor="@color/colorBlack"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
-
-    <TextView
-        android:id="@+id/textView32"
-        android:layout_width="318dp"
-        android:layout_height="76dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:text="O veículo 4 encontra-se com uma fuga de óleo, pelo que vai estar fora de serviço por tempo indefinido."
-        android:textColor="@color/colorBlack"
-        android:textSize="18dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <ImageView
-        android:id="@+id/imageView25"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/divider"
-        tools:layout_editor_absoluteX="37dp"
-        tools:layout_editor_absoluteY="411dp" />
-
-    <TextView
-        android:id="@+id/textView31"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Sem mais notificações"
-        tools:layout_editor_absoluteX="134dp"
-        tools:layout_editor_absoluteY="423dp" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView20" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.example.trabalhofinal.Api;
 
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
+import com.example.trabalhofinal.Models.Responses.NotificacoesResponse;
 import com.example.trabalhofinal.Models.Responses.StatsResponse;
 import com.example.trabalhofinal.Models.Responses.SuccessMessageResponses;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
@@ -117,6 +118,13 @@ public interface Api {
     @GET("/estatisticas/contadorviagensmotoristames/{motorista}")
     Call<StatsResponse> stats(
             @Path("motorista") int motorista,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/user/notificacoes")
+    Call<NotificacoesResponse> notifcacoes(
+            @Field("nr_user") int nr_user,
             @Header("authorization") String key
     );
 

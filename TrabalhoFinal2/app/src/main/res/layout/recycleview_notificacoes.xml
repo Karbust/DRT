@@ -7,7 +7,7 @@
 
     <ImageView
         android:id="@+id/holder_notificacao"
-        android:layout_width="401dp"
+        android:layout_width="match_parent"
         android:layout_height="167dp"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,8 +28,9 @@
 
     <TextView
         android:id="@+id/notificacao"
-        android:layout_width="wrap_content"
+        android:layout_width="300dip"
         android:layout_height="wrap_content"
+        android:singleLine="false"
         android:layout_marginTop="5dp"
         android:text="TextView"
         android:textColor="@android:color/darker_gray"

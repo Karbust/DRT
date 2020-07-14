@@ -3,6 +3,7 @@ package com.example.trabalhofinal.storage;
 import android.app.Application;
 
 import com.example.trabalhofinal.Models.Domain.Location;
+import com.example.trabalhofinal.Models.Domain.Notificacoes;
 import com.example.trabalhofinal.Models.Domain.Stats;
 import com.example.trabalhofinal.Models.Domain.Viagem;
 import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
@@ -14,6 +15,7 @@ public class ApplicationContext extends Application {
     private ArrayList<Viagem> viagens;
     private ArrayList<Stats> stats;
     private ArrayList<ViagensMotorista> viagensMotoristas;
+    private ArrayList<Notificacoes> notificacoes;
 
 
     @Override
@@ -23,6 +25,7 @@ public class ApplicationContext extends Application {
         viagens=null;
         stats=null;
         viagensMotoristas=null;
+        notificacoes=null;
     }
 
     public ArrayList<Location> getLocations() { return locations; }
@@ -51,6 +54,14 @@ public class ApplicationContext extends Application {
 
     public void setViagensMotoristas(ArrayList<ViagensMotorista> viagensMotoristas) {
         this.viagensMotoristas = viagensMotoristas;
+    }
+
+    public ArrayList<Notificacoes> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(ArrayList<Notificacoes> notificacoes) {
+        this.notificacoes = notificacoes;
     }
 
     //    private static final int CACHE_SIZE = 4*1024*1024;

@@ -12,8 +12,10 @@ import android.widget.TextView;
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.HistoricoMotorista;
 import com.example.trabalhofinal.Models.Domain.Location;
+import com.example.trabalhofinal.Models.Domain.Notificacoes;
 import com.example.trabalhofinal.Models.Domain.Stats;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
+import com.example.trabalhofinal.Models.Responses.NotificacoesResponse;
 import com.example.trabalhofinal.Models.Responses.StatsResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
@@ -44,6 +46,7 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
 
         fetch_stats();
+        fetch_notificacoes();
 
         findViewById(R.id.viagens).setOnClickListener(this);
         findViewById(R.id.marcar).setOnClickListener(this);
@@ -88,6 +91,43 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
 
         }
 
+    }
+
+    public void fetch_notificacoes(){
+        int user = sharedPrefManager.getUser();
+        List<Notificacoes> notificacoes = applicationContext.getNotificacoes();
+        String key = sharedPrefManager.getToken();
+
+        if (notificacoes == null) {
+            Call<NotificacoesResponse> call = RetrofitClient.getInstance().getApi().notifcacoes(user,key);
+
+            call.enqueue(new Callback<NotificacoesResponse>() {
+                @Override
+                public void onResponse(Call<NotificacoesResponse> call, Response<NotificacoesResponse> response) {
+                    NotificacoesResponse notificacoesResponse = response.body();
+
+                    if (notificacoesResponse != null && notificacoesResponse.isSuccess()) {
+
+                        Log.i(TAG, "Request success");
+
+                        applicationContext.setNotificacoes(notificacoesResponse.getNotificacoes());
+
+                        Log.i(TAG,"onResponse:"+notificacoesResponse.getNotificacoes());
+
+
+                    } else {
+                        Log.i(TAG, "Request Failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<NotificacoesResponse> call, Throwable t) {
+                    Log.i(TAG, "Request onFailure" + t);
+                }
+            });
+        }else{
+
+        }
     }
 
 

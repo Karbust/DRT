@@ -34,7 +34,7 @@
         <activity android:name=".Activities.Home_Motorista" />
         <activity android:name=".Activities.Viagens2" />
         <activity android:name=".Activities.Estatistica" />
-        <activity android:name=".Activities.Notificacoes" />
+        <activity android:name=".Activities.NotificacoesActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"

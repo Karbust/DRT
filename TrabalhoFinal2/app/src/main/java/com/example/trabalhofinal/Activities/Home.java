@@ -10,12 +10,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Location;
+import com.example.trabalhofinal.Models.Domain.Notificacoes;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
+import com.example.trabalhofinal.Models.Responses.NotificacoesResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,9 +50,48 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
 
         fetchLocations();
+        fetch_notificacoes();
+
 
 
         name.setText(sharedPrefManager.getNome());
+    }
+
+    public void fetch_notificacoes(){
+        int user = sharedPrefManager.getUser();
+        List<Notificacoes> notificacoes = applicationContext.getNotificacoes();
+        String key = sharedPrefManager.getToken();
+
+        if (notificacoes == null) {
+            Call<NotificacoesResponse> call = RetrofitClient.getInstance().getApi().notifcacoes(user,key);
+
+            call.enqueue(new Callback<NotificacoesResponse>() {
+                @Override
+                public void onResponse(Call<NotificacoesResponse> call, Response<NotificacoesResponse> response) {
+                    NotificacoesResponse notificacoesResponse = response.body();
+
+                    if (notificacoesResponse != null && notificacoesResponse.isSuccess()) {
+
+                        Log.i(TAG, "Request success");
+
+                        applicationContext.setNotificacoes(notificacoesResponse.getNotificacoes());
+
+                        Log.i(TAG,"onResponse:"+notificacoesResponse.getNotificacoes());
+
+
+                    } else {
+                        Log.i(TAG, "Request Failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<NotificacoesResponse> call, Throwable t) {
+                    Log.i(TAG, "Request onFailure" + t);
+                }
+            });
+        }else{
+
+        }
     }
 
 
