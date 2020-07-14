@@ -124,7 +124,7 @@ viaturasController.adicionarViatura = async (req, res) => {
             success: false,
             message: 'Ocorreu um erro ao adicionar a viatura. Motivo: duplicada.',
         })
-    }).catch((error) => {
+    }).catch(() => {
         return res.json({
             success: false,
             message: 'Ocorreu um erro ao adicionar a viatura.',

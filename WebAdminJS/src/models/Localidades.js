@@ -32,7 +32,7 @@ var Localidades = sequelize.define('LOCALIDADES', {
         allowNull: false,
     },
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false,
 })
 

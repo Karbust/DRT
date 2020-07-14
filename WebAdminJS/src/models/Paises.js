@@ -24,7 +24,7 @@ var Paises = sequelize.define('PAISES', {
         allowNull: false,
     },
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 

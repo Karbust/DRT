@@ -66,6 +66,11 @@ userRouter.get('/listaclientes',
     authorize([Role.Administrador, Role.Administrativo]),
     userController.listaClientes,
 )
+userRouter.get('/listaclientesreduzida',
+    checkToken,
+    authorize([Role.Administrador, Role.Telefonista]),
+    userController.listaClientesReduzido,
+)
 userRouter.post('/editarutilizador',
     checkToken,
     authorize([Role.Administrador, Role.Administrativo]),
@@ -86,11 +91,11 @@ userRouter.get('/registosnaovalidados',
     authorize([Role.Administrador, Role.Administrativo]),
     userController.listaRegistosNaoValidados
 )
-userRouter.get('/apagarregistonaovalidado',
+/*userRouter.get('/apagarregistonaovalidado',
     checkToken,
     authorize([Role.Administrador, Role.Administrativo]),
     userController.apagarRegistoNaoValidado
-)
+)*/
 userRouter.post('/validacaoconta',
     checkToken,
     authorize([Role.Administrador, Role.Administrativo]),
@@ -109,10 +114,10 @@ userRouter.post('/verificarcontaenvioemail',
     authorize([Role.Administrador, Role.Administrativo]),
     userController.verificarContaEnvioEmail
 )
-userRouter.post('/listarncc',
+userRouter.post('/notificacoes',
     checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    userController.listarNcc
+    authorize([Role.Administrador, Role.Motorista, Role.Utilizador]),
+    userController.getNotificacoes
 )
 userRouter.post('/registar',
     checkToken,

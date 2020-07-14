@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react'
 import {
     useTheme,
     Box,
-    Breadcrumbs,
-    Link,
-    Typography,
     Table,
     TableBody,
     TableCell,
@@ -12,21 +9,15 @@ import {
     TableHead,
     TableRow,
     Paper,
-    TablePagination,
-    TableFooter,
     Chip,
-    Slide,
-    Snackbar, Hidden, Tooltip, TextField, TableSortLabel,
-    Backdrop, CircularProgress,
+    Hidden, TableSortLabel,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { NavigateNext } from '@material-ui/icons'
-import { Link as RouterLink } from 'react-router-dom'
 import moment from 'moment'
-import clsx from 'clsx'
 
-import { useStyles, TablePaginationActions } from '../components/MuiStyles'
+import { useStyles } from '../components/MuiStyles'
 import { compararListas, getComparator, getUrl, sortFilter } from '../components/functions'
+import { TabelasPaginasHeader } from '../components/tabelasPaginasHeader'
+import { TabelasFooter } from '../components/tabelasFooter'
 
 export default function RegistosNaoValidados() {
     const classes = useStyles()
@@ -97,73 +88,91 @@ export default function RegistosNaoValidados() {
 
     return (
         <>
-            <div className={classes.root}>
-                <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={openAlert}
-                    autoHideDuration={6000}
-                    onClose={handleCloseAlert}
-                    TransitionComponent={Slide}
-                >
-                    <Alert onClose={handleCloseAlert} severity={severity}>
-                        {message}
-                    </Alert>
-                </Snackbar>
-                <Box mb={2} className={classes.container_header}>
-                    <Box mb={1} pt={1} className={classes.heading}>
-                        <Typography variant="h5">
-                            Histórico de Viagens
-                        </Typography>
-                    </Box>
-
-                    <Box mb={1} pt={1} className={classes.filter}>
-                        <Tooltip title="Filter list">
-                            <TextField
-                                fullWidth
-                                label="Filtrar"
-                                onChange={handleFilter}
-                            />
-                        </Tooltip>
-                    </Box>
-
-                    <Box className={clsx(classes.box, classes.breadcrumbs)}>
-                        <Typography variant="h5">
-                            <Breadcrumbs
-                                separator="›"
-                                aria-label="breadcrumb"
-                            >
-                                <Link
-                                    color="inherit"
-                                    component={RouterLink}
-                                    to="/"
-                                >
-                                    Início
-                                </Link>
-                                <Link
-                                    color="textPrimary"
-                                    component={RouterLink}
-                                    to="/Dashboard/Utilizadores/ValidarRegistoCliente"
-                                    aria-current="page"
-                                >
-                                    Histórico de Viagens
-                                </Link>
-                            </Breadcrumbs>
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box mb={2}>
-                    <TableContainer component={Paper}>
-                        <Table
-                            className={classes.root}
-                            aria-label="simple table"
-                        >
-                            <TableHead>
-                                <TableRow>
+            <TabelasPaginasHeader
+                openBackdrop={openBackdrop}
+                handleCloseBackdrop={handleCloseBackdrop}
+                openAlert={openAlert}
+                handleCloseAlert={handleCloseAlert}
+                severity={severity}
+                message={message}
+                handleFilter={handleFilter}
+                titulo="Histórico de Viagens"
+                url="/Dashboard/Viagens/HistoricoViagens"
+            />
+            <Box mb={2}>
+                <TableContainer component={Paper}>
+                    <Table
+                        className={classes.root}
+                        aria-label="simple table"
+                    >
+                        <TableHead>
+                            <TableRow>
+                                {(() => {
+                                    const isEqual = compararListas(orderBy, ['NR_VIAGEM_PEDIDO'])
+                                    return (
+                                        <TableCell
+                                            sortDirection={isEqual ? order : false}
+                                        >
+                                            <TableSortLabel
+                                                active={isEqual}
+                                                direction={isEqual ? order : 'asc'}
+                                                onClick={(e) => handleRequestSort(e, ['NR_VIAGEM_PEDIDO'])}
+                                            >
+                                                #
+                                                {isEqual ? (
+                                                    <span className={classes.visuallyHidden}>
+                                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                                    </span>
+                                                ) : null}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                })()}
+                                {(() => {
+                                    const isEqual = compararListas(orderBy, ['Origem', 'LOCALIDADE'])
+                                    return (
+                                        <TableCell
+                                            sortDirection={isEqual ? order : false}
+                                        >
+                                            <TableSortLabel
+                                                active={isEqual}
+                                                direction={isEqual ? order : 'asc'}
+                                                onClick={(e) => handleRequestSort(e, ['Origem', 'LOCALIDADE'])}
+                                            >
+                                                Origem
+                                                {isEqual ? (
+                                                    <span className={classes.visuallyHidden}>
+                                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                                    </span>
+                                                ) : null}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                })()}
+                                {(() => {
+                                    const isEqual = compararListas(orderBy, ['Destino', 'LOCALIDADE'])
+                                    return (
+                                        <TableCell
+                                            sortDirection={isEqual ? order : false}
+                                        >
+                                            <TableSortLabel
+                                                active={isEqual}
+                                                direction={isEqual ? order : 'asc'}
+                                                onClick={(e) => handleRequestSort(e, ['Destino', 'LOCALIDADE'])}
+                                            >
+                                                Destino
+                                                {isEqual ? (
+                                                    <span className={classes.visuallyHidden}>
+                                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                                    </span>
+                                                ) : null}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                })()}
+                                <Hidden smDown>
                                     {(() => {
-                                        const isEqual = compararListas(orderBy, ['NR_VIAGEM_PEDIDO'])
+                                        const isEqual = compararListas(orderBy, ['DATAHORA_IDA'])
                                         return (
                                             <TableCell
                                                 sortDirection={isEqual ? order : false}
@@ -171,9 +180,9 @@ export default function RegistosNaoValidados() {
                                                 <TableSortLabel
                                                     active={isEqual}
                                                     direction={isEqual ? order : 'asc'}
-                                                    onClick={(e) => handleRequestSort(e, ['NR_VIAGEM_PEDIDO'])}
+                                                    onClick={(e) => handleRequestSort(e, ['DATAHORA_IDA'])}
                                                 >
-                                                    #
+                                                    Data/Hora Ida
                                                     {isEqual ? (
                                                         <span className={classes.visuallyHidden}>
                                                             {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -184,7 +193,7 @@ export default function RegistosNaoValidados() {
                                         )
                                     })()}
                                     {(() => {
-                                        const isEqual = compararListas(orderBy, ['Origem', 'LOCALIDADE'])
+                                        const isEqual = compararListas(orderBy, ['DATAHORA_VOLTA'])
                                         return (
                                             <TableCell
                                                 sortDirection={isEqual ? order : false}
@@ -192,9 +201,9 @@ export default function RegistosNaoValidados() {
                                                 <TableSortLabel
                                                     active={isEqual}
                                                     direction={isEqual ? order : 'asc'}
-                                                    onClick={(e) => handleRequestSort(e, ['Origem', 'LOCALIDADE'])}
+                                                    onClick={(e) => handleRequestSort(e, ['DATAHORA_VOLTA'])}
                                                 >
-                                                    Origem
+                                                    Data/Hora Volta
                                                     {isEqual ? (
                                                         <span className={classes.visuallyHidden}>
                                                             {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -204,8 +213,19 @@ export default function RegistosNaoValidados() {
                                             </TableCell>
                                         )
                                     })()}
+                                </Hidden>
+                                <Hidden lgDown>
+                                    <TableCell>Passageiros</TableCell>
+                                    <TableCell>Motivo</TableCell>
+                                    <TableCell>Distância</TableCell>
+                                    <TableCell>Custo</TableCell>
+                                    <TableCell>Comparticipação CMV</TableCell>
+                                    <TableCell>Motorista</TableCell>
+                                    <TableCell>Viatura</TableCell>
+                                </Hidden>
+                                <Hidden smDown>
                                     {(() => {
-                                        const isEqual = compararListas(orderBy, ['Destino', 'LOCALIDADE'])
+                                        const isEqual = compararListas(orderBy, ['ESTADO'])
                                         return (
                                             <TableCell
                                                 sortDirection={isEqual ? order : false}
@@ -213,9 +233,9 @@ export default function RegistosNaoValidados() {
                                                 <TableSortLabel
                                                     active={isEqual}
                                                     direction={isEqual ? order : 'asc'}
-                                                    onClick={(e) => handleRequestSort(e, ['Destino', 'LOCALIDADE'])}
+                                                    onClick={(e) => handleRequestSort(e, ['ESTADO'])}
                                                 >
-                                                    Destino
+                                                    Estado
                                                     {isEqual ? (
                                                         <span className={classes.visuallyHidden}>
                                                             {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
@@ -225,86 +245,12 @@ export default function RegistosNaoValidados() {
                                             </TableCell>
                                         )
                                     })()}
-                                    <Hidden smDown>
-                                        {(() => {
-                                            const isEqual = compararListas(orderBy, ['DATAHORA_IDA'])
-                                            return (
-                                                <TableCell
-                                                    sortDirection={isEqual ? order : false}
-                                                >
-                                                    <TableSortLabel
-                                                        active={isEqual}
-                                                        direction={isEqual ? order : 'asc'}
-                                                        onClick={(e) => handleRequestSort(e, ['DATAHORA_IDA'])}
-                                                    >
-                                                        Data/Hora Ida
-                                                        {isEqual ? (
-                                                            <span className={classes.visuallyHidden}>
-                                                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                                            </span>
-                                                        ) : null}
-                                                    </TableSortLabel>
-                                                </TableCell>
-                                            )
-                                        })()}
-                                        {(() => {
-                                            const isEqual = compararListas(orderBy, ['DATAHORA_VOLTA'])
-                                            return (
-                                                <TableCell
-                                                    sortDirection={isEqual ? order : false}
-                                                >
-                                                    <TableSortLabel
-                                                        active={isEqual}
-                                                        direction={isEqual ? order : 'asc'}
-                                                        onClick={(e) => handleRequestSort(e, ['DATAHORA_VOLTA'])}
-                                                    >
-                                                        Data/Hora Volta
-                                                        {isEqual ? (
-                                                            <span className={classes.visuallyHidden}>
-                                                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                                            </span>
-                                                        ) : null}
-                                                    </TableSortLabel>
-                                                </TableCell>
-                                            )
-                                        })()}
-                                    </Hidden>
-                                    <Hidden lgDown>
-                                        <TableCell>Passageiros</TableCell>
-                                        <TableCell>Motivo</TableCell>
-                                        <TableCell>Distância</TableCell>
-                                        <TableCell>Custo</TableCell>
-                                        <TableCell>Comparticipação CMV</TableCell>
-                                        <TableCell>Motorista</TableCell>
-                                        <TableCell>Viatura</TableCell>
-                                    </Hidden>
-                                    <Hidden smDown>
-                                        {(() => {
-                                            const isEqual = compararListas(orderBy, ['ESTADO'])
-                                            return (
-                                                <TableCell
-                                                    sortDirection={isEqual ? order : false}
-                                                >
-                                                    <TableSortLabel
-                                                        active={isEqual}
-                                                        direction={isEqual ? order : 'asc'}
-                                                        onClick={(e) => handleRequestSort(e, ['ESTADO'])}
-                                                    >
-                                                        Estado
-                                                        {isEqual ? (
-                                                            <span className={classes.visuallyHidden}>
-                                                                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                                            </span>
-                                                        ) : null}
-                                                    </TableSortLabel>
-                                                </TableCell>
-                                            )
-                                        })()}
-                                    </Hidden>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {sortFilter(viagens, getComparator(order, orderBy), filter)
+                                </Hidden>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                sortFilter(viagens, getComparator(order, orderBy), filter)
                                     .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                                     .map((row, key) => (
                                         <TableRow key={key}>
@@ -335,33 +281,19 @@ export default function RegistosNaoValidados() {
                                                 </TableCell>
                                             </Hidden>
                                         </TableRow>
-                                    ))}
-                            </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        rowsPerPageOptions={[5, 10, 25, {
-                                            label: 'Todos',
-                                            value: Number.MAX_SAFE_INTEGER,
-                                        }]}
-                                        colSpan={11}
-                                        count={viagens.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        SelectProps={{
-                                            inputProps: { 'aria-label': 'linhas por página' },
-                                            native: true,
-                                        }}
-                                        onChangePage={handleChangePage}
-                                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                                        ActionsComponent={TablePaginationActions}
-                                    />
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </TableContainer>
-                </Box>
-            </div>
+                                    ))
+                            }
+                        </TableBody>
+                        <TabelasFooter
+                            dados={viagens}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
+                            handleChangePage={handleChangePage}
+                            handleChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
+                    </Table>
+                </TableContainer>
+            </Box>
         </>
     )
 }

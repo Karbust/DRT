@@ -22,9 +22,9 @@ viagensRouter.post('/editarviagem',
     viagensController.editarViagem
 )
 
-// TODO: ROTAS ANDROID - CLASSIFICAÇÃO VIAGEM - VIAGENS ROUTES
+
 viagensRouter.post('/pedidosviagemmotorista',
-    authorize([Role.Administrador, Role.Motorista]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
     viagensController.pedidosViagemMotorista
 )
 /*viagensRouter.post('/pedidosviagemdetalhes',
@@ -33,24 +33,32 @@ viagensRouter.post('/pedidosviagemmotorista',
 )*/
 
 viagensRouter.post('/historicoviagemcliente',
-    authorize([Role.Administrador, Role.Utilizador]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador, Role.Utilizador]),
     viagensController.historicoViagensUtilizador
 )
 viagensRouter.post('/historicoviagemmotorista',
-    authorize([Role.Administrador, Role.Motorista]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
     viagensController.historicoViagensMotorista
 )
 
 viagensRouter.post('/pedidosviagemcliente',
-    authorize([Role.Administrador, Role.Utilizador]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador, Role.Utilizador]),
     viagensController.pedidosViagemCliente
 )
+viagensRouter.post('/verificardividacliente',
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador, Role.Utilizador]),
+    viagensController.verificarDividaCliente
+)
 viagensRouter.post('/atualizarestadoviagem',
-    authorize([Role.Administrador, Role.Motorista]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
     viagensController.atualizarEstadoViagem
 )
+viagensRouter.post('/atualizarestadopagamentoviagem',
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
+    viagensController.atualizarEstadoPagamentoViagem
+)
 viagensRouter.post('/classificacaoviagem',
-    authorize([Role.Administrador, Role.Utilizador]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Utilizador]),
     viagensController.classificacaoViagem
 )
 viagensRouter.get('/classificacoesviagens',

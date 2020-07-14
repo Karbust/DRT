@@ -3,19 +3,11 @@ import {
     Button,
     Typography,
     Box,
-    Breadcrumbs,
-    Link,
     Stepper,
     Step,
     StepLabel,
     CircularProgress,
-    Slide,
-    Snackbar,
-    Backdrop,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { NavigateNext } from '@material-ui/icons'
-import { Link as RouterLink } from 'react-router-dom'
 import 'moment/locale/pt'
 import { Formik } from 'formik'
 import axios from 'axios'
@@ -25,6 +17,8 @@ import { FormDadosPessoais } from '../components/formDadosPessoais'
 import { FormDocumentos } from '../components/formDocumentos'
 import { useStyles } from '../components/MuiStyles'
 import { backendUrl } from '../configs'
+import { getUrl } from '../components/functions'
+import { PaginasHeader } from '../components/PaginasHeader'
 import authHeader from '../components/auth-header'
 
 function getSteps() {
@@ -34,10 +28,8 @@ function getSteps() {
 export default function RegistarMotorista() {
     const classes = useStyles()
 
-    // const [message, setMessage] = useState('')
     const [activeStep, setActiveStep] = useState(0)
     const [nacionalidades, setNacionalidades] = useState([])
-    const [localidades, setLocalidades] = useState([])
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
@@ -60,8 +52,7 @@ export default function RegistarMotorista() {
     const handleReset = () => setActiveStep(0)
 
     useEffect(() => {
-        axios
-            .get(`${backendUrl}api/nacionalidades`, { headers: authHeader() })
+        getUrl('api/nacionalidades')
             .then((res) => {
                 if (res.data.success) {
                     setNacionalidades(res.data.data)
@@ -76,27 +67,12 @@ export default function RegistarMotorista() {
                 setSeverity('error')
                 setOpenAlert(true)
             })
-        axios
-            .get(`${backendUrl}api/localidades`, { headers: authHeader() })
-            .then((res) => {
-                if (res.data.success) {
-                    setLocalidades(res.data.data)
-                } else {
-                    setMessage('Não foi possível obter a lista de localidades.')
-                    setSeverity('error')
-                    setOpenAlert(true)
-                }
+            .finally(() => {
+                setOpenBackdrop(false)
             })
-            .catch(() => {
-                setMessage('Ocorreu um erro ao enviar o pedido localidades para o servidor.')
-                setSeverity('error')
-                setOpenAlert(true)
-            })
-        setOpenBackdrop(false)
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
-        formikActions.setSubmitting(true)
         const formData = new FormData()
         const { files, ...remaining_values } = values
         Object.keys(remaining_values).forEach((key) => formData.append(key, remaining_values[key]))
@@ -104,11 +80,11 @@ export default function RegistarMotorista() {
             formData.append('files', files[i])
         }
         return axios
-            .post(`${backendUrl}user/registar`, formData)
+            .post(`${backendUrl}user/registar`, formData, { headers: authHeader() })
             .then((data) => {
                 if (data.data.success) {
+                    formikActions.setStatus(1)
                     setActiveStep(3)
-                    formikActions.setSubmitting(false)
                     formikActions.resetForm()
                     setMessage(data.data.message)
                     setSeverity('success')
@@ -128,7 +104,7 @@ export default function RegistarMotorista() {
     const getStepContent = (step) => {
         switch (step) {
             case 0:
-                return <FormDadosPessoais classes={classes} nacionalidades={nacionalidades} localidades={localidades} />
+                return <FormDadosPessoais classes={classes} nacionalidades={nacionalidades} />
             case 1:
                 return <FormDadosConta classes={classes} />
             case 2:
@@ -151,113 +127,83 @@ export default function RegistarMotorista() {
 
     return (
         <>
-            <div className={classes.root}>
-                <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={openAlert}
-                    autoHideDuration={6000}
-                    onClose={handleCloseAlert}
-                    TransitionComponent={Slide}
+            <PaginasHeader
+                openBackdrop={openBackdrop}
+                handleCloseBackdrop={handleCloseBackdrop}
+                openAlert={openAlert}
+                handleCloseAlert={handleCloseAlert}
+                severity={severity}
+                message={message}
+                titulo="Registar Motorista"
+                url="/Dashboard/Administracao/RegistarMotorista"
+            />
+            <Box mb={2}>
+                <Stepper
+                    className={classes.stepper}
+                    alternativeLabel
+                    activeStep={activeStep}
                 >
-                    <Alert onClose={handleCloseAlert} severity={severity}>
-                        {message}
-                    </Alert>
-                </Snackbar>
-                <Box mb={2} className={classes.container}>
-                    <Box mb={1} pt={1}>
-                        <Typography variant="h5">
-                            Registo de Motorista
-                        </Typography>
-                    </Box>
-                    <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant="h5">
-                            <Breadcrumbs
-                                separator="›"
-                                aria-label="breadcrumb"
+                    {steps.map((label) => (
+                        <Step key={label} className={classes.step}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <div>
+                    {activeStep === steps.length ? (
+                        <div>
+                            <Typography className={classes.instructions}>
+                                All steps completed - you&apos;re finished
+                            </Typography>
+                            <Button onClick={handleReset} className={classes.button}>
+                                Reset
+                            </Button>
+                        </div>
+                    ) : (
+                        <Box>
+                            <Formik
+                                onSubmit={onFormikSubmit}
+                                validateOnBlur={false}
+                                validateOnChange={false}
+                                enableReinitialize
+                                initialStatus={0}
+                                initialValues={{
+                                    nome: '',
+                                    datanascimento: null,
+                                    genero: '',
+                                    ncc: '',
+                                    nss: '',
+                                    nif: '',
+                                    telemovel: '',
+                                    telefone: '',
+                                    nacionalidade: 0,
+                                    morada: '',
+                                    codpostal: '',
+                                    localidade: '',
+                                    email: '',
+                                    utilizador: '',
+                                    tipo_utilizador: 5,
+                                    files: null,
+                                }}
                             >
-                                <Link color="inherit" component={RouterLink} to="/">
-                                    Início
-                                </Link>
-                                <Link
-                                    color="textPrimary"
-                                    component={RouterLink}
-                                    to="/Dashboard/RegistarMotorista"
-                                    aria-current="page"
-                                >
-                                    Registar Motorista
-                                </Link>
-                            </Breadcrumbs>
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box mb={2}>
-                    <Stepper
-                        className={classes.stepper}
-                        alternativeLabel
-                        activeStep={activeStep}
-                    >
-                        {steps.map((label) => (
-                            <Step key={label} className={classes.step}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    <div>
-                        {activeStep === steps.length ? (
-                            <div>
-                                <Typography className={classes.instructions}>
-                                    All steps completed - you&apos;re finished
-                                </Typography>
-                                <Button onClick={handleReset} className={classes.button}>
-                                    Reset
-                                </Button>
-                            </div>
-                        ) : (
-                            <Box>
-                                <Formik
-                                    onSubmit={onFormikSubmit}
-                                    validateOnBlur={false}
-                                    validateOnChange={false}
-                                    initialValues={{
-                                        nome: 'teste',
-                                        datanascimento: '2019-06-04',
-                                        genero: 'M',
-                                        ncc: '',
-                                        nss: '123',
-                                        nif: '',
-                                        telemovel: '123',
-                                        telefone: '123',
-                                        nacionalidade: 189,
-                                        morada: 'teste',
-                                        codpostal: 'teste',
-                                        localidade: '123',
-                                        email: '',
-                                        utilizador: 'teste',
-                                        tipo_utilizador: 5,
-                                        files: null,
-                                    }}
-                                >
-                                    {({
-                                        isSubmitting,
-                                        submitForm,
-                                        isValid,
-                                    }) => {
-                                        /* console.log(formErrors)
-                                        console.log(isValid) */
-                                        return (
-                                            <>
-                                                <form onSubmit={(event) => {
+                                {({
+                                    isSubmitting,
+                                    submitForm,
+                                    isValid,
+                                    status,
+                                }) => {
+                                    return (
+                                        <>
+                                            <form
+                                                key={status}
+                                                onSubmit={(event) => {
                                                     event.preventDefault()
                                                     submitForm()
                                                 }}
-                                                >
-                                                    {
-                                                        getStepContent(activeStep)
-                                                    }
-                                                </form>
+                                            >
+                                                {
+                                                    getStepContent(activeStep)
+                                                }
                                                 <Box component="div" align="right" mt={5}>
                                                     <Button
                                                         disabled={!isValid || activeStep === 0}
@@ -276,15 +222,15 @@ export default function RegistarMotorista() {
                                                         {!isSubmitting && (activeStep === steps.length - 1 ? 'Concluir' : 'Seguinte')}
                                                     </Button>
                                                 </Box>
-                                            </>
-                                        )
-                                    }}
-                                </Formik>
-                            </Box>
-                        )}
-                    </div>
-                </Box>
-            </div>
+                                            </form>
+                                        </>
+                                    )
+                                }}
+                            </Formik>
+                        </Box>
+                    )}
+                </div>
+            </Box>
         </>
     )
 }

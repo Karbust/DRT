@@ -15,7 +15,7 @@ import clsx from 'clsx'
 import React, { useEffect, useState } from 'react'
 
 export const FormRegistarViagem = ({
-    classes, localidades, distDur, callbackOrigem, callbackDestino,
+    classes, localidades, clientes, distDur, callbackOrigem, callbackDestino,
 }) => {
     const {
         setFieldValue, values, isValid, isSubmitting, submitForm, validateField,
@@ -27,6 +27,11 @@ export const FormRegistarViagem = ({
     const handleChangeIdaVolta = (event) => {
         setIdaVolta(event.target.checked)
     }
+
+    useEffect(() => {
+        setFieldValue('distancia', distDur.distanciaValue)
+        setFieldValue('duracao', distDur.duracaoValue)
+    }, [distDur.distanciaValue, distDur.duracaoValue, setFieldValue])
 
     useEffect(() => {
         setFieldValue('distancia', distDur.distanciaValue)
@@ -214,7 +219,7 @@ export const FormRegistarViagem = ({
                                     onChange={(value) => {
                                         setIdaVoltaSwitch(false)
                                         setFieldValue('datahora_ida', value.format('YYYY-MM-DD HH:mm'))
-                                        if (!idaVoltaSwitch) {
+                                        if (idaVolta) {
                                             if (!values.datahora_volta) {
                                                 errors.datahora_volta = 'Campo obrigatório'
                                             } else if (moment(values.datahora_volta).isSameOrBefore(value.format('YYYY-MM-DD HH:mm'))) {
@@ -307,12 +312,48 @@ export const FormRegistarViagem = ({
                                 {...field}
                                 required
                                 fullWidth
-                                label="Número Cliente"
+                                label="Número Cliente Pedido"
                                 variant="outlined"
                                 className={classes.textField}
                                 error={Boolean(errors.nrcliente)}
                                 helperText={errors.nrcliente}
                                 onBlur={(event) => validateField(event.currentTarget.name)}
+                            />
+                        )}
+                    </Field>
+                    <Field
+                        name="clientes"
+                        validate={(clientesField) => (clientesField ? undefined : 'Campo obrigatório')}
+                    >
+                        {({ field, form: { errors } }) => (
+                            <Autocomplete
+                                multiple
+                                filterSelectedOptions
+                                id="tags-outlined"
+                                options={clientes}
+                                getOptionLabel={(option) => {
+                                    if (!option.NOME_UTILIZADOR) {
+                                        return ''
+                                    }
+                                    return option.NOME_UTILIZADOR
+                                }}
+                                onChange={(event, newValue) => {
+                                    setFieldValue('clientes', newValue)
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...field}
+                                        {...params}
+                                        required
+                                        fullWidth
+                                        label="Participantes"
+                                        variant="outlined"
+                                        className={classes.textField}
+                                        error={Boolean(errors.clientes)}
+                                        helperText={errors.clientes}
+                                        onBlur={(event) => validateField(event.currentTarget.name)}
+                                    />
+                                )}
                             />
                         )}
                     </Field>

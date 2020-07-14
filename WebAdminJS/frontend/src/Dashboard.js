@@ -15,28 +15,19 @@ import {
     Collapse,
     Hidden,
 } from '@material-ui/core'
-import {
-    Menu,
-    ExpandLess,
-    ExpandMore,
-} from '@material-ui/icons'
+import MenuIcon from '@material-ui/icons/Menu'
 
 import './css/all.min.css'
 import Logo from './imagens/logo_muv.svg'
 import { useStyles } from './components/MuiStyles'
 import DashboardView from './views_dashboard/DashboardView'
-
 import RegistarViagem from './views_dashboard/RegistarViagem'
 import PedidosViagem from './views_dashboard/PedidosViagem'
 import HistoricoViagens from './views_dashboard/HistoricoViagens'
-
 import RegistarCliente from './views_dashboard/RegistarCliente'
 import ListaClientes from './views_dashboard/ListaClientes'
 import ValidarRegistos from './views_dashboard/ValidarRegistos'
 import RegistosNaoValidados from './views_dashboard/RegistosNaoValidados'
-
-import RegistarMotorista from './views_dashboard/RegistarMotorista'
-import ListaMotoristas from './views_dashboard/ListaMotoristas'
 import RegistarAdministrador from './views_dashboard/RegistarAdministrador'
 import ListaAdministradores from './views_dashboard/ListaAdministradores'
 import RegistarAdministrativo from './views_dashboard/RegistarAdministrativo'
@@ -45,12 +36,12 @@ import RegistarAdministradorOperador from './views_dashboard/RegistarAdministrad
 import ListaAdministradoresOperador from './views_dashboard/ListaAdministradoresOperador'
 import RegistarTelefonista from './views_dashboard/RegistarTelefonista'
 import ListaTelefonistas from './views_dashboard/ListaTelefonistas'
+import RegistarMotorista from './views_dashboard/RegistarMotorista'
+import ListaMotoristas from './views_dashboard/ListaMotoristas'
 import RegistarAdministrativoOperador from './views_dashboard/RegistarAdministrativoOperador'
 import ListaAdministrativosOperador from './views_dashboard/ListaAdministrativosOperador'
-
 import RegistarViatura from './views_dashboard/RegistarViatura'
 import ListaViaturas from './views_dashboard/ListaViaturas'
-
 import { Role } from './components/functions'
 import { PrivateRoute } from './components/PrivateRoute'
 
@@ -110,7 +101,9 @@ export default function Dashboard() {
                                     <i className="fad fa-map fa-lg" />
                                 </ListItemIcon>
                                 <ListItemText primary="Viagens" />
-                                {openNestedViagens ? <ExpandLess /> : <ExpandMore />}
+                                {openNestedViagens
+                                    ? <i className="fas fa-chevron-up" />
+                                    : <i className="fas fa-chevron-down" />}
                             </ListItem>
                             <Collapse in={openNestedViagens} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
@@ -180,7 +173,9 @@ export default function Dashboard() {
                                     <i className="fa fa-users fa-lg" />
                                 </ListItemIcon>
                                 <ListItemText primary="Clientes" />
-                                {openNestedUsers ? <ExpandLess /> : <ExpandMore />}
+                                {openNestedUsers
+                                    ? <i className="fas fa-chevron-up" />
+                                    : <i className="fas fa-chevron-down" />}
                             </ListItem>
                             <Collapse in={openNestedUsers} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
@@ -246,7 +241,9 @@ export default function Dashboard() {
                                     <i className="fa fa-cars fa-lg" />
                                 </ListItemIcon>
                                 <ListItemText primary="Viaturas" />
-                                {openNestedViaturas ? <ExpandLess /> : <ExpandMore />}
+                                {openNestedViaturas
+                                    ? <i className="fas fa-chevron-up" />
+                                    : <i className="fas fa-chevron-down" />}
                             </ListItem>
                             <Collapse in={openNestedViaturas} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
@@ -298,7 +295,9 @@ export default function Dashboard() {
                                     <i className="fa fa-users-cog fa-lg" />
                                 </ListItemIcon>
                                 <ListItemText primary="Administração" />
-                                {openNestedSeccaoAdministracao ? <ExpandLess /> : <ExpandMore />}
+                                {openNestedSeccaoAdministracao
+                                    ? <i className="fas fa-chevron-up" />
+                                    : <i className="fas fa-chevron-down" />}
                             </ListItem>
                             <Collapse in={openNestedSeccaoAdministracao} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
@@ -496,12 +495,12 @@ export default function Dashboard() {
                             onClick={handleDrawerToggle}
                             className={classes.menuButton3}
                         >
-                            <Menu />
+                            <MenuIcon />
                         </IconButton>
                         <img src={Logo} width="150" alt="Logo MUV" />
                     </Toolbar>
                 </AppBar>
-                <nav className={classes.drawer} aria-label="mailbox folders">
+                <nav className={classes.drawer}>
                     <Hidden mdUp implementation="css">
                         <Drawer
                             variant="temporary"
@@ -512,7 +511,7 @@ export default function Dashboard() {
                                 paper: classes.drawerPaper,
                             }}
                             ModalProps={{
-                                keepMounted: true, // Better open performance on mobile.
+                                keepMounted: true,
                             }}
                         >
                             {drawer}
@@ -572,6 +571,7 @@ export default function Dashboard() {
                         <PrivateRoute exact path={`${path}/Viaturas`} component={DashboardView} />
                         <PrivateRoute exact path={`${path}/Viaturas/RegistarViatura`} roles={[Role.Administrador, Role.AdministradorOperador]} component={RegistarViatura} />
                         <PrivateRoute exact path={`${path}/Viaturas/ListaViaturas`} roles={[Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador]} component={ListaViaturas} />
+                        <PrivateRoute exact path={`${path}/Viaturas/*`} component={DashboardView} />
                     </Switch>
                 </main>
             </div>

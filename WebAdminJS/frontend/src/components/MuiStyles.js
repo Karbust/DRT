@@ -10,16 +10,60 @@ import {
 } from '@material-ui/core/colors'
 import { ptPT } from '@material-ui/core/locale'
 import React from 'react'
-import {
-    FirstPage,
-    KeyboardArrowLeft,
-    KeyboardArrowRight,
-    LastPage,
-} from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { borderColor } from '@material-ui/system'
 
+import Background from '../imagens/V2.jpg'
+
 const drawerWidth = 280
+
+export const microsite = makeStyles((theme) => ({
+    root: {
+        backgroundImage: `url(${Background})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundColor: 'rgb(190, 211, 212)',
+    },
+    container: {
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    filho1: {
+        height: '5vh',
+    },
+    filho2: {
+        height: '95vh',
+        display: 'flex',
+        marginTop: '100px',
+        flexDirection: 'column',
+    },
+    titulo: {
+        textTransform: 'uppercase',
+    },
+    botoes: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    botao1: {
+        marginRight: theme.spacing(4),
+    },
+}))
+
+export const BotaoDownload = withStyles({
+    root: {
+        background: 'linear-gradient(45deg, #ff8100c9 30%, #ffc400 90%)',
+        border: 0,
+        borderRadius: 3,
+        boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+        color: 'white',
+        height: 48,
+        padding: '0 30px',
+    },
+    label: {
+        textTransform: 'maximize',
+    },
+})(Button)
 
 export const muiTheme = createMuiTheme({
     palette: {
@@ -50,7 +94,6 @@ export const muiTheme = createMuiTheme({
             root: {
                 '&:hover:not($disabled):not($focused):not($error) $notchedOutline': {
                     'borderColor': '#FFD400',
-                    // Reset on touch devices, it doesn't add specificity
                     '@media (hover: none)': {
                         borderColor,
                     },
@@ -61,7 +104,6 @@ export const muiTheme = createMuiTheme({
             underline: {
                 '&:hover:not($disabled):not($focused):not($error):before': {
                     'borderBottomColor': '#FFD400',
-                    // Reset on touch devices, it doesn't add specificity
                     '@media (hover: none)': {
                         borderColor,
                     },
@@ -102,6 +144,15 @@ export const useStyles = makeStyles((theme) => ({
     },
     dashboard: {
         display: 'flex',
+    },
+    cardSearch: {
+        display: 'grid',
+        gridTemplateColumns: '3fr 2fr',
+        justifyContent: 'space-between',
+        marginTop: '10px',
+    },
+    cardSearchField: {
+        marginTop: '-16px',
     },
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
@@ -214,7 +265,10 @@ export const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
         width: '100%',
         justifyContent: 'center',
-        backgroundColor: '#EBEAE8',
+        backgroundImage: `url(${Background})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
+        backgroundColor: 'rgb(190, 211, 212)',
     },
     grid: {
         alignSelf: 'center',
@@ -222,14 +276,6 @@ export const useStyles = makeStyles((theme) => ({
         backgroundColor: '#fff',
         boxShadow: '0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)',
     },
-    /* appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }, */
     menuButton2: {
         marginRight: 36,
     },
@@ -389,30 +435,36 @@ export const TablePaginationActions = (props) => {
                 disabled={page === 0}
                 aria-label="first page"
             >
-                {theme.direction === 'rtl' ? <LastPage /> : <FirstPage />}
+                {theme.direction === 'rtl'
+                    ? <i className="far fa-angle-double-right fa-xs" />
+                    : <i className="far fa-angle-double-left fa-xs" />}
             </IconButton>
             <IconButton
                 onClick={handleBackButtonClick}
                 disabled={page === 0}
                 aria-label="previous page"
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowRight />
-                    : <KeyboardArrowLeft />}
+                {theme.direction === 'rtl'
+                    ? <i className="fas fa-chevron-right fa-xs" />
+                    : <i className="fas fa-chevron-left fa-xs" />}
             </IconButton>
             <IconButton
                 onClick={handleNextButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="next page"
             >
-                {theme.direction === 'rtl' ? <KeyboardArrowLeft />
-                    : <KeyboardArrowRight />}
+                {theme.direction === 'rtl'
+                    ? <i className="fas fa-chevron-left fa-xs" />
+                    : <i className="fas fa-chevron-right fa-xs" />}
             </IconButton>
             <IconButton
                 onClick={handleLastPageButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
                 aria-label="last page"
             >
-                {theme.direction === 'rtl' ? <FirstPage /> : <LastPage />}
+                {theme.direction === 'rtl'
+                    ? <i className="far fa-angle-double-left fa-xs" />
+                    : <i className="far fa-angle-double-right fa-xs" />}
             </IconButton>
         </div>
     )

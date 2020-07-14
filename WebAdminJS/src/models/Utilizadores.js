@@ -14,7 +14,7 @@ var TiposUtilizadores = sequelize.define('TIPOS_UTILIZADORES',{
         allowNull: false
     }
 },{
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false,
 })
 
@@ -138,7 +138,7 @@ var Utilizadores = sequelize.define('UTILIZADORES', {
         allowNull: true
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     paranoid: true,
     timestamps: true,
     hooks: {
@@ -201,7 +201,7 @@ var Verificacoes = sequelize.define('VERIFICACOES', {
         }
     },
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 
@@ -236,7 +236,7 @@ var Validacoes = sequelize.define('VALIDACOES', {
         allowNull: false
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 

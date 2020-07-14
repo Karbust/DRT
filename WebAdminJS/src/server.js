@@ -26,6 +26,7 @@ import { userRouter } from './routes/userRoutes.js'
 import { viagensRouter } from './routes/viagensRoutes.js'
 import { viaturasRouter } from './routes/viaturasRoutes.js'
 import { emailRouter } from './routes/emailRoutes.js'
+import { estatisticasRouter } from './routes/estatisticasRoutes.js'
 import { apiRouter } from './routes/apiRoutes.js'
 import { firstRunRouter } from './routes/firstRunRoutes.js'
 
@@ -51,6 +52,11 @@ app.use('/viaturas',
     enderecoIP,
     checkToken,
     viaturasRouter
+)
+app.use('/estatisticas',
+    enderecoIP,
+    checkToken,
+    estatisticasRouter
 )
 app.use('/api',
     enderecoIP,

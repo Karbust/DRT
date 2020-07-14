@@ -1,6 +1,6 @@
 import Sequelize from 'sequelize'
 import { sequelize } from '../config/database.js'
-import Utilizadores from './Utilizadores'
+import { Utilizadores } from './Utilizadores.js'
 
 var Validacoes = sequelize.define('VALIDACOES', {
     NR_VALIDACAO: {
@@ -33,7 +33,7 @@ var Validacoes = sequelize.define('VALIDACOES', {
         allowNull: false
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 

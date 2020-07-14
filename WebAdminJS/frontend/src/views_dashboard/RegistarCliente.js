@@ -3,19 +3,11 @@ import {
     Button,
     Typography,
     Box,
-    Breadcrumbs,
-    Link,
     Stepper,
     Step,
     StepLabel,
     CircularProgress,
-    Snackbar,
-    Slide,
-    Backdrop,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { NavigateNext } from '@material-ui/icons'
-import { Link as RouterLink } from 'react-router-dom'
 import 'moment/locale/pt'
 import { Formik } from 'formik'
 import axios from 'axios'
@@ -26,6 +18,8 @@ import { FormDocumentos } from '../components/formDocumentos'
 import { useStyles } from '../components/MuiStyles'
 import { backendUrl } from '../configs'
 import { getUrl } from '../components/functions'
+import { PaginasHeader } from '../components/PaginasHeader'
+import authHeader from '../components/auth-header'
 
 function getSteps() {
     return ['Detalhes Pessoais', 'Detalhes da Conta', 'Documentos']
@@ -34,7 +28,6 @@ function getSteps() {
 export default function RegistarCliente() {
     const classes = useStyles()
 
-    // const [message, setMessage] = useState('')
     const [activeStep, setActiveStep] = useState(0)
     const [nacionalidades, setNacionalidades] = useState([])
     const [localidades, setLocalidades] = useState([])
@@ -76,8 +69,6 @@ export default function RegistarCliente() {
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
-    // setMessage('')
-        formikActions.setSubmitting(true)
         const formData = new FormData()
         const { files, ...remaining_values } = values
         Object.keys(remaining_values).forEach((key) => formData.append(key, remaining_values[key]))
@@ -85,11 +76,10 @@ export default function RegistarCliente() {
             formData.append('files', files[i])
         }
         return axios
-            .post(`${backendUrl}user/registar`, formData)
+            .post(`${backendUrl}user/registar`, formData, { headers: authHeader() })
             .then((data) => {
                 if (data.data.success) {
                     setActiveStep(3)
-                    formikActions.setSubmitting(false)
                     formikActions.resetForm()
                     setMessage(data.data.message)
                     setSeveridade('success')
@@ -133,136 +123,103 @@ export default function RegistarCliente() {
 
     return (
         <>
-            <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
-                <CircularProgress color="inherit" />
-            </Backdrop>
-            <div className={classes.root}>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={openAlert}
-                    autoHideDuration={6000}
-                    onClose={handleCloseAlert}
-                    TransitionComponent={Slide}
+            <PaginasHeader
+                openBackdrop={openBackdrop}
+                handleCloseBackdrop={handleCloseBackdrop}
+                openAlert={openAlert}
+                handleCloseAlert={handleCloseAlert}
+                severity={severidade}
+                message={message}
+                titulo="Registar Cliente"
+                url="/Dashboard/Clientes/RegistarCliente"
+            />
+            <Box mb={2}>
+                <Stepper
+                    className={classes.stepper}
+                    alternativeLabel
+                    activeStep={activeStep}
                 >
-                    <Alert onClose={handleCloseAlert} severity={severidade}>
-                        {message}
-                    </Alert>
-                </Snackbar>
-                <Box mb={2} className={classes.container}>
-                    <Box mb={1} pt={1}>
-                        <Typography variant="h5">
-                            Registo de Cliente
-                        </Typography>
-                    </Box>
-                    <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant="h5">
-                            <Breadcrumbs
-                                separator="›"
-                                aria-label="breadcrumb"
+                    {steps.map((label) => (
+                        <Step key={label} className={classes.step}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+                <div>
+                    {activeStep === steps.length ? (
+                        <div>
+                            <Typography className={classes.instructions}>
+                                All steps completed - you&apos;re finished
+                            </Typography>
+                            <Button onClick={handleReset} className={classes.button}>
+                                Reset
+                            </Button>
+                        </div>
+                    ) : (
+                        <Box>
+                            <Formik
+                                onSubmit={onFormikSubmit}
+                                validateOnBlur={false}
+                                validateOnChange={false}
+                                initialValues={{
+                                    nome: '',
+                                    datanascimento: null,
+                                    genero: '',
+                                    ncc: '',
+                                    nss: '',
+                                    nif: '',
+                                    telemovel: '',
+                                    telefone: '',
+                                    nacionalidade: 0,
+                                    morada: '',
+                                    codpostal: '',
+                                    localidade: '',
+                                    email: '',
+                                    utilizador: '',
+                                    tipo_utilizador: 7,
+                                    files: null,
+                                }}
                             >
-                                <Link color="inherit" component={RouterLink} to="/">
-                                    Início
-                                </Link>
-                                <Link
-                                    color="textPrimary"
-                                    component={RouterLink}
-                                    to="/Dashboard/Clientes/RegistarCliente"
-                                    aria-current="page"
-                                >
-                                    Registar Cliente
-                                </Link>
-                            </Breadcrumbs>
-                        </Typography>
-                    </Box>
-                </Box>
-                <Box mb={2}>
-                    <Stepper
-                        className={classes.stepper}
-                        alternativeLabel
-                        activeStep={activeStep}
-                    >
-                        {steps.map((label) => (
-                            <Step key={label} className={classes.step}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
-                    <div>
-                        {activeStep === steps.length ? (
-                            <div>
-                                <Typography className={classes.instructions}>
-                                    All steps completed - you&apos;re finished
-                                </Typography>
-                                <Button onClick={handleReset} className={classes.button}>
-                                    Reset
-                                </Button>
-                            </div>
-                        ) : (
-                            <Box>
-                                <Formik
-                                    onSubmit={onFormikSubmit}
-                                    validateOnBlur={false}
-                                    validateOnChange={false}
-                                    initialValues={{
-                                        nome: '',
-                                        datanascimento: null,
-                                        genero: '',
-                                        ncc: '',
-                                        nss: '',
-                                        nif: '',
-                                        telemovel: '',
-                                        telefone: '',
-                                        nacionalidade: 0,
-                                        morada: '',
-                                        codpostal: '',
-                                        localidade: '',
-                                        email: '',
-                                        utilizador: '',
-                                        tipo_utilizador: 7,
-                                        files: null,
-                                    }}
-                                >
-                                    {({
-                                        isSubmitting,
-                                        submitForm,
-                                        isValid,
-                                    }) => {
-                                        return (
-                                            <>
-                                                <form onSubmit={(event) => {
-                                                    event.preventDefault()
-                                                    submitForm()
-                                                }}
+                                {({
+                                    isSubmitting,
+                                    submitForm,
+                                    isValid,
+                                }) => {
+                                    return (
+                                        <>
+                                            <form onSubmit={(event) => {
+                                                event.preventDefault()
+                                                submitForm()
+                                            }}
+                                            >
+                                                {getStepContent(activeStep)}
+                                            </form>
+                                            <Box component="div" align="right" mt={5}>
+                                                <Button
+                                                    disabled={!isValid || activeStep === 0}
+                                                    onClick={handleBack}
                                                 >
-                                                    {getStepContent(activeStep)}
-                                                </form>
-                                                <Box component="div" align="right" mt={5}>
-                                                    <Button
-                                                        disabled={!isValid || activeStep === 0}
-                                                        onClick={handleBack}
-                                                    >
-                                                        Voltar
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={activeStep === steps.length - 1 ? submitForm : handleNext}
-                                                        className={classes.button}
-                                                        disabled={!isValid || isSubmitting}
-                                                    >
-                                                        {isSubmitting && (<CircularProgress color="inherit" />)}
-                                                        {!isSubmitting && (activeStep === steps.length - 1 ? 'Concluir' : 'Seguinte')}
-                                                    </Button>
-                                                </Box>
-                                            </>
-                                        )
-                                    }}
-                                </Formik>
-                            </Box>
-                        )}
-                    </div>
-                </Box>
-            </div>
+                                                    Voltar
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={activeStep === steps.length - 1 ? submitForm : handleNext}
+                                                    className={classes.button}
+                                                    disabled={!isValid || isSubmitting}
+                                                >
+                                                    {isSubmitting && (<CircularProgress color="inherit" />)}
+                                                    {!isSubmitting && (activeStep === steps.length - 1 ? 'Concluir' : 'Seguinte')}
+                                                </Button>
+                                            </Box>
+                                        </>
+                                    )
+                                }}
+                            </Formik>
+                        </Box>
+                    )}
+                </div>
+            </Box>
         </>
     )
 }

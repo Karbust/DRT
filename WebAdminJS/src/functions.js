@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk'
-import { aws } from './config/config.js' // load configurations file
+import { aws } from './config/config.js'
 
 function password (length) {
     var result = ''

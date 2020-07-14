@@ -79,6 +79,7 @@
             {
                 "SwitchCase": 1
             }
-        ]
+        ],
+        "security/detect-non-literal-fs-filename": "off"
     }
 }

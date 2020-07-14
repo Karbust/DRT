@@ -3,9 +3,6 @@ import axios from 'axios'
 import {
     useTheme,
     Box,
-    Breadcrumbs,
-    Link,
-    Typography,
     Table,
     TableBody,
     TableCell,
@@ -14,8 +11,6 @@ import {
     TableRow,
     Paper,
     Button,
-    TablePagination,
-    TableFooter,
     Dialog,
     DialogActions,
     DialogContent,
@@ -31,28 +26,22 @@ import {
     IconButton,
     CircularProgress,
     Tooltip,
-    Slide,
-    Snackbar, Hidden, TableSortLabel,
+    Hidden, TableSortLabel,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import {
-    NavigateNext,
-    Close,
-} from '@material-ui/icons'
 import {
     Magnifier,
     MOUSE_ACTIVATION,
     TOUCH_ACTIVATION,
 } from 'react-image-magnifiers'
-import { Link as RouterLink } from 'react-router-dom'
 import moment from 'moment'
 import { useConfirm } from 'material-ui-confirm'
-import clsx from 'clsx'
 
-import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
+import { StyledButton, useStyles, Transition } from '../components/MuiStyles'
 import authHeader from '../components/auth-header'
 import { backendUrl } from '../configs'
-import { compararListas, getComparator, sortFilter } from '../components/functions'
+import { compararListas, getComparator, getUrl, sortFilter } from '../components/functions'
+import { TabelasFooter } from '../components/tabelasFooter'
+import { TabelasPaginasHeader } from '../components/tabelasPaginasHeader'
 
 export default function ValidarRegistos() {
     const classes = useStyles()
@@ -69,6 +58,7 @@ export default function ValidarRegistos() {
     const [openImagem, setOpenImagem] = useState(false)
     const [imagemSelecionada, setImagemSelecionada] = useState('')
     const [update, setUpdate] = useState(false)
+    const [openBackdrop, setOpenBackdrop] = useState(true)
 
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -87,6 +77,10 @@ export default function ValidarRegistos() {
         if (reason === 'clickaway') { return }
 
         setOpenAlert(false)
+    }
+
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false)
     }
 
     const handleRequestSort = (event, properties) => {
@@ -305,352 +299,321 @@ export default function ValidarRegistos() {
     }
 
     useEffect(() => {
-        axios
-            .get(`${backendUrl}user/utilizadoresnaovalidados`, { headers: authHeader() })
+        getUrl('user/utilizadoresnaovalidados')
             .then((res) => {
                 if (res.data.success) {
                     setUtilizadores(res.data.data)
                     setUpdate(false)
+                } else {
+                    setMessage('Ocorreu um erro ao obter a lista de utilizadores não validados.')
+                    setSeverity('error')
+                    setOpenAlert(true)
                 }
+            })
+            .catch(() => {
+                setMessage('Ocorreu um erro ao pedir a lista de utilizadores não validados ao servidor.')
+                setSeverity('error')
+                setOpenAlert(true)
+            })
+            .finally(() => {
+                setOpenBackdrop(false)
             })
     }, [update])
 
     return (
         <>
-            <div className={classes.root}>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={openAlert}
-                    autoHideDuration={6000}
-                    onClose={handleCloseAlert}
-                    TransitionComponent={Slide}
-                >
-                    <Alert onClose={handleCloseAlert} severity={severity}>
-                        {message}
-                    </Alert>
-                </Snackbar>
-                <Box mb={2} className={classes.container_header}>
-                    <Box mb={1} pt={1} className={classes.heading}>
-                        <Typography variant="h5">
-                            Validar Registos
-                        </Typography>
-                    </Box>
-
-                    <Box mb={1} pt={1} className={classes.filter}>
-                        <Tooltip title="Filter list">
-                            <TextField
-                                fullWidth
-                                label="Filtrar"
-                                onChange={handleFilter}
-                            />
-                        </Tooltip>
-                    </Box>
-
-                    <Box className={clsx(classes.box, classes.breadcrumbs)}>
-                        <Typography variant="h5">
-                            <Breadcrumbs
-                                separator="›"
-                                aria-label="breadcrumb"
-                            >
-                                <Link
-                                    color="inherit"
-                                    component={RouterLink}
-                                    to="/"
-                                >
-                                    Início
-                                </Link>
-                                <Link
-                                    color="textPrimary"
-                                    component={RouterLink}
-                                    to="/Dashboard/Clientes/ValidarRegistoCliente"
-                                    aria-current="page"
-                                >
-                                    Validar Registos
-                                </Link>
-                            </Breadcrumbs>
-                        </Typography>
-                    </Box>
+            <TabelasPaginasHeader
+                openBackdrop={openBackdrop}
+                handleCloseBackdrop={handleCloseBackdrop}
+                openAlert={openAlert}
+                handleCloseAlert={handleCloseAlert}
+                severity={severity}
+                message={message}
+                handleFilter={handleFilter}
+                titulo="Validar Registos"
+                url="/Dashboard/Viaturas/ListaViaturas"
+            />
+            <Dialog
+                fullScreen
+                open={openImagem}
+                onClose={handleCloseImagem}
+                TransitionComponent={Transition}
+            >
+                <AppBar position="sticky">
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={handleCloseImagem}
+                            aria-label="close"
+                        >
+                            <i className="fal fa-times fa-lg" />
+                        </IconButton>
+                    </Toolbar>
+                </AppBar>
+                <Box className={classes.toolbarImagem}>
+                    <Magnifier
+                        className={classes.inputPosition}
+                        imageSrc={imagemSelecionada}
+                        largeImageSrc={imagemSelecionada}
+                        mouseActivation={MOUSE_ACTIVATION.CLICK}
+                        touchActivation={TOUCH_ACTIVATION.TAP}
+                        dragToMove
+                    />
                 </Box>
-                <Dialog
-                    fullScreen
-                    open={openImagem}
-                    onClose={handleCloseImagem}
-                    TransitionComponent={Transition}
-                >
-                    <AppBar position="sticky">
-                        <Toolbar>
-                            <IconButton
-                                edge="start"
-                                color="inherit"
-                                onClick={handleCloseImagem}
-                                aria-label="close"
-                            >
-                                <Close />
-                            </IconButton>
-                        </Toolbar>
-                    </AppBar>
-                    <Box className={classes.toolbarImagem}>
-                        <Magnifier
-                            className={classes.inputPosition}
-                            imageSrc={imagemSelecionada}
-                            largeImageSrc={imagemSelecionada}
-                            mouseActivation={MOUSE_ACTIVATION.CLICK}
-                            touchActivation={TOUCH_ACTIVATION.TAP}
-                            dragToMove
-                        />
-                    </Box>
-                </Dialog>
-                <Dialog
-                    fullScreen={fullScreen}
-                    fullWidth
-                    maxWidth="md"
-                    open={open}
-                    TransitionComponent={Transition}
-                    onClose={handleClose}
-                    aria-labelledby="responsive-dialog-title"
-                >
-                    <DialogTitle id="responsive-dialog-title">
-                        Validação de Conta
-                        de Utilizador
-                    </DialogTitle>
-                    <DialogContent dividers>
-                        <Box mb={2}>
-                            <Grid container spacing={1}>
-                                <Grid item md={6} sm={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Nome"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.NOME_UTILIZADOR}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Data de Nascimento"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={moment(currentUtilizador.user.DATA_NASCIMENTO).format('YYYY-MM-DD')}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Género"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={handleGenero(currentUtilizador.user.GENERO)}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Número Cartão de Cidadão"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.N_CC}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Número Segurança Social"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.N_SEGSOCIAL}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Número Identificação Fiscal"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.NIF}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item md={6} sm={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Número de Telemóvel"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.N_TELEMOVEL}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Número de Telefone"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.N_TELEFONE ? currentUtilizador.user.N_TELEFONE : ''}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Morada"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.MORADA_UTILIZADOR}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Código Postal"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.COD_POSTAL}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                    <TextField
-                                        fullWidth
-                                        label="Freguesia"
-                                        variant="outlined"
-                                        className={classes.textField}
-                                        value={currentUtilizador.user.FREGUESIA}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
-                                    />
-                                </Grid>
-                                <Box className={classes.GridListRoot}>
-                                    <GridList
-                                        className={classes.GridList}
-                                        cols={1}
-                                    >
-                                        <GridListTile cols={1} rows={1}>
-                                            <img
-                                                src={srcSlotImg1}
-                                                onClick={() => handleOpenImagen(srcSlotImg1)}
-                                                alt="Comprovativo de Morada"
-                                            />
-                                            <GridListTileBar
-                                                title="Comprovativo de Morada"
-                                                classes={{
-                                                    root: classes.GridListTitleBar,
-                                                    title: classes.GridListTitle,
-                                                }}
-                                            />
-                                        </GridListTile>
-                                        <GridListTile cols={1} rows={1}>
-                                            <img
-                                                src={srcSlotImg2}
-                                                onClick={() => handleOpenImagen(srcSlotImg2)}
-                                                alt="Comprovativo Ncc"
-                                            />
-                                            <GridListTileBar
-                                                title="Comprovativo Cartão de Cidadão"
-                                                classes={{
-                                                    root: classes.GridListTitleBar,
-                                                    title: classes.GridListTitle,
-                                                }}
-                                            />
-                                        </GridListTile>
-                                    </GridList>
-                                </Box>
-                            </Grid>
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button
-                            autoFocus
-                            onClick={handleClose}
-                            variant="outlined"
-                            color="primary"
-                            disabled={isSubmittingApprove || isSubmittingDisapprove}
-                        >
-                            Cancelar
-                        </Button>
-                        <Button
-                            onClick={handleDisapprove}
-                            variant="outlined"
-                            color="primary"
-                            style={{
-                                width: '123px',
-                                height: '36px',
-                            }}
-                            disabled={isSubmittingApprove || isSubmittingDisapprove}
-                        >
-                            {isSubmittingDisapprove && (
-                                <CircularProgress
-                                    size={30}
-                                    color="inherit"
+            </Dialog>
+            <Dialog
+                fullScreen={fullScreen}
+                fullWidth
+                maxWidth="md"
+                open={open}
+                TransitionComponent={Transition}
+                onClose={handleClose}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogTitle id="responsive-dialog-title">
+                    Validação de Conta
+                    de Utilizador
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Box mb={2}>
+                        <Grid container spacing={1}>
+                            <Grid item md={6} sm={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Nome"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.NOME_UTILIZADOR}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
                                 />
-                            )}
-                            {!isSubmittingDisapprove && 'Desaprovar'}
-                        </Button>
-                        <StyledButton
-                            onClick={handleApprove}
-                            color="primary"
-                            autoFocus
-                            style={{ width: '115px' }}
-                            disabled={isSubmittingDisapprove || isSubmittingApprove}
-                        >
-                            {isSubmittingApprove && (
-                                <CircularProgress color="inherit" />)}
-                            {!isSubmittingApprove && 'Aprovar'}
-                        </StyledButton>
-                    </DialogActions>
-                </Dialog>
-                <Box mb={2}>
-                    <TableContainer component={Paper}>
-                        <Table
-                            className={classes.root}
-                            aria-label="simple table"
-                        >
-                            <TableHead>
-                                <TableRow>
-                                    {(() => {
-                                        const isEqual = compararListas(orderBy, ['NR_UTILIZADOR'])
-                                        return (
-                                            <TableCell
-                                                sortDirection={isEqual ? order : false}
+                                <TextField
+                                    fullWidth
+                                    label="Data de Nascimento"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={moment(currentUtilizador.user.DATA_NASCIMENTO).format('YYYY-MM-DD')}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Género"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={handleGenero(currentUtilizador.user.GENERO)}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Número Cartão de Cidadão"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.N_CC}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Número Segurança Social"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.N_SEGSOCIAL}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Número Identificação Fiscal"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.NIF}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item md={6} sm={6} xs={12}>
+                                <TextField
+                                    fullWidth
+                                    label="Número de Telemóvel"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.N_TELEMOVEL}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Número de Telefone"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.N_TELEFONE ? currentUtilizador.user.N_TELEFONE : ''}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Morada"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.MORADA_UTILIZADOR}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Código Postal"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.COD_POSTAL}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Freguesia"
+                                    variant="outlined"
+                                    className={classes.textField}
+                                    value={currentUtilizador.user.FREGUESIA}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                />
+                            </Grid>
+                            <Box className={classes.GridListRoot}>
+                                <GridList
+                                    className={classes.GridList}
+                                    cols={1}
+                                >
+                                    <GridListTile cols={1} rows={1}>
+                                        <img
+                                            src={srcSlotImg1}
+                                            onClick={() => handleOpenImagen(srcSlotImg1)}
+                                            alt="Comprovativo de Morada"
+                                        />
+                                        <GridListTileBar
+                                            title="Comprovativo de Morada"
+                                            classes={{
+                                                root: classes.GridListTitleBar,
+                                                title: classes.GridListTitle,
+                                            }}
+                                        />
+                                    </GridListTile>
+                                    <GridListTile cols={1} rows={1}>
+                                        <img
+                                            src={srcSlotImg2}
+                                            onClick={() => handleOpenImagen(srcSlotImg2)}
+                                            alt="Comprovativo Ncc"
+                                        />
+                                        <GridListTileBar
+                                            title="Comprovativo Cartão de Cidadão"
+                                            classes={{
+                                                root: classes.GridListTitleBar,
+                                                title: classes.GridListTitle,
+                                            }}
+                                        />
+                                    </GridListTile>
+                                </GridList>
+                            </Box>
+                        </Grid>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        autoFocus
+                        onClick={handleClose}
+                        variant="outlined"
+                        color="primary"
+                        disabled={isSubmittingApprove || isSubmittingDisapprove}
+                    >
+                        Cancelar
+                    </Button>
+                    <Button
+                        onClick={handleDisapprove}
+                        variant="outlined"
+                        color="primary"
+                        style={{
+                            width: '123px',
+                            height: '36px',
+                        }}
+                        disabled={isSubmittingApprove || isSubmittingDisapprove}
+                    >
+                        {isSubmittingDisapprove && (
+                            <CircularProgress
+                                size={30}
+                                color="inherit"
+                            />
+                        )}
+                        {!isSubmittingDisapprove && 'Desaprovar'}
+                    </Button>
+                    <StyledButton
+                        onClick={handleApprove}
+                        color="primary"
+                        autoFocus
+                        style={{ width: '115px' }}
+                        disabled={isSubmittingDisapprove || isSubmittingApprove}
+                    >
+                        {isSubmittingApprove && (
+                            <CircularProgress color="inherit" />)}
+                        {!isSubmittingApprove && 'Aprovar'}
+                    </StyledButton>
+                </DialogActions>
+            </Dialog>
+            <Box mb={2}>
+                <TableContainer component={Paper}>
+                    <Table
+                        className={classes.root}
+                        aria-label="simple table"
+                    >
+                        <TableHead>
+                            <TableRow>
+                                {(() => {
+                                    const isEqual = compararListas(orderBy, ['NR_UTILIZADOR'])
+                                    return (
+                                        <TableCell
+                                            sortDirection={isEqual ? order : false}
+                                        >
+                                            <TableSortLabel
+                                                active={isEqual}
+                                                direction={isEqual ? order : 'asc'}
+                                                onClick={(e) => handleRequestSort(e, ['NR_UTILIZADOR'])}
                                             >
-                                                <TableSortLabel
-                                                    active={isEqual}
-                                                    direction={isEqual ? order : 'asc'}
-                                                    onClick={(e) => handleRequestSort(e, ['NR_UTILIZADOR'])}
-                                                >
-                                                    #
-                                                    {isEqual ? (
-                                                        <span className={classes.visuallyHidden}>
-                                                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                                        </span>
-                                                    ) : null}
-                                                </TableSortLabel>
-                                            </TableCell>
-                                        )
-                                    })()}
-                                    <TableCell>Nome</TableCell>
-                                    <Hidden smDown>
-                                        <TableCell>Freguesia</TableCell>
-                                    </Hidden>
-                                    <TableCell>
-                                        Data de Criação da
-                                        Conta
-                                    </TableCell>
-                                    <TableCell>Ações</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {sortFilter(utilizadores, getComparator(order, orderBy), filter)
+                                                #
+                                                {isEqual ? (
+                                                    <span className={classes.visuallyHidden}>
+                                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                                    </span>
+                                                ) : null}
+                                            </TableSortLabel>
+                                        </TableCell>
+                                    )
+                                })()}
+                                <TableCell>Nome</TableCell>
+                                <Hidden smDown>
+                                    <TableCell>Freguesia</TableCell>
+                                </Hidden>
+                                <TableCell>
+                                    Data de Criação da
+                                    Conta
+                                </TableCell>
+                                <TableCell>Ações</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                sortFilter(utilizadores, getComparator(order, orderBy), filter)
                                     .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                                     .map((row, key) => (
                                         <TableRow key={key}>
@@ -718,33 +681,19 @@ export default function ValidarRegistos() {
                                                 }
                                             </TableCell>
                                         </TableRow>
-                                    ))}
-                            </TableBody>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination
-                                        rowsPerPageOptions={[5, 10, 25, {
-                                            label: 'Todos',
-                                            value: Number.MAX_SAFE_INTEGER,
-                                        }]}
-                                        colSpan={5}
-                                        count={utilizadores.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
-                                        SelectProps={{
-                                            inputProps: { 'aria-label': 'linhas por página' },
-                                            native: true,
-                                        }}
-                                        onChangePage={handleChangePage}
-                                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                                        ActionsComponent={TablePaginationActions}
-                                    />
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </TableContainer>
-                </Box>
-            </div>
+                                    ))
+                            }
+                        </TableBody>
+                        <TabelasFooter
+                            dados={utilizadores}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
+                            handleChangePage={handleChangePage}
+                            handleChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
+                    </Table>
+                </TableContainer>
+            </Box>
         </>
     )
 }

@@ -2,10 +2,12 @@ import {
     DirectionsRenderer,
     DirectionsService,
 } from '@react-google-maps/api'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
-export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
+export const RotaGoogleMap = React.memo((props) => {
     const [response, setResponse] = useState(null)
+
+    const { destino, origem, onRouteReceived } = props
 
     useEffect(() => {
         if (destino !== null || origem !== null) {
@@ -13,7 +15,7 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
         }
     }, [destino, origem])
 
-    const directionsCallback = (result, status) => {
+    const directionsCallback = useCallback((result, status) => {
         if (status === 'OK' && response === null) {
             const { duration, distance } = result.routes[0].legs[0]
             onRouteReceived({
@@ -25,7 +27,7 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
             })
             setResponse(result)
         }
-    }
+    }, [onRouteReceived, response])
 
     return (
         <>
@@ -64,4 +66,4 @@ export const RotaGoogleMap = ({ destino, origem, onRouteReceived }) => {
             }
         </>
     )
-}
+})
