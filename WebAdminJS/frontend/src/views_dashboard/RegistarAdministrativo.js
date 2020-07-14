@@ -2,7 +2,6 @@ import React from 'react'
 import {
     Typography, Box, Breadcrumbs, Link,
 } from '@material-ui/core'
-import { NavigateNext } from '@material-ui/icons'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { useStyles } from '../components/MuiStyles'

@@ -13,7 +13,7 @@ var Cores = sequelize.define('VIATURAS_CORES', {
         unique: true
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 
@@ -29,7 +29,7 @@ var Marcas = sequelize.define('VIATURAS_MARCAS', {
         unique: true
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 
@@ -52,7 +52,7 @@ var Modelos = sequelize.define('VIATURAS_MODELOS', {
         allowNull: false
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 
@@ -68,7 +68,7 @@ var Seguradoras = sequelize.define('VIATURAS_SEGURADORAS', {
         unique: true
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 
@@ -121,7 +121,7 @@ var Viaturas = sequelize.define('VIATURAS', {
         }
     },
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: true,
     paranoid: true,
 })

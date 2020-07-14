@@ -47,6 +47,7 @@
         "import"
     ],
     "rules": {
+        "no-useless-escape": "off",
         "no-unused-vars": "warn",
         "no-param-reassign": "off",
         "no-plusplus": "off",

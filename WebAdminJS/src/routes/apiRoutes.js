@@ -1,5 +1,4 @@
 import express from 'express'
-import { checkToken, authorize, Role } from '../middleware/jwt.js'
 
 const apiRouter = express.Router()
 

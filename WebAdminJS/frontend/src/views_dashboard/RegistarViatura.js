@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import {
-    Typography,
     Box,
     Button,
-    Breadcrumbs,
-    Link,
     Grid,
     CircularProgress,
-    Snackbar,
-    Slide,
 } from '@material-ui/core'
-import { NavigateNext } from '@material-ui/icons'
-import { Link as RouterLink } from 'react-router-dom'
 import { Formik } from 'formik'
 import axios from 'axios'
-import { Alert } from '@material-ui/lab'
 
 import { useStyles } from '../components/MuiStyles'
 import { backendUrl } from '../configs'
@@ -22,6 +14,7 @@ import authHeader from '../components/auth-header'
 import { FormRegistarViatura } from '../components/formRegistarViatura'
 import { MiniFormAdicionarMarca, MiniFormAdicionarModelo, MiniFormAdicionarCor, MiniFormAdicionarSeguradora } from '../components/miniFormsRegistosViaturas'
 import { getUrl } from '../components/functions'
+import { PaginasHeader } from '../components/PaginasHeader'
 
 export default function RegistarViatura() {
     const classes = useStyles()
@@ -42,6 +35,12 @@ export default function RegistarViatura() {
     const [openModelo, setOpenModelo] = useState(false)
     const [openCor, setOpenCor] = useState(false)
     const [openSeguradora, setOpenSeguradora] = useState(false)
+
+    const [openBackdrop, setOpenBackdrop] = useState(false)
+
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false)
+    }
 
     // MARCA - START
     const handleCloseMarca = () => {
@@ -169,146 +168,110 @@ export default function RegistarViatura() {
 
     return (
         <>
-            <div className={classes.root}>
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    open={openAlert}
-                    autoHideDuration={6000}
-                    onClose={handleCloseAlert}
-                    TransitionComponent={Slide}
-                >
-                    <Alert onClose={handleCloseAlert} severity={severity}>
-                        {message}
-                    </Alert>
-                </Snackbar>
-
-                <Box mb={2} className={classes.container}>
-                    <Box mb={1} pt={1}>
-                        <Typography variant="h5">
-                            Registar Viatura
-                        </Typography>
-                    </Box>
-                    <Box mb={1} pt={1} className={classes.box}>
-                        <Typography variant="h5">
-                            <Breadcrumbs
-                                separator="›"
-                                aria-label="breadcrumb"
-                            >
-                                <Link
-                                    color="inherit"
-                                    component={RouterLink}
-                                    to="/"
-                                >
-                                    Início
-                                </Link>
-                                <Link
-                                    color="textPrimary"
-                                    component={RouterLink}
-                                    to="/Dashboard/RegistarVeiculo"
-                                    aria-current="page"
-                                >
-                                    Registar
-                                    Viatura
-                                </Link>
-                            </Breadcrumbs>
-                        </Typography>
-                    </Box>
-                </Box>
-                <MiniFormAdicionarMarca
-                    handleSubmitMarca={handleSubmitMarca}
-                    handleCloseMarca={handleCloseMarca}
-                    openMarca={openMarca}
-                />
-                <MiniFormAdicionarModelo
-                    handleSubmitModelo={handleSubmitModelo}
-                    handleCloseModelo={handleCloseModelo}
-                    openModelo={openModelo}
-                    marcas={marcas}
-                />
-                <MiniFormAdicionarCor
-                    handleSubmitCor={handleSubmitCor}
-                    handleCloseCor={handleCloseCor}
-                    openCor={openCor}
-                />
-                <MiniFormAdicionarSeguradora
-                    handleSubmitSeguradora={handleSubmitSeguradora}
-                    handleCloseSeguradora={handleCloseSeguradora}
-                    openSeguradora={openSeguradora}
-                />
-                <Box mb={2}>
-                    <Grid container spacing={4}>
-                        <Grid item lg={3} md={5} sm={6} xs={12}>
-                            <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenMarca}>
-                                Adicionar Marca
-                            </Button>
-                        </Grid>
-                        <Grid item lg={3} md={5} sm={6} xs={12}>
-                            <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenModelo}>
-                                Adicionar Modelo
-                            </Button>
-                        </Grid>
-                        <Grid item lg={3} md={5} sm={6} xs={12}>
-                            <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenCor}>
-                                Adicionar Cor
-                            </Button>
-                        </Grid>
-                        <Grid item lg={3} md={5} sm={6} xs={12}>
-                            <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenSeguradora}>
-                                Adicionar Seguradora
-                            </Button>
-                        </Grid>
+            <PaginasHeader
+                openBackdrop={openBackdrop}
+                handleCloseBackdrop={handleCloseBackdrop}
+                openAlert={openAlert}
+                handleCloseAlert={handleCloseAlert}
+                severity={severity}
+                message={message}
+                titulo="Registar Viatura"
+                url="/Dashboard/Viaturas/RegistarViatura"
+            />
+            <MiniFormAdicionarMarca
+                handleSubmitMarca={handleSubmitMarca}
+                handleCloseMarca={handleCloseMarca}
+                openMarca={openMarca}
+            />
+            <MiniFormAdicionarModelo
+                handleSubmitModelo={handleSubmitModelo}
+                handleCloseModelo={handleCloseModelo}
+                openModelo={openModelo}
+                marcas={marcas}
+            />
+            <MiniFormAdicionarCor
+                handleSubmitCor={handleSubmitCor}
+                handleCloseCor={handleCloseCor}
+                openCor={openCor}
+            />
+            <MiniFormAdicionarSeguradora
+                handleSubmitSeguradora={handleSubmitSeguradora}
+                handleCloseSeguradora={handleCloseSeguradora}
+                openSeguradora={openSeguradora}
+            />
+            <Box mb={2}>
+                <Grid container spacing={4}>
+                    <Grid item lg={3} md={5} sm={6} xs={12}>
+                        <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenMarca}>
+                            Adicionar Marca
+                        </Button>
                     </Grid>
-                    <Formik
-                        onSubmit={onFormikSubmit}
-                        validateOnBlur={false}
-                        validateOnChange={false}
-                        initialValues={{
-                            matricula: '',
-                            ano: '',
-                            modelo: 0,
-                            cor: 0,
-                            capacidade: '',
-                            apolice: '',
-                            seguradora: 0,
-                        }}
-                    >
-                        {({
-                            submitForm,
-                            isValid,
-                            isSubmitting,
-                        }) => {
-                            return (
-                                <form onSubmit={(event) => {
-                                    event.preventDefault()
-                                    submitForm()
-                                }}
-                                >
-                                    <Grid container spacing={4}>
-                                        <FormRegistarViatura
-                                            cores={cores}
-                                            modelos={modelos}
-                                            seguradoras={seguradoras}
-                                        />
-                                    </Grid>
+                    <Grid item lg={3} md={5} sm={6} xs={12}>
+                        <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenModelo}>
+                            Adicionar Modelo
+                        </Button>
+                    </Grid>
+                    <Grid item lg={3} md={5} sm={6} xs={12}>
+                        <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenCor}>
+                            Adicionar Cor
+                        </Button>
+                    </Grid>
+                    <Grid item lg={3} md={5} sm={6} xs={12}>
+                        <Button className={classes.button3} variant="contained" color="primary" onClick={handleClickOpenSeguradora}>
+                            Adicionar Seguradora
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Formik
+                    onSubmit={onFormikSubmit}
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    initialValues={{
+                        matricula: '',
+                        ano: '',
+                        modelo: 0,
+                        cor: 0,
+                        capacidade: '',
+                        apolice: '',
+                        seguradora: 0,
+                    }}
+                >
+                    {({
+                        submitForm,
+                        isValid,
+                        isSubmitting,
+                    }) => {
+                        return (
+                            <form onSubmit={(event) => {
+                                event.preventDefault()
+                                submitForm()
+                            }}
+                            >
+                                <Grid container spacing={4}>
+                                    <FormRegistarViatura
+                                        cores={cores}
+                                        modelos={modelos}
+                                        seguradoras={seguradoras}
+                                    />
+                                </Grid>
 
-                                    <Box component="div" align="right" mt={5}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={submitForm}
-                                            className={classes.button}
-                                            disabled={!isValid || isSubmitting}
-                                        >
-                                            {isSubmitting && (<CircularProgress color="inherit" />)}
-                                            {!isSubmitting && 'Concluir'}
-                                        </Button>
-                                    </Box>
-                                </form>
-                            )
-                        }}
-                    </Formik>
-                </Box>
-            </div>
+                                <Box component="div" align="right" mt={5}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={submitForm}
+                                        className={classes.button}
+                                        disabled={!isValid || isSubmitting}
+                                    >
+                                        {isSubmitting && (<CircularProgress color="inherit" />)}
+                                        {!isSubmitting && 'Concluir'}
+                                    </Button>
+                                </Box>
+                            </form>
+                        )
+                    }}
+                </Formik>
+            </Box>
         </>
     )
 }

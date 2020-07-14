@@ -3,9 +3,6 @@ import axios from 'axios'
 import {
     useTheme,
     Box,
-    Breadcrumbs,
-    Link,
-    Typography,
     Table,
     TableBody,
     TableCell,
@@ -14,8 +11,6 @@ import {
     TableRow,
     Paper,
     Button,
-    TablePagination,
-    TableFooter,
     Chip,
     Dialog,
     DialogTitle,
@@ -23,34 +18,19 @@ import {
     DialogActions,
     CircularProgress,
     useMediaQuery,
-    Slide,
-    Snackbar,
     Hidden,
     TableSortLabel,
-    Tooltip,
-    TextField,
-    Backdrop,
 } from '@material-ui/core'
-import {
-    NavigateNext,
-} from '@material-ui/icons'
-import { Link as RouterLink } from 'react-router-dom'
 import moment from 'moment'
 import { Formik } from 'formik'
-import { Alert } from '@material-ui/lab'
-import clsx from 'clsx'
 
-import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
+import { StyledButton, useStyles, Transition } from '../components/MuiStyles'
 import authHeader from '../components/auth-header'
 import { backendUrl } from '../configs'
 import { FormPedidosViagem } from '../components/formPedidosViagem'
 import { getUrl, getComparator, compararListas, sortFilter } from '../components/functions'
-
-const motivoIdToName = {
-    'L': 'LAZER',
-    'T': 'TRABALHO',
-    'SNU': 'SAÚDE NÃO URGENTE',
-}
+import { TabelasPaginasHeader } from '../components/tabelasPaginasHeader'
+import { TabelasFooter } from '../components/tabelasFooter'
 
 export default function PedidosViagem() {
     const classes = useStyles()
@@ -61,7 +41,7 @@ export default function PedidosViagem() {
     const [update, setUpdate] = useState(false)
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState('')
-    const [severidade, setSeveridade] = useState('')
+    const [severity, setSeverity] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
     const [openBackdrop, setOpenBackdrop] = useState(true)
 
@@ -118,16 +98,16 @@ export default function PedidosViagem() {
                 if (res.data.success) {
                     viagens[currentViagem.key].ESTADO = 'PENDENTE'
                     setMessage('Viagem editada com sucesso')
-                    setSeveridade('success')
+                    setSeverity('success')
                     setOpen(false)
                 } else {
                     setMessage('Ocorreu um erro ao editar a viagem.')
-                    setSeveridade('error')
+                    setSeverity('error')
                 }
             })
             .catch(() => {
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
-                setSeveridade('error')
+                setSeverity('error')
             })
             .finally(() => {
                 formikActions.setSubmitting(false)
@@ -139,23 +119,17 @@ export default function PedidosViagem() {
         getUrl('viagens/pedidosviagem')
             .then((res) => {
                 if (res.data.success) {
-                    const array = res.data.data
-
-                    array.forEach((row) => {
-                        row.MOTIVO = motivoIdToName[row.MOTIVO] ? motivoIdToName[row.MOTIVO] : row.MOTIVO
-                    })
-
-                    setViagens(array)
+                    setViagens(res.data.data)
                     setUpdate(false)
                 } else {
                     setMessage('Ocorreu um erro ao obter a lista de viagens.')
-                    setSeveridade('error')
+                    setSeverity('error')
                     setOpenAlert(true)
                 }
             })
             .catch(() => {
                 setMessage('Ocorreu um erro ao pedir a lista de viagens ao servidor.')
-                setSeveridade('error')
+                setSeverity('error')
                 setOpenAlert(true)
             })
             .finally(() => {
@@ -165,62 +139,18 @@ export default function PedidosViagem() {
 
     return (
         <>
-            <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
-                <CircularProgress color="inherit" />
-            </Backdrop>
-            <Snackbar
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                open={openAlert}
-                autoHideDuration={6000}
-                onClose={handleCloseAlert}
-                TransitionComponent={Slide}
-            >
-                <Alert onClose={handleCloseAlert} severity={severidade}>
-                    {message}
-                </Alert>
-            </Snackbar>
-            <Box mb={2} className={classes.container_header}>
-                <Box mb={1} pt={1} className={classes.heading}>
-                    <Typography variant="h5">
-                        Pedidos de Viagem
-                    </Typography>
-                </Box>
 
-                <Box mb={1} pt={1} className={classes.filter}>
-                    <Tooltip title="Filter list">
-                        <TextField
-                            fullWidth
-                            label="Filtrar"
-                            onChange={handleFilter}
-                        />
-                    </Tooltip>
-                </Box>
-
-                <Box className={clsx(classes.box, classes.breadcrumbs)}>
-                    <Typography variant="h5">
-                        <Breadcrumbs
-                            separator="›"
-                            aria-label="breadcrumb"
-                        >
-                            <Link
-                                color="inherit"
-                                component={RouterLink}
-                                to="/"
-                            >
-                                Início
-                            </Link>
-                            <Link
-                                color="textPrimary"
-                                component={RouterLink}
-                                to="/Dashboard/Utilizadores/PedidosViagem"
-                                aria-current="page"
-                            >
-                                Pedidos Viagem
-                            </Link>
-                        </Breadcrumbs>
-                    </Typography>
-                </Box>
-            </Box>
+            <TabelasPaginasHeader
+                openBackdrop={openBackdrop}
+                handleCloseBackdrop={handleCloseBackdrop}
+                openAlert={openAlert}
+                handleCloseAlert={handleCloseAlert}
+                severity={severity}
+                message={message}
+                handleFilter={handleFilter}
+                titulo="Pedidos de Viagem"
+                url="/Dashboard/Viagens/PedidosViagem"
+            />
             <Dialog
                 fullScreen={fullScreen}
                 fullWidth
@@ -268,7 +198,7 @@ export default function PedidosViagem() {
                                     }}
                                     >
                                         <FormPedidosViagem
-                                            setSeveridade={setSeveridade}
+                                            setSeveridade={setSeverity}
                                             setOpenAlert={setOpenAlert}
                                             setMessage={setMessage}
                                             currentViagem={currentViagem}
@@ -469,73 +399,61 @@ export default function PedidosViagem() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {sortFilter(viagens, getComparator(order, orderBy), filter)
-                                .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                                .map((row, key) => (
-                                    <TableRow key={key}>
-                                        <TableCell component="th" scope="row">
-                                            {row.NR_VIAGEM_PEDIDO}
-                                        </TableCell>
-                                        <TableCell>{row.Origem.LOCALIDADE}</TableCell>
-                                        <TableCell>{row.Destino.LOCALIDADE}</TableCell>
-                                        <Hidden smDown>
-                                            <TableCell>{moment(row.DATAHORA_IDA).format('YYYY-MM-DD HH:mm')}</TableCell>
-                                            <TableCell>{!row.DATAHORA_VOLTA ? '-' : moment(row.DATAHORA_VOLTA).format('YYYY-MM-DD HH:mm')}</TableCell>
-                                        </Hidden>
-                                        <Hidden lgDown>
-                                            <TableCell>{row.PASSAGEIROS}</TableCell>
-                                            <TableCell>{row.MOTIVO}</TableCell>
-                                            <TableCell>
-                                                {(row.DISTANCIA / 1000).toFixed(2)}
-                                                {' '}
-                                                Km
+                            {
+                                sortFilter(viagens, getComparator(order, orderBy), filter, [])
+                                    .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                                    .map((row, key) => (
+                                        <TableRow key={key}>
+                                            <TableCell component="th" scope="row">
+                                                {row.NR_VIAGEM_PEDIDO}
                                             </TableCell>
-                                            <TableCell>{!row.CUSTO ? '-' : `€${row.CUSTO}` }</TableCell>
-                                            <TableCell>{!row.MOTORISTA ? '-' : row.MOTORISTA}</TableCell>
-                                            <TableCell>{!row.ViagemViatura ? '-' : row.ViagemViatura.MATRICULA}</TableCell>
-                                        </Hidden>
-                                        <Hidden smDown>
+                                            <TableCell>{row.Origem.LOCALIDADE}</TableCell>
+                                            <TableCell>{row.Destino.LOCALIDADE}</TableCell>
+                                            <Hidden smDown>
+                                                <TableCell>{moment(row.DATAHORA_IDA).format('YYYY-MM-DD HH:mm')}</TableCell>
+                                                <TableCell>{!row.DATAHORA_VOLTA ? '-' : moment(row.DATAHORA_VOLTA).format('YYYY-MM-DD HH:mm')}</TableCell>
+                                            </Hidden>
+                                            <Hidden lgDown>
+                                                <TableCell>{row.PASSAGEIROS}</TableCell>
+                                                <TableCell>{row.MOTIVO}</TableCell>
+                                                <TableCell>
+                                                    {(row.DISTANCIA / 1000).toFixed(2)}
+                                                    {' '}
+                                                    Km
+                                                </TableCell>
+                                                <TableCell>{!row.CUSTO ? '-' : `€${row.CUSTO}` }</TableCell>
+                                                <TableCell>{!row.MOTORISTA ? '-' : row.MOTORISTA}</TableCell>
+                                                <TableCell>{!row.ViagemViatura ? '-' : row.ViagemViatura.MATRICULA}</TableCell>
+                                            </Hidden>
+                                            <Hidden smDown>
+                                                <TableCell>
+                                                    {row.ESTADO === 'PEDIDO' && <Chip style={{ backgroundColor: theme.palette.info.main }} size="small" label={row.ESTADO} />}
+                                                    {row.ESTADO === 'PENDENTE' && <Chip style={{ backgroundColor: theme.palette.info2.main }} size="small" label={row.ESTADO} />}
+                                                </TableCell>
+                                            </Hidden>
                                             <TableCell>
-                                                {row.ESTADO === 'PEDIDO' && <Chip style={{ backgroundColor: theme.palette.info.main }} size="small" label={row.ESTADO} />}
-                                                {row.ESTADO === 'PENDENTE' && <Chip style={{ backgroundColor: theme.palette.info2.main }} size="small" label={row.ESTADO} />}
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    disableElevation
+                                                    onClick={() => handleClickOpen(key)}
+                                                    style={{ marginRight: theme.spacing(3) }}
+                                                >
+                                                    EDITAR
+                                                </Button>
                                             </TableCell>
-                                        </Hidden>
-                                        <TableCell>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                disableElevation
-                                                onClick={() => handleClickOpen(key)}
-                                                style={{ marginRight: theme.spacing(3) }}
-                                            >
-                                                EDITAR
-                                            </Button>
-                                        </TableCell>
 
-                                    </TableRow>
-                                ))}
+                                        </TableRow>
+                                    ))
+                            }
                         </TableBody>
-                        <TableFooter>
-                            <TableRow>
-                                <TablePagination
-                                    rowsPerPageOptions={[5, 10, 25, {
-                                        label: 'Todos',
-                                        value: Number.MAX_SAFE_INTEGER,
-                                    }]}
-                                    colSpan={12}
-                                    count={viagens.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    SelectProps={{
-                                        inputProps: { 'aria-label': 'linhas por página' },
-                                        native: true,
-                                    }}
-                                    onChangePage={handleChangePage}
-                                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                                    ActionsComponent={TablePaginationActions}
-                                />
-                            </TableRow>
-                        </TableFooter>
+                        <TabelasFooter
+                            dados={viagens}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
+                            handleChangePage={handleChangePage}
+                            handleChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
                     </Table>
                 </TableContainer>
             </Box>

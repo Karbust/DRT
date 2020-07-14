@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import {
     TiposUtilizadores, Utilizadores, Verificacoes, Validacoes
 } from '../models/Utilizadores.js'
+import { Notificacoes } from '../models/Notificacoes.js'
 import { sequelize } from '../config/database.js'
 import { url, jwt as jwtSecret } from '../config/config.js'
 import { password as passwordGen, sendEmail } from '../functions.js'
@@ -22,7 +23,7 @@ Utilizadores.hasMany(Validacoes, { foreignKey: 'NR_VALIDADOR', as: 'VALIDADORVAL
 const userController = {}
 sequelize.sync()
 
-const op = Sequelize.Op;
+const op = Sequelize.Op
 
 const cache = new NodeCache({
     stdTTL: 100,
@@ -162,8 +163,30 @@ userController.listaClientes = async (req, res) => {
         })
     })
 }
+userController.listaClientesReduzido = async (req, res) => {
+    Utilizadores.findAll({
+        attributes: ['NR_UTILIZADOR', 'NOME_UTILIZADOR'],
+        where: {
+            TIPO_UTILIZADOR: 7,
+            VALIDADO: true,
+            VERIFICADO: true
+        },
+    }).then((data) => {
+        res.json({
+            success: true,
+            data: data,
+        })
+    }).catch(() => {
+        res.json({
+            success: false,
+            data: "Ocorreu um erro ao obter a lista de utilizadores.",
+        })
+    })
+}
 userController.editarUtilizador = async (req, res) => {
-    let { nome, telemovel, telefone, morada, codpostal, localidade, email, utilizador, password } = req.body.values
+    let {
+        nome, telemovel, telefone, morada, codpostal, localidade, email, utilizador, password
+    } = req.body.values
 
     Utilizadores.update({
         NOME_UTILIZADOR: nome,
@@ -215,27 +238,6 @@ userController.listarMotoristas = async (req, res) => {
             data: JSON.parse(cache.get('motoristas')),
         })
     }
-}
-
-userController.listarNcc = async (req, res) => {
-    await Utilizadores.findAll({
-        attributes: ['NR_UTILIZADOR', 'N_CC'],
-        where: {
-            N_CC: {
-                [op.startsWith]: req.body.cc,
-            },
-        },
-        order: [
-            ['N_CC', 'ASC'],
-        ],
-    }).then((data) => {
-        return res.json({
-            success: true,
-            data: data,
-        })
-    }).catch(() => {
-        return res.json({ success: false })
-    })
 }
 
 userController.validacaoConta = async (req, res) => {
@@ -475,8 +477,8 @@ userController.listaRegistosNaoValidados = async (req, res) => {
         return res.json({ success: false, message: error })
     })
 }
-userController.apagarRegistoNaoValidado = async (req, res) => {
-    /*await sequelize.transaction(async (t) => {
+/*userController.apagarRegistoNaoValidado = async (req, res) => {
+    await sequelize.transaction(async (t) => {
         let { user, aprovar } = req.body
         let { nr_user } = req.decoded
 
@@ -506,7 +508,31 @@ userController.apagarRegistoNaoValidado = async (req, res) => {
     }).catch(function(err) {
         console.log(err)
         return res.json({ success: false })
-    })*/
+    })
+}*/
+
+userController.getNotificacoes = async (req, res) => {
+    await Notificacoes.findAll({
+        attributes: [
+            'CONTEUDO',
+            'createdAt'
+        ],
+        where: {
+            NR_UTILIZADOR: req.body.nr_user //req.decoded.nrUser
+        },
+        order: [['createdAt', 'DESC']],
+        limit: 10
+    }).then((data) => {
+        return res.json({
+            success: true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: true,
+            message: 'Não foi possível obter as notificações.'
+        })
+    })
 }
 
 userController.registar = async (req, res) => {
@@ -565,7 +591,6 @@ userController.registar = async (req, res) => {
         })
     })
 }
-
 userController.registarApp = async (req, res) => {
     let {
         nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, password
@@ -626,6 +651,7 @@ userController.registarApp = async (req, res) => {
         })
     })
 }
+
 userController.login = async (req, res) => {
     if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
         return res.status(403).json({
@@ -713,7 +739,6 @@ userController.login = async (req, res) => {
         })
     }
 }
-
 userController.loginApp = async (req, res) => {
     if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
         return res.status(403).json({

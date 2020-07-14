@@ -1,5 +1,5 @@
 import express from 'express'
-import { authorize, Role} from '../middleware/jwt.js'
+import { authorize, Role } from '../middleware/jwt.js'
 
 const viaturasRouter = express.Router()
 

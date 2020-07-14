@@ -13,7 +13,6 @@ AWS.config.update({
 })
 
 emailRouter.get('/test', (req, res) => {
-    // call sesClient to send an email
     sendEmail('charparodar@gmail.com', "Hey! Welcome", "This is the body of email<br>Teste")
 
     res.send('Email is sent!')

@@ -4,10 +4,10 @@ import { Localidades } from '../models/Localidades.js'
 import { Paises } from '../models/Paises.js'
 import { Cores, Marcas, Modelos, Seguradoras } from '../models/Viaturas.js'
 import fs from 'fs'
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const firstRunController = {}
 

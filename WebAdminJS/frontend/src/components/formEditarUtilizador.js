@@ -4,22 +4,18 @@ import {
     Dialog, DialogActions,
     DialogContent,
     DialogTitle, Grid, GridList, GridListTile, GridListTileBar,
-    IconButton, MenuItem, TextField,
+    IconButton, TextField,
     Toolbar, useMediaQuery, useTheme,
 } from '@material-ui/core'
-import { Close } from '@material-ui/icons'
 import { Magnifier, MOUSE_ACTIVATION, TOUCH_ACTIVATION } from 'react-image-magnifiers'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Field, Formik } from 'formik'
-import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import MomentUtils from '@date-io/moment'
 import validator from 'validator'
 
 import { backendUrl } from '../configs'
 
-import { validateNCC, validateNIF, validateNSS } from './functions'
 import authHeader from './auth-header'
 import { StyledButton, Transition, useStyles } from './MuiStyles'
 
@@ -52,7 +48,7 @@ export const FormEditarUtilizador = ({
         setOpen(false)
     }
 
-    const onFormikSubmit = (values, formikActions) => {
+    const onFormikSubmit = (values) => {
         return axios
             .post(`${backendUrl}user/editarutilizador`, { values, nr_user: currentUtilizador.NR_UTILIZADOR }, { headers: authHeader() })
             .then((data) => {
@@ -109,7 +105,7 @@ export const FormEditarUtilizador = ({
                             onClick={handleCloseImagem}
                             aria-label="close"
                         >
-                            <Close />
+                            <i className="fal fa-times fa-sm" />
                         </IconButton>
                     </Toolbar>
                 </AppBar>
@@ -136,8 +132,8 @@ export const FormEditarUtilizador = ({
                 <DialogTitle id="responsive-dialog-title">Editar Utilizador</DialogTitle>
                 <Formik
                     onSubmit={onFormikSubmit}
-                    validateOnBlur
-                    validateOnChange
+                    validateOnBlur={false}
+                    validateOnChange={false}
                     initialValues={{
                         nome: currentUtilizador.NOME_UTILIZADOR,
                         datanascimento: moment(currentUtilizador.DATA_NASCIMENTO).format('YYYY-MM-DD'),
@@ -157,9 +153,6 @@ export const FormEditarUtilizador = ({
                 >
                     {({
                         submitForm,
-                        isValid,
-                        isSubmitting,
-                        setFieldValue,
                         validateField,
                     }) => {
                         return (

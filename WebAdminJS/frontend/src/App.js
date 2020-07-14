@@ -8,6 +8,7 @@ import AuthService from './components/auth.service'
 import Login from './views/Login'
 import Dashboard from './Dashboard'
 import { backendUrl } from './configs'
+import Microsite from './views/Microsite'
 
 function PrivateRoute({ children, ...rest }) {
     return (
@@ -24,31 +25,15 @@ function PrivateRoute({ children, ...rest }) {
     )
 }
 
-/* export const PrivateRoute1 = ({ component: Component, roles, ...rest }) => (
-    <Route {...rest} render={props => {
-        const currentUser = AuthService.getCurrentUser()
-        if (!currentUser) {
-            // not logged in so redirect to login page with the return url
-            return <Redirect to={{ pathname: '/Login', state: { from: props.location } }} />
-        }
-
-        // check if route is restricted by role
-        if (roles && roles.indexOf(currentUser.role) === -1) {
-            // role not authorised so redirect to home page
-            return <Redirect to={{ pathname: '/' }} />
-        }
-
-        // authorised so return component
-        return <Component {...props} />
-    }} />
-) */
-
 function App() {
     return (
         <Router>
             <Switch>
                 <Route path="/Ativacao/:token">
                     <Ativacao />
+                </Route>
+                <Route path="/Microsite">
+                    <Microsite />
                 </Route>
                 <PrivateRoute path="/" exact>
                     <Redirect push to="/Dashboard" />
@@ -82,8 +67,6 @@ function Logout() {
     return <Redirect to="/Login" />
 }
 function Ativacao() {
-    // We can use the `useParams` hook here to access
-    // the dynamic pieces of the URL.
     const { token } = useParams()
 
     const [status, setStatus] = useState('')

@@ -265,9 +265,6 @@ export const FormPedidosViagem = ({
                                     error={Boolean(errors.motivo)}
                                     helperText={errors.motivo}
                                     onBlur={(event) => validateField(event.target.name)}
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
                                 >
                                     <MenuItem key="1" value="L">Lazer</MenuItem>
                                     <MenuItem key="2" value="T">Trabalho</MenuItem>

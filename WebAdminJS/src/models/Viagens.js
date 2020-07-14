@@ -29,6 +29,8 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
     PASSAGEIROS: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        min: 1,
+        max: 8,
     },
     MOTIVO: {
         type: Sequelize.ENUM('L', 'T', 'SNU'),
@@ -99,7 +101,7 @@ var PedidoViagem = sequelize.define('VIAGEM_PEDIDO', {
         },
     },
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: true
 })
 
@@ -142,7 +144,7 @@ var ClassificacaoViagem = sequelize.define('VIAGEM_CLASSIFICACAO', {
         allowNull: false
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: true
 })
 
@@ -167,9 +169,23 @@ var ClientesViagem = sequelize.define('VIAGEM_CLIENTES', {
             model: Utilizadores,
             key: 'NR_UTILIZADOR'
         }
+    },
+    MONTANTE: {
+        type: Sequelize.DECIMAL(10,2),
+        allowNull: true,
+    },
+    ESTADO_CLIENTE: {
+        type: Sequelize.ENUM('PENDENTE', 'CONFIRMADO', 'PRESENTE', 'FALTOU'),
+        defaultValue: 'PENDENTE',
+        allowNull: false
+    },
+    ESTADO_PAGAMENTO: {
+        type: Sequelize.ENUM('PENDENTE', 'RECEBIDO', 'CONFIRMADO'),
+        defaultValue: 'PENDENTE',
+        allowNull: false
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: false
 })
 
@@ -208,7 +224,7 @@ var AlteracoesViagem = sequelize.define('VIAGEM_ALTERACOES', {
         allowNull: false
     }
 }, {
-    freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
+    freezeTableName: true,
     timestamps: true
 })
 
