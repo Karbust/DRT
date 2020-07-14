@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/backgroud_dialog"
+        android:layout_width="400dp"
+        android:layout_height="200dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/viagens_branco" />
+
+    <com.hsalf.smileyrating.SmileyRating
+        android:id="@+id/smile_rating"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/avaliar_dialog"
+        app:layout_constraintEnd_toEndOf="@+id/backgroud_dialog"
+        app:layout_constraintStart_toStartOf="@+id/backgroud_dialog" />
+
+    <Button
+        android:id="@+id/avaliar_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:text="Avaliar"
+        android:background="@drawable/botao_viagem"
+        android:backgroundTint="@color/colorYellow"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintBottom_toBottomOf="@+id/backgroud_dialog"
+        app:layout_constraintEnd_toEndOf="@+id/backgroud_dialog"
+        app:layout_constraintStart_toStartOf="@+id/backgroud_dialog" />
+</androidx.constraintlayout.widget.ConstraintLayout>

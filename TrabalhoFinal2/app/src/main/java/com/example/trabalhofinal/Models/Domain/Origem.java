@@ -1,6 +1,8 @@
 package com.example.trabalhofinal.Models.Domain;
 
-public class Origem {
+import java.io.Serializable;
+
+public class Origem implements Serializable {
 
     private String LOCALIDADE;
     private float LATITUDE;

@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".Activities.Viagens"
+    >
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Viagens">
+    >
+
 
     <TextView
         android:id="@+id/textView12"
@@ -222,26 +230,6 @@
         app:layout_constraintStart_toEndOf="@+id/textView16"
         app:layout_constraintTop_toBottomOf="@+id/imageView15" />
 
-    <TextView
-        android:id="@+id/textView18"
-        style="@style/paragem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Tipo de paragem:"
-        app:layout_constraintStart_toStartOf="@+id/imageView15"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
-    <TextView
-        android:id="@+id/textView19"
-        style="@style/paragem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:text="Entrada"
-        app:layout_constraintEnd_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
     <Button
         android:id="@+id/viagem"
         android:layout_width="102dp"
@@ -255,5 +243,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/botao_sub"
+        android:backgroundTint="@color/colorYellow"
+        android:text="Iniciar Viagem"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView50" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView50"
+        style="@style/paragem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="Valor a ser cobrado:"
+        app:layout_constraintStart_toStartOf="@+id/textView16"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <TextView
+        android:id="@+id/textView51"
+        style="@style/paragem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="preço"
+        app:layout_constraintEnd_toEndOf="@+id/textView17"
+        app:layout_constraintTop_toTopOf="@+id/textView50" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

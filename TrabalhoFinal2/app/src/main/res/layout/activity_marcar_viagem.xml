@@ -69,14 +69,14 @@
             app:layout_constraintStart_toEndOf="@+id/nome3"
             app:layout_constraintTop_toBottomOf="@+id/nome3" />
 
-    <Spinner
-        android:id="@+id/spinner4"
-        android:layout_width="360dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nome2" />
+        <Spinner
+            android:id="@+id/spinner4"
+            android:layout_width="360dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passageiros" />
 
         <TextView
             android:id="@+id/nome3"
@@ -90,18 +90,16 @@
             app:layout_constraintStart_toStartOf="@+id/spinner4"
             app:layout_constraintTop_toBottomOf="@+id/spinner4" />
 
-        <EditText
-            android:id="@+id/nome2"
-            android:layout_width="360dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="46dp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/passageiros"
+            android:layout_width="286dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Nº Passageiros"
-            android:inputType="number"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinner3" />
+            app:layout_constraintEnd_toEndOf="@+id/textView18"
+            app:layout_constraintStart_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
         <ImageView
             android:id="@+id/imageView27"
@@ -243,6 +241,36 @@
             android:textColor="@android:color/darker_gray"
             app:layout_constraintEnd_toEndOf="@+id/textView15"
             app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+        <EditText
+            android:id="@+id/textView18"
+            android:layout_width="286dp"
+            android:layout_height="41dp"
+            android:layout_marginTop="46dp"
+            android:gravity="center_vertical"
+            android:hint="Nrº Utillizador"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="@+id/spinner3"
+            app:layout_constraintStart_toStartOf="@+id/spinner3"
+            app:layout_constraintTop_toBottomOf="@+id/spinner3" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/more"
+            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            app:layout_constraintEnd_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toTopOf="@+id/textView18" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Número de Utilizador dos Acompanhantes:"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintBottom_toTopOf="@+id/textView18"
+            app:layout_constraintStart_toStartOf="@+id/textView18" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

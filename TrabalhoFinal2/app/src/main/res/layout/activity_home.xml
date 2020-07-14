@@ -60,13 +60,13 @@
         style="@style/perfil1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="123dp"
-        android:layout_marginEnd="52dp"
         android:background="@drawable/active"
         android:gravity="center"
         android:text="Home"
         android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintStart_toEndOf="@+id/imageView11"
         app:layout_constraintTop_toBottomOf="@+id/Nome" />
 
     <ImageView
@@ -79,25 +79,35 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView11"
         app:srcCompat="@drawable/bussula" />
 
+    <ImageView
+        android:id="@+id/imageView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/viagens"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/viagens"
+        app:srcCompat="@drawable/bussula" />
+
     <TextView
         android:id="@+id/viagens"
         style="@style/perfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="38dp"
         android:text="Histórico Viagens"
         app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        app:layout_constraintTop_toBottomOf="@+id/viagens_cliente" />
 
     <ImageView
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/perfil"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+        android:layout_marginStart="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/perfil"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/perfil"
         app:srcCompat="@drawable/boneco" />
 
     <TextView
@@ -106,20 +116,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="38dp"
         android:text="Marcar Viagem"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
         app:layout_constraintTop_toBottomOf="@+id/viagens" />
+
+    <TextView
+        android:id="@+id/viagens_cliente"
+        style="@style/perfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="38dp"
+        android:text="Viagens"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <TextView
         android:id="@+id/perfil"
         style="@style/perfil"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="131dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="38dp"
         android:text="Perfil"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toBottomOf="@+id/marcar" />
 
     <ImageView
@@ -127,18 +148,18 @@
         android:layout_width="17dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="55dp"
+        app:layout_constraintBottom_toBottomOf="@+id/marcar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="@+id/marcar"
         app:srcCompat="@drawable/agenda" />
 
     <ImageView
         android:id="@+id/imageView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="136dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toStartOf="@+id/textView10"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Nome"
         app:srcCompat="@drawable/home" />
 

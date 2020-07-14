@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/recycle_constraint_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/data_recycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="JAN 10 - 12:30 PM"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/caminho"
+        app:layout_constraintTop_toBottomOf="@+id/textView47" />
+
+    <ImageView
+        android:id="@+id/holder"
+        android:layout_width="401dp"
+        android:layout_height="167dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/data_recycle"
+        app:srcCompat="@drawable/viagens_branco" />
+
+    <ImageView
+        android:id="@+id/caminho"
+        android:layout_width="22dp"
+        android:layout_height="103dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="39dp"
+        app:layout_constraintBottom_toBottomOf="@+id/holder"
+        app:layout_constraintStart_toStartOf="@+id/holder"
+        app:srcCompat="@drawable/pontos" />
+
+    <TextView
+        android:id="@+id/de"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"
+        android:text="De:"
+        app:layout_constraintStart_toEndOf="@+id/caminho"
+        app:layout_constraintTop_toTopOf="@+id/holder" />
+
+    <TextView
+        android:id="@+id/calde"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:text="Calde"
+        android:textColor="@color/colorBlack"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/caminho"
+        app:layout_constraintTop_toBottomOf="@+id/de" />
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="289dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="7dp"
+        app:layout_constraintStart_toEndOf="@+id/caminho"
+        app:layout_constraintTop_toBottomOf="@+id/calde"
+        app:srcCompat="@drawable/divider" />
+
+    <TextView
+        android:id="@+id/para"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="7dp"
+        android:text="Para:"
+        app:layout_constraintStart_toEndOf="@+id/caminho"
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <TextView
+        android:id="@+id/hospital"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="5dp"
+        android:text="Hospital São Teotónio"
+        android:textColor="@color/colorBlack"
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/caminho"
+        app:layout_constraintTop_toBottomOf="@+id/para" />
+
+    <Button
+        android:id="@+id/detalhes"
+        android:layout_width="102dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="52dp"
+        android:background="@drawable/botao_viagem"
+        android:backgroundTint="@color/colorYellow"
+        android:text="Detalhes"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="@+id/holder"
+        app:layout_constraintTop_toTopOf="@+id/holder" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

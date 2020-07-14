@@ -34,62 +34,30 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        findViewById(R.id.button2).setOnClickListener(this);
         findViewById(R.id.terminar).setOnClickListener(this);
         findViewById(R.id.perfil).setOnClickListener(this);
         findViewById(R.id.marcar).setOnClickListener(this);
+        findViewById(R.id.viagens).setOnClickListener(this);
+        findViewById(R.id.viagens_cliente).setOnClickListener(this);
         TextView name=findViewById(R.id.Nome);
 
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
 
         fetchLocations();
-        fetchviagens();
 
 
         name.setText(sharedPrefManager.getNome());
     }
 
-    private void fetchviagens() {
-
-        Log.i(TAG,"Passei fetch viagens ");
-        int user=sharedPrefManager.getUser();
-        String key=sharedPrefManager.getToken();
-
-        Call<ViagensResponse> call = RetrofitClient.getInstance().getApi().viagens(user,key);
-        Log.i(TAG, "Request enqueue");
-        call.enqueue(new Callback<ViagensResponse>() {
-
-            @Override
-            public void onResponse(Call<ViagensResponse> call, Response<ViagensResponse> response) {
-                ViagensResponse viagensResponse = response.body();
-                if (viagensResponse != null && viagensResponse.isSuccess()) {
-
-                    applicationContext.setViagens(viagensResponse.getViagens());
-                    Log.i(TAG, "Request Successful" );
-
-                } else {
-
-
-                    Log.i(TAG, "Request Failed");
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ViagensResponse> call, Throwable t) {
-                Log.i(TAG, "Request erro");
-                Log.i(TAG, "Request failure" + t);
-            }
-        });
-    }
 
 
     private void fetchLocations() {
         Log.i(TAG,"Passei fetch locations ");
         List<Location> locations = applicationContext.getLocations();
+        String key = sharedPrefManager.getToken();
         if (locations == null) {
-            Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
+            Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations(key);
 
             call.enqueue(new Callback<LocationsResponse>() {
                 @Override
@@ -141,14 +109,18 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
-            case R.id.button2:
-                    startActivity(new Intent(Home.this, Home_Motorista.class));
-                break;
             case R.id.perfil:
                 startActivity(new Intent(Home.this,Perfil.class));
                 break;
+            case R.id.viagens:
+                startActivity(new Intent(Home.this,Historico.class));
+                break;
             case R.id.marcar:
                 startActivity(new Intent(Home.this,MarcarViagem.class));
+                break;
+            case R.id.viagens_cliente:
+                startActivity(new Intent(Home.this,Viagens2.class));
+                break;
         }
     }
 }

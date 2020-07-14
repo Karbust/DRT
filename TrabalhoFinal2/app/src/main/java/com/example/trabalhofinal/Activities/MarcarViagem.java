@@ -1,14 +1,18 @@
 package com.example.trabalhofinal.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,6 +25,8 @@ import android.widget.Toast;
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.R;
+import com.example.trabalhofinal.Utils.RecyclerViewAdapterHistorico;
+import com.example.trabalhofinal.Utils.RecyclerViewAdapterPassageiros;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 import com.google.maps.DistanceMatrixApiRequest;
@@ -33,13 +39,19 @@ import com.google.maps.model.DistanceMatrixRow;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -57,7 +69,7 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
     private Spinner origem;
     private Spinner destino;
     private Spinner motivo;
-    private String[] paths={"Lazer","Trabalho","Saúde nao Urgente"};
+    private String[] paths = {"Lazer", "Trabalho", "Saúde nao Urgente"};
     private String motives;
     private ApplicationContext applicationContext;
     private SharedPrefManager sharedPrefManager;
@@ -73,7 +85,6 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
     private TextView tempo_volta;
     private String data_escolida_volta;
     private String hora_escolida_volta;
-    private EditText passageiros;
     private EditText observacoes;
     private DistanceMatrixApiRequest distanceMatrixApiRequest;
     private float latitude_origem;
@@ -82,26 +93,36 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
     private float longitude_destino;
     private String distancia = "";
     private String duracao = "";
+    private EditText nr_passageiro;
+    int size = 0;
+    private ArrayList<String> nrs_passageiro;
+    private RecyclerViewAdapterPassageiros recyclerViewAdapterPassageiros;
+    RecyclerView recyclerViewPassageiro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marcar_viagem);
 
-        motivo=findViewById(R.id.spinner4);
-        origem=findViewById(R.id.spinner2);
-        destino=findViewById(R.id.spinner3);
-        data=findViewById(R.id.nome3);
-        tempo=findViewById(R.id.textView15);
-        aSwitch=findViewById(R.id.switch1);
-        data_volta=findViewById(R.id.nome4);
-        tempo_volta=findViewById(R.id.textView46);
-        passageiros=findViewById(R.id.nome2);
-        observacoes=findViewById(R.id.nome5);
+        motivo = findViewById(R.id.spinner4);
+        origem = findViewById(R.id.spinner2);
+        destino = findViewById(R.id.spinner3);
+        data = findViewById(R.id.nome3);
+        tempo = findViewById(R.id.textView15);
+        aSwitch = findViewById(R.id.switch1);
+        data_volta = findViewById(R.id.nome4);
+        tempo_volta = findViewById(R.id.textView46);
+        observacoes = findViewById(R.id.nome5);
+        recyclerViewPassageiro = findViewById(R.id.passageiros);
+        nr_passageiro = findViewById(R.id.textView18);
+        nrs_passageiro = new ArrayList<>();
 
         applicationContext = (ApplicationContext) getApplicationContext();
-        sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
+        sharedPrefManager = SharedPrefManager.getInstance(applicationContext);
 
+        recyclerViewAdapterPassageiros = new RecyclerViewAdapterPassageiros(nrs_passageiro);
+        recyclerViewPassageiro.setAdapter(recyclerViewAdapterPassageiros);
+        recyclerViewPassageiro.setLayoutManager(new LinearLayoutManager(this));
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, simple_spinner_dropdown_item, paths);
@@ -112,9 +133,9 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         ArrayList<Location> localizacoes = applicationContext.getLocations();
 
 
-        ArrayAdapter<Location> adapter1=new ArrayAdapter<Location>(this,simple_spinner_item,localizacoes);
+        ArrayAdapter<Location> adapter1 = new ArrayAdapter<Location>(this, simple_spinner_item, localizacoes);
         adapter1.setDropDownViewResource(simple_spinner_dropdown_item);
-        ArrayAdapter<Location> adapter2=new ArrayAdapter<Location>(this,simple_spinner_item,localizacoes);
+        ArrayAdapter<Location> adapter2 = new ArrayAdapter<Location>(this, simple_spinner_item, localizacoes);
         adapter2.setDropDownViewResource(simple_spinner_dropdown_item);
         origem.setAdapter(adapter1);
         origem.setOnItemSelectedListener(this);
@@ -129,10 +150,11 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         findViewById(R.id.nome4).setOnClickListener(this);
         findViewById(R.id.textView46).setOnClickListener(this);
         findViewById(R.id.button3).setOnClickListener(this);
+        findViewById(R.id.button5).setOnClickListener(this);
     }
 
-    public void datepick(){
-        Calendar cal= Calendar.getInstance();
+    public void datepick() {
+        Calendar cal = Calendar.getInstance();
         int ano = cal.get(Calendar.YEAR);
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
@@ -141,19 +163,19 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if(monthOfYear < 10){
+                if (monthOfYear < 10) {
                     data_escolhida = year + "-0" + (monthOfYear + 1) + "-" + dayOfMonth;
-                }else{
+                } else {
                     data_escolhida = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                 }
                 data.setText(data_escolhida);
             }
-        },ano,mes,dia);
+        }, ano, mes, dia);
         dialog.show();
     }
 
-    public void datepick_volta(){
-        Calendar cal= Calendar.getInstance();
+    public void datepick_volta() {
+        Calendar cal = Calendar.getInstance();
         int ano = cal.get(Calendar.YEAR);
         int mes = cal.get(Calendar.MONTH);
         int dia = cal.get(Calendar.DAY_OF_MONTH);
@@ -162,71 +184,69 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if(monthOfYear < 10){
+                if (monthOfYear < 10) {
                     data_escolida_volta = year + "-0" + (monthOfYear + 1) + "-" + dayOfMonth;
-                }else{
-                    data_escolida_volta =  year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                } else {
+                    data_escolida_volta = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                 }
                 data_volta.setText(data_escolida_volta);
             }
-        },ano,mes,dia);
+        }, ano, mes, dia);
         dialog.show();
     }
 
-    public void timepicker(){
+    public void timepicker() {
 
-        final Calendar c=Calendar.getInstance();
-        int horas=c.get(Calendar.HOUR_OF_DAY);
-        int minutos=c.get(Calendar.MINUTE);
+        final Calendar c = Calendar.getInstance();
+        int horas = c.get(Calendar.HOUR_OF_DAY);
+        int minutos = c.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if(minute < 10){
-                    hora_escolhida=hourOfDay + ":0" + minute;
-                }else{
-                    hora_escolhida=hourOfDay + ":" + minute;
+                if (minute < 10) {
+                    hora_escolhida = hourOfDay + ":0" + minute;
+                } else {
+                    hora_escolhida = hourOfDay + ":" + minute;
                 }
-               tempo.setText(hora_escolhida);
+                tempo.setText(hora_escolhida);
             }
-        },horas,minutos,true);
+        }, horas, minutos, true);
         timePickerDialog.show();
     }
 
-    public void timepicker_volta(){
+    public void timepicker_volta() {
 
-        final Calendar c=Calendar.getInstance();
-        int horas=c.get(Calendar.HOUR_OF_DAY);
-        int minutos=c.get(Calendar.MINUTE);
+        final Calendar c = Calendar.getInstance();
+        int horas = c.get(Calendar.HOUR_OF_DAY);
+        int minutos = c.get(Calendar.MINUTE);
 
         TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if(minute < 10){
-                    hora_escolida_volta=hourOfDay + ":0" + minute;
-                }else{
-                    hora_escolida_volta=hourOfDay + ":" + minute;
+                if (minute < 10) {
+                    hora_escolida_volta = hourOfDay + ":0" + minute;
+                } else {
+                    hora_escolida_volta = hourOfDay + ":" + minute;
                 }
                 tempo_volta.setText(hora_escolida_volta);
             }
-        },horas,minutos,true);
+        }, horas, minutos, true);
         timePickerDialog.show();
     }
 
-    private void getdados(){
+    private void getdados() {
 
         String key = getString(R.string.google_maps_key);
 
         GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey(key).build();
-        distanceMatrixApiRequest=new DistanceMatrixApiRequest(geoApiContext);
+        distanceMatrixApiRequest = new DistanceMatrixApiRequest(geoApiContext);
         try {
-            DistanceMatrix result = distanceMatrixApiRequest.origins(new LatLng(latitude_origem,longitude_origem)).destinations(new LatLng(latitude_destino,longitude_destino)).mode(TravelMode.DRIVING).await();
-            for (DistanceMatrixRow var : result.rows)
-            {
-                for (DistanceMatrixElement val : var.elements)
-                    {
-                   distancia = String.valueOf(val.distance.inMeters);
-                   duracao = String.valueOf(val.duration.inSeconds);
+            DistanceMatrix result = distanceMatrixApiRequest.origins(new LatLng(latitude_origem, longitude_origem)).destinations(new LatLng(latitude_destino, longitude_destino)).mode(TravelMode.DRIVING).await();
+            for (DistanceMatrixRow var : result.rows) {
+                for (DistanceMatrixElement val : var.elements) {
+                    distancia = String.valueOf(val.distance.inMeters);
+                    duracao = String.valueOf(val.duration.inSeconds);
                 }
             }
         } catch (ApiException | InterruptedException | IOException e) {
@@ -234,9 +254,8 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    public boolean compareDates(String d1,String d2)
-    {
-        try{
+    public boolean compareDates(String d1, String d2) {
+        try {
             // If you already have date objects then skip 1
 
             //1
@@ -245,30 +264,34 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
             Date date1 = sdf.parse(d1);
             Date date2 = sdf.parse(d2);
 
-            Log.i(TAG,"Date1"+sdf.format(date1));
-            Log.i(TAG,"Date2"+sdf.format(date2));
+            Log.i(TAG, "Date1" + sdf.format(date1));
+            Log.i(TAG, "Date2" + sdf.format(date2));
 
             // Create 2 dates ends
             //1
 
             // Date object is having 3 methods namely after,before and equals for comparing
             // after() will return true if and only if date1 is after date 2
-            if(date1.after(date2)){
+            if (date1.after(date2)) {
                 return true;
             }
-        }
-        catch(ParseException ex){
+        } catch (ParseException ex) {
             ex.printStackTrace();
         }
         return false;
     }
 
     private void registo() {
-        Log.i(TAG,"Passei em regist:");
+        Log.i(TAG, "Passei em regist:");
+
+        String cliente_atual = String.valueOf(sharedPrefManager.getUser());
+        nrs_passageiro.add(cliente_atual);
+
+        int nr_cliente_atual = sharedPrefManager.getUser();
 
 
-        if(start == end){
-            TextView errorText = (TextView)destino.getSelectedView();
+        if (start == end) {
+            TextView errorText = (TextView) destino.getSelectedView();
             errorText.setError("");
             errorText.setText("Destino igual a origem!");
             errorText.requestFocus();
@@ -278,22 +301,27 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         getdados();
 
 
-        String pessoas=passageiros.getText().toString().trim();
-        String data_hora_ida=data_escolhida+" "+hora_escolhida;
-        String data_hora_volta=data_escolida_volta+" "+hora_escolida_volta;
-        int nrcliente=sharedPrefManager.getUser();
-        String obs=observacoes.getText().toString().trim();
-        String key=sharedPrefManager.getToken();
+        String data_hora_ida = data_escolhida + " " + hora_escolhida;
+        String data_hora_volta = data_escolida_volta + " " + hora_escolida_volta;
+        int nrcliente = sharedPrefManager.getUser();
+        String obs = observacoes.getText().toString().trim();
+        String key = sharedPrefManager.getToken();
 
+        JSONArray aux = new JSONArray();
 
-        if(pessoas.isEmpty()){
-            passageiros.setError("Em falta!");
-            passageiros.requestFocus();
-            return;
+        for(String numero : nrs_passageiro){
+            JSONObject hashMap = new JSONObject();
+            try {
+                hashMap.put("NR_UTILZIADOR",numero);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            aux.put(hashMap);
         }
 
-        if(data_hora_volta != null){
-            if(compareDates(data_hora_ida,data_hora_volta)){
+
+        if (data_hora_volta != null) {
+            if (compareDates(data_hora_ida, data_hora_volta)) {
                 data_volta.setError("Data de volta tem de ser superior á de ida!");
                 data_volta.requestFocus();
                 return;
@@ -301,16 +329,15 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         }
 
 
-
-        Call<ResponseBody> call = RetrofitClient.getInstance().getApi().registoviagem(start,end,pessoas,motives,data_hora_ida,data_hora_volta,nrcliente,obs,distancia,duracao,key);
-        Log.i(TAG,"Origem="+start+" Destino="+end+" NrPassageiros:"+pessoas+" Motivo:"+motives+" Ida="+data_hora_ida+ " Volta="+data_hora_volta+ " CienteNr="+nrcliente+" Observacoes="+obs+" Distancia="+distancia+" Duracao="+duracao+" Key:"+key);
+         Call<ResponseBody> call = RetrofitClient.getInstance().getApi().registoviagem(start, end, motives,nr_cliente_atual, data_hora_ida, data_hora_volta, aux, obs, distancia, duracao, key);
+        Log.i(TAG, "Origem=" + start + " Destino=" + end + " NrPassageiros:" + " Motivo:" + motives + " Ida=" + data_hora_ida + " Volta=" + data_hora_volta + " CienteNr=" + nrcliente + " Observacoes=" + obs + " Distancia=" + distancia + " Duracao=" + duracao + " Key:" + key);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 //SuccessMessageResponses successMessageResponses = response.body();
                 if (response.body() != null && response.isSuccessful()) {
                     Log.i(TAG, "Request success: " + response.body());
-                    Toast.makeText(getApplicationContext(),"Success" , Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
 
                 } else {
                     Log.i(TAG, "Request Failed");
@@ -329,31 +356,30 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        ArrayList<Location> locals = applicationContext.getLocations();
-        switch (parent.getId()){
+        switch (parent.getId()) {
             case R.id.spinner4:
-                if(position == 0){
-                    motives="L";
-                }else if(position == 1){
-                    motives="T";
-                }else if(position == 2){
-                    motives="SNU";
+                if (position == 0) {
+                    motives = "L";
+                } else if (position == 1) {
+                    motives = "T";
+                } else if (position == 2) {
+                    motives = "SNU";
                 }
                 break;
             case R.id.spinner2:
                 Location location = (Location) origem.getSelectedItem();
-                start=location.getNR_LOCALIDADE();
-                latitude_origem=location.getLATITUDE();
-                longitude_origem=location.getLONGITUDE();
+                start = location.getNR_LOCALIDADE();
+                latitude_origem = location.getLATITUDE();
+                longitude_origem = location.getLONGITUDE();
                 break;
             case R.id.spinner3:
-                Location location1=(Location) destino.getSelectedItem();
-                end=location1.getNR_LOCALIDADE();
-                latitude_destino=location1.getLATITUDE();
-                longitude_destino=location1.getLONGITUDE();
+                Location location1 = (Location) destino.getSelectedItem();
+                end = location1.getNR_LOCALIDADE();
+                latitude_destino = location1.getLATITUDE();
+                longitude_destino = location1.getLONGITUDE();
                 break;
         }
-        Log.i(TAG,"Passei em onItemSelected: "+"origem="+start+" destino="+end+ " motivo="+motives);
+        Log.i(TAG, "Passei em onItemSelected: " + "origem=" + start + " destino=" + end + " motivo=" + motives);
     }
 
     @Override
@@ -361,10 +387,26 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    public void adicionar(){
+
+        String passageiro = nr_passageiro.getText().toString().trim();
+
+        if(!passageiro.equals(null) && !passageiro.equals("")){
+
+            nrs_passageiro.add(passageiro);
+
+
+            recyclerViewAdapterPassageiros.setNr_passageiros(nrs_passageiro);
+
+            nr_passageiro.setText("");
+            nr_passageiro.setHint("Nrº Utilizador");
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.nome3:
                 datepick();
                 break;
@@ -378,25 +420,28 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
                 timepicker_volta();
                 break;
             case R.id.button3:
-               registo();
+                registo();
+                break;
+            case R.id.button5:
+                adicionar();
                 break;
         }
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(aSwitch.isChecked()){
+        if (aSwitch.isChecked()) {
             data_volta.setVisibility(View.VISIBLE);
             tempo_volta.setVisibility(View.VISIBLE);
-            data_escolida_volta=data_volta.getText().toString().trim();
-            hora_escolida_volta=tempo_volta.getText().toString().trim();
-        }else{
+            data_escolida_volta = data_volta.getText().toString().trim();
+            hora_escolida_volta = tempo_volta.getText().toString().trim();
+        } else {
             data_volta.setVisibility(View.INVISIBLE);
             tempo_volta.setVisibility(View.INVISIBLE);
             data_volta.setText("Data Volta");
             tempo_volta.setText("Hora Volta");
-            data_escolida_volta=null;
-            hora_escolida_volta=null;
+            data_escolida_volta = null;
+            hora_escolida_volta = null;
         }
     }
 }

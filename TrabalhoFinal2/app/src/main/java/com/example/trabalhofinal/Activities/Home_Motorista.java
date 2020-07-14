@@ -7,10 +7,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
+import com.example.trabalhofinal.Models.Domain.HistoricoMotorista;
 import com.example.trabalhofinal.Models.Domain.Location;
+import com.example.trabalhofinal.Models.Domain.Stats;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
+import com.example.trabalhofinal.Models.Responses.StatsResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
@@ -38,68 +42,36 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
 
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
-        fetchLocations();
-        fetchviagens();
+
+        fetch_stats();
 
         findViewById(R.id.viagens).setOnClickListener(this);
         findViewById(R.id.marcar).setOnClickListener(this);
         findViewById(R.id.terminar).setOnClickListener(this);
+        findViewById(R.id.perfil).setOnClickListener(this);
 
     }
 
-    private void fetchviagens() {
-        Log.i(TAG,"Passei fetch viagens ");
+    public void fetch_stats(){
+        int user = sharedPrefManager.getUser();
+        List<Stats> stats = applicationContext.getStats();
+        String key = sharedPrefManager.getToken();
 
-        int user=sharedPrefManager.getUser();
-        String key=sharedPrefManager.getToken();
+        if (stats == null) {
+            Call<StatsResponse> call = RetrofitClient.getInstance().getApi().stats(user,key);
 
-        Call<ViagensResponse> call = RetrofitClient.getInstance().getApi().viagens(user,key);
-        Log.i(TAG, "Request enqueue");
-        call.enqueue(new Callback<ViagensResponse>() {
-
-            @Override
-            public void onResponse(Call<ViagensResponse> call, Response<ViagensResponse> response) {
-                ViagensResponse viagensResponse = response.body();
-                if (viagensResponse != null && viagensResponse.isSuccess()) {
-
-                    applicationContext.setViagens(viagensResponse.getViagens());
-                    Log.i(TAG, "Request Successful" );
-
-                } else {
-
-
-                    Log.i(TAG, "Request Failed");
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ViagensResponse> call, Throwable t) {
-                Log.i(TAG, "Request erro");
-                Log.i(TAG, "Request failure" + t);
-            }
-        });
-    }
-
-
-    private void fetchLocations() {
-        Log.i(TAG,"Passei fetch locations ");
-        List<Location> locations = applicationContext.getLocations();
-        if (locations == null) {
-            Call<LocationsResponse> call = RetrofitClient.getInstance().getApi().locations();
-
-            call.enqueue(new Callback<LocationsResponse>() {
+            call.enqueue(new Callback<StatsResponse>() {
                 @Override
-                public void onResponse(Call<LocationsResponse> call, Response<LocationsResponse> response) {
-                    LocationsResponse locationsResponse = response.body();
+                public void onResponse(Call<StatsResponse> call, Response<StatsResponse> response) {
+                    StatsResponse statsResponse = response.body();
 
-                    if (locationsResponse != null && locationsResponse.isSuccess()) {
+                    if (statsResponse != null && statsResponse.isSuccess()) {
 
                         Log.i(TAG, "Request success");
 
-                        applicationContext.setLocations(locationsResponse.getLocations());
+                        applicationContext.setStats(statsResponse.getData());
 
-                        Log.i(TAG,"onResponse:"+locationsResponse.getLocations());
+                        Log.i(TAG,"onResponse:"+statsResponse.getData());
 
 
                     } else {
@@ -108,13 +80,14 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
                 }
 
                 @Override
-                public void onFailure(Call<LocationsResponse> call, Throwable t) {
+                public void onFailure(Call<StatsResponse> call, Throwable t) {
                     Log.i(TAG, "Request onFailure" + t);
                 }
             });
         }else{
 
         }
+
     }
 
 
@@ -139,11 +112,13 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.viagens:
-                startActivity(new Intent(Home_Motorista.this,Viagens2.class));
+                startActivity(new Intent(Home_Motorista.this,ViagensMotoristaActivity.class));
                 break;
             case R.id.marcar:
                 startActivity(new Intent(Home_Motorista.this,Perfil.class));
                 break;
+            case R.id.perfil:
+                startActivity(new Intent(Home_Motorista.this, HistoricoMotorista.class));
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.trabalhofinal.Models.Domain;
 
-public class Destino {
+import java.io.Serializable;
+
+public class Destino implements Serializable {
 
     private String LOCALIDADE;
     private float LATITUDE;

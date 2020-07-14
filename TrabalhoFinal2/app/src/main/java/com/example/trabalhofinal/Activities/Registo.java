@@ -428,9 +428,10 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_CARTAO_DE_CIDADAO) {
-            if(resultCode == Activity.RESULT_OK) {
-                if(data.getClipData() != null) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.getClipData() != null) {
                     int count = data.getClipData().getItemCount();
                     int currentItem = 0;
                     while (currentItem < count) {
@@ -439,15 +440,15 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                         currentItem++;
                     }
                     cc.setError(null);
-                }else if(data.getData() != null){
+                } else if (data.getData() != null) {
                     Uri imageUri = data.getData();
                     Uricc = imageUri;
                     cc.setError(null);
                 }
             }
         } else if (requestCode == REQUEST_CODE_COMPROVATIVO_DE_MORADA) {
-            if(resultCode == Activity.RESULT_OK) {
-                if(data.getClipData() != null) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.getClipData() != null) {
                     int count = data.getClipData().getItemCount();
                     int currentItem = 0;
                     while (currentItem < count) {
@@ -456,7 +457,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
                         currentItem++;
                     }
                     cm.setError(null);
-                }else if(data.getData() != null){
+                } else if (data.getData() != null) {
                     Uri imageUri = data.getData();
                     Urimorada = imageUri;
                     cm.setError(null);

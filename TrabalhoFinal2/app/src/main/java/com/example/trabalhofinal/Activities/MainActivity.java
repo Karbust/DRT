@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText username;
     private EditText password;
     private ApplicationContext applicationContext;
+    private SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         username=findViewById(R.id.Utilizador);
         password=findViewById(R.id.passe);
 
-        applicationContext = (ApplicationContext) getApplicationContext();
         findViewById(R.id.iniciar_sessao).setOnClickListener(this);
         findViewById(R.id.registe_se_aqui).setOnClickListener(this);
     }
@@ -46,7 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart(){
         super.onStart();
 
-        if(SharedPrefManager.getInstance(this).isLoggedIn()){
+        if(SharedPrefManager.getInstance(this).isLoggedIn() && SharedPrefManager.getInstance(this).getTipoutilizador() == 5){
+            Intent intent= new Intent(MainActivity.this,Home_Motorista.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else if(SharedPrefManager.getInstance(this).isLoggedIn() && SharedPrefManager.getInstance(this).getTipoutilizador() == 7){
             Intent intent= new Intent(MainActivity.this,Home.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -69,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        Call<LoginResponse> call = RetrofitClient.getInstance().getApi().login(user, passe);
+        Call<LoginResponse> call = RetrofitClient.getInstance().getApi().login(user, passe,true);
         Log.i(TAG, "Request enqueue");
         call.enqueue(new Callback<LoginResponse>() {
 
@@ -84,9 +88,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     SharedPrefManager.getInstance(applicationContext).saveSession(loginResponse.getToken(),loginResponse.getUser());
                     String token = SharedPrefManager.getInstance(applicationContext).getToken();
-                    Intent intent = new Intent(MainActivity.this, Home.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    if(loginResponse.getUser().getTipo() == 5){
+                        Intent intent = new Intent(MainActivity.this, Home_Motorista.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }else if(loginResponse.getUser().getTipo() == 7){
+                        Intent intent = new Intent(MainActivity.this, Home.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
                     Log.i(TAG, "Request Successful" + token);
                     Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
 

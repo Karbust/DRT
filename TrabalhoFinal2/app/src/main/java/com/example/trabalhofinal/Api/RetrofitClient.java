@@ -8,7 +8,6 @@ public class RetrofitClient {
     private static final String BASE_URL = "https://drt.karbust.me:8443/";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
-    private Retrofit retrofit_google;
 
     private RetrofitClient(){
         retrofit=new Retrofit.Builder()

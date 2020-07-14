@@ -2,9 +2,16 @@ package com.example.trabalhofinal.Api;
 
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
+import com.example.trabalhofinal.Models.Responses.StatsResponse;
 import com.example.trabalhofinal.Models.Responses.SuccessMessageResponses;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
+import com.example.trabalhofinal.Models.Responses.ViagensResponseMotorista;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +27,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 
 public interface Api {
 
@@ -27,11 +35,14 @@ public interface Api {
     @POST("user/loginapp")
     Call<LoginResponse> login(
       @Field("username") String username,
-      @Field("password") String password
+      @Field("password") String password,
+      @Field("remember") Boolean remember
     );
 
     @GET("api/localidades")
-    Call<LocationsResponse> locations();
+    Call<LocationsResponse> locations(
+            @Header("authorization") String key
+    );
 
     @Multipart
     @POST("user/registarapp")
@@ -42,8 +53,15 @@ public interface Api {
 
     @FormUrlEncoded
     @POST("/viagens/pedidosviagemmotorista")
-    Call<ViagensResponse> viagens(
+    Call<ViagensResponseMotorista> viagens(
             @Field("motorista") int motorista,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/pedidosviagemcliente")
+    Call<ViagensResponse> viagens_cliente(
+            @Field("cliente") int cliente,
             @Header("authorization") String key
     );
 
@@ -52,14 +70,53 @@ public interface Api {
     Call<ResponseBody> registoviagem(
             @Field("origem") int origem,
             @Field("destino") int destino,
-            @Field("passageiros") String passageiros,
             @Field("motivo") String motivo,
+            @Field("nrcliente") int nrcliente,
             @Field("datahora_ida") String datahora_ida,
             @Field("datahora_volta") String datahora_volta,
-            @Field("nrcliente") int nrcliente,
+            @Field("clientes") JSONArray nrclientes,
             @Field("observacoes") String observacoes,
             @Field("distancia") String distancia,
             @Field("duracao") String duracao,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/atualizarestadoviagem")
+    Call<ResponseBody> estadoUpdate(
+            @Field("nr_viagem") int nr_viagem,
+            @Field("estado") String estado,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/historicoviagemmotorista")
+    Call<ViagensResponseMotorista> historico_motorista(
+            @Field("nr_utilizador") int nr_utilizador,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/historicoviagemcliente")
+    Call<ViagensResponse> historico_cliente(
+            @Field("nr_utilizador") int nr_utilizador,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/classificacaoviagem")
+    Call<SuccessMessageResponses> avaliacao(
+            @Field("nr_viagem") int nr_viagem,
+            @Field("nr_cliente") int nr_cliente,
+            @Field("classificacao") int classificacao,
+            @Field("comentario") String comentario,
+            @Header("authorization") String key
+    );
+
+
+    @GET("/estatisticas/contadorviagensmotoristames/{motorista}")
+    Call<StatsResponse> stats(
+            @Path("motorista") int motorista,
             @Header("authorization") String key
     );
 
