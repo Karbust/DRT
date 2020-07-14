@@ -23,9 +23,38 @@ viagensRouter.post('/editarviagem',
 )
 
 // TODO: ROTAS ANDROID - CLASSIFICAÇÃO VIAGEM - VIAGENS ROUTES
-viagensRouter.post('/pedidosviagemmotorista', viagensController.pedidosViagemMotorista)
-viagensRouter.post('/pedidosviagemdetalhes', viagensController.pedidosViagemDetalhes)
-viagensRouter.post('/classificacaoviagem', viagensController.classificacaoViagem)
-viagensRouter.get('/classificacoesviagens', viagensController.classificacoesViagens)
+viagensRouter.post('/pedidosviagemmotorista',
+    authorize([Role.Administrador, Role.Motorista]),
+    viagensController.pedidosViagemMotorista
+)
+/*viagensRouter.post('/pedidosviagemdetalhes',
+    authorize([Role.Administrador, Role.Motorista, Role.Utilizador]),
+    viagensController.pedidosViagemDetalhes
+)*/
+
+viagensRouter.post('/historicoviagemcliente',
+    authorize([Role.Administrador, Role.Utilizador]),
+    viagensController.historicoViagensUtilizador
+)
+viagensRouter.post('/historicoviagemmotorista',
+    authorize([Role.Administrador, Role.Motorista]),
+    viagensController.historicoViagensMotorista
+)
+
+viagensRouter.post('/pedidosviagemcliente',
+    authorize([Role.Administrador, Role.Utilizador]),
+    viagensController.pedidosViagemCliente
+)
+viagensRouter.post('/atualizarestadoviagem',
+    authorize([Role.Administrador, Role.Motorista]),
+    viagensController.atualizarEstadoViagem
+)
+viagensRouter.post('/classificacaoviagem',
+    authorize([Role.Administrador, Role.Utilizador]),
+    viagensController.classificacaoViagem
+)
+viagensRouter.get('/classificacoesviagens',
+    viagensController.classificacoesViagens
+)
 
 export { viagensRouter }

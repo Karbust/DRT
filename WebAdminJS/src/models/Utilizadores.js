@@ -129,6 +129,14 @@ var Utilizadores = sequelize.define('UTILIZADORES', {
         type: Sequelize.DATE,
         allowNull: false,
     },
+    IP_REGISTO: {
+        type: Sequelize.INET,
+        allowNull: false
+    },
+    IP_ULTIMO_LOGIN: {
+        type: Sequelize.INET,
+        allowNull: true
+    }
 }, {
     freezeTableName: true, //para corrigir a criação de tabelas pluralizadas
     paranoid: true,
@@ -142,6 +150,18 @@ var Utilizadores = sequelize.define('UTILIZADORES', {
                 .catch(() => {
                     throw new Error()
                 })
+        },
+        beforeUpdate: (user) => {
+            console.log(user.dataValues.PASSWORD !== user._previousDataValues.PASSWORD)
+            if (user.dataValues.PASSWORD !== user._previousDataValues.PASSWORD) {
+                return bcrypt.hash(user.dataValues.PASSWORD, 10)
+                    .then(hash => {
+                        user.dataValues.PASSWORD = hash
+                    })
+                    .catch(() => {
+                        throw new Error()
+                    })
+            }
         },
     },
 })

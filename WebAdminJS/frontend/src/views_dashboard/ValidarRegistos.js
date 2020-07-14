@@ -32,7 +32,7 @@ import {
     CircularProgress,
     Tooltip,
     Slide,
-    Snackbar,
+    Snackbar, Hidden, TableSortLabel,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import {
@@ -47,10 +47,12 @@ import {
 import { Link as RouterLink } from 'react-router-dom'
 import moment from 'moment'
 import { useConfirm } from 'material-ui-confirm'
+import clsx from 'clsx'
 
 import { StyledButton, useStyles, Transition, TablePaginationActions } from '../components/MuiStyles'
 import authHeader from '../components/auth-header'
 import { backendUrl } from '../configs'
+import { compararListas, getComparator, sortFilter } from '../components/functions'
 
 export default function ValidarRegistos() {
     const classes = useStyles()
@@ -63,12 +65,16 @@ export default function ValidarRegistos() {
     const [isSubmittingDisapprove, setIsSubmittingDisapprove] = useState(false)
     const [isVerifying, setIsVerifying] = useState(false)
     const [isResendingEmail, setIsResendingEmail] = useState(false)
-    const [page, setPage] = useState(0)
-    const [rowsPerPage, setRowsPerPage] = useState(10)
     const [open, setOpen] = useState(false)
     const [openImagem, setOpenImagem] = useState(false)
     const [imagemSelecionada, setImagemSelecionada] = useState('')
     const [update, setUpdate] = useState(false)
+
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [orderBy, setOrderBy] = useState(['createdAt'])
+    const [order, setOrder] = useState('asc')
+    const [filter, setFilter] = useState(null)
 
     const [srcSlotImg1, setSrcSlotImg1] = useState(null)
     const [srcSlotImg2, setSrcSlotImg2] = useState(null)
@@ -81,6 +87,23 @@ export default function ValidarRegistos() {
         if (reason === 'clickaway') { return }
 
         setOpenAlert(false)
+    }
+
+    const handleRequestSort = (event, properties) => {
+        const isAsc = JSON.stringify(orderBy) === JSON.stringify(properties) && order === 'asc'
+        setOrder(isAsc ? 'desc' : 'asc')
+        setOrderBy(properties)
+    }
+
+    const handleFilter = (event) => {
+        setFilter(event.target.value)
+    }
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage)
+    }
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10))
+        setPage(0)
     }
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
@@ -132,18 +155,18 @@ export default function ValidarRegistos() {
                         setOpen(false)
                         setMessage('Conta desaprovada com sucesso.')
                         setSeverity('success')
-                        setOpenAlert(true)
                     } else {
                         setIsSubmittingApprove(false)
                         setMessage('Ocorreu um erro ao desaprovar a conta.')
                         setSeverity('error')
-                        setOpenAlert(true)
                     }
                 })
                 .catch(() => {
                     setIsSubmittingApprove(false)
                     setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                     setSeverity('error')
+                })
+                .finally(() => {
                     setOpenAlert(true)
                 })
         }).catch(() => {
@@ -160,19 +183,19 @@ export default function ValidarRegistos() {
                     setUpdate(true)
                     setMessage('Conta validada com sucesso.')
                     setSeverity('success')
-                    setOpenAlert(true)
                     setOpen(false)
                 } else {
                     setIsSubmittingApprove(false)
                     setMessage('Ocorreu um erro ao validar a conta.')
                     setSeverity('error')
-                    setOpenAlert(true)
                 }
             })
             .catch(() => {
                 setIsSubmittingApprove(false)
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                 setSeverity('error')
+            })
+            .finally(() => {
                 setOpenAlert(true)
             })
     }
@@ -201,18 +224,18 @@ export default function ValidarRegistos() {
                             setIsVerifying(false)
                             setMessage('Conta verificada com sucesso.')
                             setSeverity('success')
-                            setOpenAlert(true)
                         } else {
                             setIsVerifying(false)
                             setMessage('Ocorreu um erro ao verificar a conta.')
                             setSeverity('error')
-                            setOpenAlert(true)
                         }
                     })
                     .catch(() => {
                         setIsVerifying(false)
                         setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                         setSeverity('error')
+                    })
+                    .finally(() => {
                         setOpenAlert(true)
                     })
             })
@@ -222,7 +245,7 @@ export default function ValidarRegistos() {
     }
 
     const handleResendEmail = (key) => {
-        setCurrentUtilizador(utilizadores[key])
+        setCurrentUtilizador({ user: utilizadores[key], key })
         setIsResendingEmail(true)
         confirm({
             title: 'Verificação',
@@ -244,18 +267,18 @@ export default function ValidarRegistos() {
                             setIsResendingEmail(false)
                             setMessage('Email enviado com sucesso.')
                             setSeverity('success')
-                            setOpenAlert(true)
                         } else {
                             setIsResendingEmail(false)
                             setMessage('Ocorreu um erro ao enviar o email.')
                             setSeverity('error')
-                            setOpenAlert(true)
                         }
                     })
                     .catch(() => {
                         setIsResendingEmail(false)
                         setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                         setSeverity('error')
+                    })
+                    .finally(() => {
                         setOpenAlert(true)
                     })
             }).catch(() => {
@@ -270,14 +293,6 @@ export default function ValidarRegistos() {
 
     const handleCloseImagem = () => {
         setOpenImagem(false)
-    }
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage)
-    }
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10))
-        setPage(0)
     }
 
     const handleGenero = (genero) => {
@@ -314,16 +329,27 @@ export default function ValidarRegistos() {
                         {message}
                     </Alert>
                 </Snackbar>
-                <Box mb={2} className={classes.container}>
-                    <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                <Box mb={2} className={classes.container_header}>
+                    <Box mb={1} pt={1} className={classes.heading}>
+                        <Typography variant="h5">
                             Validar Registos
                         </Typography>
                     </Box>
-                    <Box mb={1} pt={1} className={classes.box}>
+
+                    <Box mb={1} pt={1} className={classes.filter}>
+                        <Tooltip title="Filter list">
+                            <TextField
+                                fullWidth
+                                label="Filtrar"
+                                onChange={handleFilter}
+                            />
+                        </Tooltip>
+                    </Box>
+
+                    <Box className={clsx(classes.box, classes.breadcrumbs)}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link
@@ -336,10 +362,10 @@ export default function ValidarRegistos() {
                                 <Link
                                     color="textPrimary"
                                     component={RouterLink}
-                                    to="/Dashboard/Utilizadores/ValidarRegistoCliente"
+                                    to="/Dashboard/Clientes/ValidarRegistoCliente"
                                     aria-current="page"
                                 >
-                                    RegistarVeiculo
+                                    Validar Registos
                                 </Link>
                             </Breadcrumbs>
                         </Typography>
@@ -591,9 +617,31 @@ export default function ValidarRegistos() {
                         >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Número de Utilizador</TableCell>
-                                    <TableCell>Nome do Utilizador</TableCell>
-                                    <TableCell>Freguesia</TableCell>
+                                    {(() => {
+                                        const isEqual = compararListas(orderBy, ['NR_UTILIZADOR'])
+                                        return (
+                                            <TableCell
+                                                sortDirection={isEqual ? order : false}
+                                            >
+                                                <TableSortLabel
+                                                    active={isEqual}
+                                                    direction={isEqual ? order : 'asc'}
+                                                    onClick={(e) => handleRequestSort(e, ['NR_UTILIZADOR'])}
+                                                >
+                                                    #
+                                                    {isEqual ? (
+                                                        <span className={classes.visuallyHidden}>
+                                                            {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                                        </span>
+                                                    ) : null}
+                                                </TableSortLabel>
+                                            </TableCell>
+                                        )
+                                    })()}
+                                    <TableCell>Nome</TableCell>
+                                    <Hidden smDown>
+                                        <TableCell>Freguesia</TableCell>
+                                    </Hidden>
                                     <TableCell>
                                         Data de Criação da
                                         Conta
@@ -602,82 +650,82 @@ export default function ValidarRegistos() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {(rowsPerPage > 0
-                                    ? utilizadores.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                                    : utilizadores
-                                ).map((row, key) => (
-                                    <TableRow key={key}>
-                                        <TableCell component="th" scope="row">
-                                            {row.NR_UTILIZADOR}
-                                        </TableCell>
-                                        <TableCell>{row.NOME_UTILIZADOR}</TableCell>
-                                        <TableCell>{row.FREGUESIA}</TableCell>
-                                        <TableCell>{moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
-                                        <TableCell>
-                                            {
-                                                row.VERIFICADO ? (
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        disableElevation
-                                                        onClick={() => handleClickOpen(key)}
-                                                        style={{ marginRight: theme.spacing(3) }}
-                                                    >
-                                                        Validar
-                                                    </Button>
-                                                ) : (
-                                                    <>
-                                                        <Tooltip title="O email foi enviado recentemente, aguarde um pouco antes de tentar ativar." arrow disableHoverListener={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') >= 30}>
-                                                            <span>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="primary"
-                                                                    disableElevation
-                                                                    onClick={() => handleClickVerificar(key)}
-                                                                    disabled={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') < 30 || (isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR)}
-                                                                    style={{
-                                                                        marginRight: theme.spacing(3),
-                                                                        width: '104px',
-                                                                        height: '36px',
-                                                                    }}
-                                                                >
-                                                                    {isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR
-                                                                        ? (<CircularProgress size={30} color="inherit" />) : 'Verificar'}
-                                                                </Button>
-                                                            </span>
-                                                        </Tooltip>
-                                                        <Tooltip title="O email foi enviado recentemente, aguarde um pouco antes de tentar enviar um novo." arrow disableHoverListener={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') >= 30}>
-                                                            <span>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="primary"
-                                                                    disableElevation
-                                                                    onClick={() => handleResendEmail(key)}
-                                                                    disabled={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') < 30 || (isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR)}
-                                                                    style={{
-                                                                        width: '148px',
-                                                                        height: '36px',
-                                                                    }}
-                                                                >
-                                                                    {isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR
-                                                                        ? (<CircularProgress size={30} color="inherit" />) : 'Reenviar Email'}
-                                                                </Button>
-                                                            </span>
-                                                        </Tooltip>
-                                                    </>
-                                                )
-                                            }
-                                        </TableCell>
-
-                                    </TableRow>
-                                ))}
+                                {sortFilter(utilizadores, getComparator(order, orderBy), filter)
+                                    .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                                    .map((row, key) => (
+                                        <TableRow key={key}>
+                                            <TableCell component="th" scope="row">
+                                                {row.NR_UTILIZADOR}
+                                            </TableCell>
+                                            <TableCell>{row.NOME_UTILIZADOR}</TableCell>
+                                            <Hidden smDown>
+                                                <TableCell>{row.FREGUESIA}</TableCell>
+                                            </Hidden>
+                                            <TableCell>{moment(row.createdAt).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+                                            <TableCell>
+                                                {
+                                                    row.VERIFICADO ? (
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            disableElevation
+                                                            onClick={() => handleClickOpen(key)}
+                                                            style={{ marginRight: theme.spacing(3) }}
+                                                        >
+                                                            Validar
+                                                        </Button>
+                                                    ) : (
+                                                        <>
+                                                            <Tooltip title="O email foi enviado recentemente, aguarde um pouco antes de tentar ativar." arrow disableHoverListener={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') >= 30}>
+                                                                <span>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="primary"
+                                                                        disableElevation
+                                                                        onClick={() => handleClickVerificar(key)}
+                                                                        disabled={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') < 30 || (isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR)}
+                                                                        style={{
+                                                                            marginRight: theme.spacing(3),
+                                                                            width: '104px',
+                                                                            height: '36px',
+                                                                        }}
+                                                                    >
+                                                                        {isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR
+                                                                            ? (<CircularProgress size={30} color="inherit" />) : 'Verificar'}
+                                                                    </Button>
+                                                                </span>
+                                                            </Tooltip>
+                                                            <Tooltip title="O email foi enviado recentemente, aguarde um pouco antes de tentar enviar um novo." arrow disableHoverListener={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') >= 30}>
+                                                                <span>
+                                                                    <Button
+                                                                        variant="contained"
+                                                                        color="primary"
+                                                                        disableElevation
+                                                                        onClick={() => handleResendEmail(key)}
+                                                                        disabled={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') < 30 || (isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR)}
+                                                                        style={{
+                                                                            width: '148px',
+                                                                            height: '36px',
+                                                                        }}
+                                                                    >
+                                                                        {isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR
+                                                                            ? (<CircularProgress size={30} color="inherit" />) : 'Reenviar Email'}
+                                                                    </Button>
+                                                                </span>
+                                                            </Tooltip>
+                                                        </>
+                                                    )
+                                                }
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                             </TableBody>
                             <TableFooter>
                                 <TableRow>
                                     <TablePagination
                                         rowsPerPageOptions={[5, 10, 25, {
                                             label: 'Todos',
-                                            value: -1,
+                                            value: Number.MAX_SAFE_INTEGER,
                                         }]}
                                         colSpan={5}
                                         count={utilizadores.length}

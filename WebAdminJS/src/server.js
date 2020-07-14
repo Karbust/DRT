@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import { checkToken, authorize, Role } from './middleware/jwt.js'
+import { enderecoIP } from './middleware/enderecoIP.js'
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -28,14 +29,37 @@ import { emailRouter } from './routes/emailRoutes.js'
 import { apiRouter } from './routes/apiRoutes.js'
 import { firstRunRouter } from './routes/firstRunRoutes.js'
 
-app.use('/mail', checkToken, emailRouter) // rota de testes de envio de email
-app.use('/public', checkToken, express.static('src/public'))
-app.use('/user', userRouter)
-app.use('/viagens', checkToken, viagensRouter)
-app.use('/viaturas', checkToken, viaturasRouter)
-app.use('/api', checkToken, apiRouter)
+app.use('/mail',
+    checkToken,
+    emailRouter
+) // rota de testes de envio de email
+app.use('/public',
+    enderecoIP,
+    checkToken,
+    express.static('src/public')
+)
+app.use('/user',
+    enderecoIP,
+    userRouter
+)
+app.use('/viagens',
+    enderecoIP,
+    checkToken,
+    viagensRouter
+)
+app.use('/viaturas',
+    enderecoIP,
+    checkToken,
+    viaturasRouter
+)
+app.use('/api',
+    enderecoIP,
+    checkToken,
+    apiRouter
+)
 
 app.use('/firstrun',
+    enderecoIP,
     checkToken,
     authorize([Role.Administrador]),
     firstRunRouter

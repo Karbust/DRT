@@ -21,16 +21,19 @@ import {
 import { GoogleMapsApiKey } from '../configs'
 
 import { useStyles } from './MuiStyles'
+import { getUrl } from './functions'
 
 export const FormPedidosViagem = ({
-    localidades, motoristas, viaturas, currentViagem,
+    setMessage, setSeveridade, setOpenAlert, currentViagem,
 }) => {
     const classes = useStyles()
     const {
         setFieldValue, values, validateField,
     } = useFormikContext()
 
-    // const [idaVoltaSwitch, setIdaVoltaSwitch] = useState(true)
+    const [localidades, setLocalidades] = useState([])
+    const [motoristas, setMotoristas] = useState([])
+    const [viaturas, setViaturas] = useState([])
     const [idaVoltaSwitch, setIdaVoltaSwitch] = useState(!values.datahora_ida)
     const [idaVolta, setIdaVolta] = useState(!!values.datahora_volta)
     const [origem, setOrigem] = useState(currentViagem.viagem.Origem)
@@ -90,6 +93,40 @@ export const FormPedidosViagem = ({
     const handleChangeIdaVolta = (event) => {
         setIdaVolta(event.target.checked)
     }
+
+    useEffect(() => {
+        Promise.all([
+            getUrl('api/localidades'),
+            getUrl('user/motoristas'),
+            getUrl('viaturas/viaturas'),
+        ]).then((data) => {
+            const objLocalidades = data[0]
+            const objMotoristas = data[1]
+            const objViaturas = data[2]
+
+            if (objLocalidades.data.success) {
+                setLocalidades(objLocalidades.data.data)
+            } else {
+                throw new Error(objLocalidades.data.message)
+            }
+
+            if (objMotoristas.data.success) {
+                setMotoristas(objMotoristas.data.data)
+            } else {
+                throw new Error(objMotoristas.data.message)
+            }
+
+            if (objViaturas.data.success) {
+                setViaturas(objViaturas.data.data)
+            } else {
+                throw new Error(objViaturas.data.message)
+            }
+        }).catch((error) => {
+            setMessage(error.message)
+            setSeveridade('error')
+            setOpenAlert(true)
+        })
+    }, [setMessage, setSeveridade, setOpenAlert])
 
     return (
         <>

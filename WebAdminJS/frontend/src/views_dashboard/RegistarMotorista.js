@@ -11,6 +11,7 @@ import {
     CircularProgress,
     Slide,
     Snackbar,
+    Backdrop,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
@@ -33,14 +34,18 @@ function getSteps() {
 export default function RegistarMotorista() {
     const classes = useStyles()
 
-    // const [message, setMessage] = React.useState('')
+    // const [message, setMessage] = useState('')
     const [activeStep, setActiveStep] = useState(0)
     const [nacionalidades, setNacionalidades] = useState([])
     const [localidades, setLocalidades] = useState([])
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
+    const [openBackdrop, setOpenBackdrop] = useState(true)
 
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false)
+    }
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
             return
@@ -87,6 +92,7 @@ export default function RegistarMotorista() {
                 setSeverity('error')
                 setOpenAlert(true)
             })
+        setOpenBackdrop(false)
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
@@ -106,15 +112,15 @@ export default function RegistarMotorista() {
                     formikActions.resetForm()
                     setMessage(data.data.message)
                     setSeverity('success')
-                    setOpenAlert(true)
                 } else {
                     setMessage(data.data.message)
                     setSeverity('error')
-                    setOpenAlert(true)
                 }
             }).catch(() => {
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                 setSeverity('error')
+            })
+            .finally(() => {
                 setOpenAlert(true)
             })
     }
@@ -146,6 +152,9 @@ export default function RegistarMotorista() {
     return (
         <>
             <div className={classes.root}>
+                <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
+                    <CircularProgress color="inherit" />
+                </Backdrop>
                 <Snackbar
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                     open={openAlert}
@@ -159,14 +168,14 @@ export default function RegistarMotorista() {
                 </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                        <Typography variant="h5">
                             Registo de Motorista
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link color="inherit" component={RouterLink} to="/">

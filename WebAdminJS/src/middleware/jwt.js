@@ -6,7 +6,9 @@ let Role = {
     Administrativo: 2,
     AdministradorOperador: 3,
     Telefonista: 4,
-    AdministrativoOperador: 6
+    Motorista: 5,
+    AdministrativoOperador: 6,
+    Utilizador: 7
 }
 let checkToken = (req, res, next) => {
     let token = req.headers['x-access-token'] ||

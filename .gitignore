@@ -229,3 +229,4 @@ modules.xml
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/webstorm+all,node,yarn,react
+WebAdminJS/src/public/documentos/*

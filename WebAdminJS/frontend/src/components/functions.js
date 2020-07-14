@@ -1,3 +1,9 @@
+import axios from 'axios'
+
+import { backendUrl } from '../configs'
+
+import authHeader from './auth-header'
+
 export const Role = {
     Administrador: 1,
     Administrativo: 2,
@@ -6,47 +12,122 @@ export const Role = {
     AdministrativoOperador: 6,
 }
 
-export const getNumberFromChar = (letter) => {
-    switch (letter) {
-        case '0': return 0
-        case '1': return 1
-        case '2': return 2
-        case '3': return 3
-        case '4': return 4
-        case '5': return 5
-        case '6': return 6
-        case '7': return 7
-        case '8': return 8
-        case '9': return 9
-        case 'A': return 10
-        case 'B': return 11
-        case 'C': return 12
-        case 'D': return 13
-        case 'E': return 14
-        case 'F': return 15
-        case 'G': return 16
-        case 'H': return 17
-        case 'I': return 18
-        case 'J': return 19
-        case 'K': return 20
-        case 'L': return 21
-        case 'M': return 22
-        case 'N': return 23
-        case 'O': return 24
-        case 'P': return 25
-        case 'Q': return 26
-        case 'R': return 27
-        case 'S': return 28
-        case 'T': return 29
-        case 'U': return 30
-        case 'V': return 31
-        case 'W': return 32
-        case 'X': return 33
-        case 'Y': return 34
-        case 'Z': return 35
-        default:
-            throw new Error()
+export const getUrl = (url) => {
+    return axios.get(backendUrl + url, { headers: authHeader() })
+}
+
+export function descendingComparator(a, b, orderBy, order) {
+    for (let i = 0; i < orderBy.length; i++) {
+        if (a !== null) {
+            a = a[orderBy[i]]
+        }
+        if (b !== null) {
+            b = b[orderBy[i]]
+        }
     }
+    if ((a === null && b !== null) && order === 'asc') {
+        return -1
+    }
+    if ((a === null && b !== null) && order === 'desc') {
+        return 1
+    }
+    if ((a !== null && b === null) && order === 'asc') {
+        return 1
+    }
+    if ((a !== null && b === null) && order === 'desc') {
+        return -1
+    }
+    if (b < a) {
+        return -1
+    }
+    if (b > a) {
+        return 1
+    }
+    return 0
+}
+
+export function getComparator(order, orderBy) {
+    return order === 'desc'
+        ? (a, b) => descendingComparator(a, b, orderBy, order)
+        : (a, b) => -descendingComparator(a, b, orderBy, order)
+}
+
+export function stableSort(array, comparator) {
+    const stabilizedThis = array.map((el, index) => [el, index])
+    stabilizedThis.sort((a, b) => {
+        const order = comparator(a[0], b[0])
+        if (order !== 0) return order
+        return a[1] - b[1]
+    })
+    return stabilizedThis.map((el) => el[0])
+}
+
+export function compararListas(lista1, lista2) {
+    return JSON.stringify(lista1) === JSON.stringify(lista2)
+}
+
+export function dfs(row, filter, columns) {
+    return Object.keys(row).some((key) => {
+        if (typeof columns !== 'undefined' && columns.length > 0 && !columns.includes(key)) {
+            return false
+        }
+        if (row[key] instanceof Object) {
+            if (dfs(row[key], filter, columns)) {
+                return true
+            }
+        } else if (String(row[key]).toUpperCase().includes(filter.toUpperCase()) && row[key] !== null) {
+            return true
+        }
+        return false
+    })
+}
+
+export function filtrar(array, filter, columns) {
+    return array.filter((element) => dfs(element, filter, columns))
+}
+
+export function sortFilter(array, comparator, filtro, columns) {
+    const sortedArray = stableSort(array, comparator)
+    return filtro === null ? sortedArray : filtrar(sortedArray, filtro, columns)
+}
+
+const charToNumberMap = {
+    '0': 0,
+    '1': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    'A': 10,
+    'B': 11,
+    'C': 12,
+    'D': 13,
+    'E': 14,
+    'F': 15,
+    'G': 16,
+    'H': 17,
+    'I': 18,
+    'J': 19,
+    'K': 20,
+    'L': 21,
+    'M': 22,
+    'N': 23,
+    'O': 24,
+    'P': 25,
+    'Q': 26,
+    'R': 27,
+    'S': 28,
+    'T': 29,
+    'U': 30,
+    'V': 31,
+    'W': 32,
+    'X': 33,
+    'Y': 34,
+    'Z': 35,
 }
 
 export const validateNCC = (ncc) => {
@@ -54,11 +135,15 @@ export const validateNCC = (ncc) => {
         return false
     }
 
-    let sum = 0; let
-        secondDigit = false
+    let sum = 0
+    let secondDigit = false
 
     for (let i = ncc.length - 1; i >= 0; --i) {
-        let valor = getNumberFromChar(ncc[i])
+        let valor = charToNumberMap[ncc[i]]
+
+        if (!valor) {
+            return false
+        }
 
         if (secondDigit) {
             valor *= 2

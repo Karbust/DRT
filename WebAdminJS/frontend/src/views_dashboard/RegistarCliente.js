@@ -11,6 +11,7 @@ import {
     CircularProgress,
     Snackbar,
     Slide,
+    Backdrop,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { NavigateNext } from '@material-ui/icons'
@@ -24,6 +25,7 @@ import { FormDadosPessoais } from '../components/formDadosPessoais'
 import { FormDocumentos } from '../components/formDocumentos'
 import { useStyles } from '../components/MuiStyles'
 import { backendUrl } from '../configs'
+import { getUrl } from '../components/functions'
 
 function getSteps() {
     return ['Detalhes Pessoais', 'Detalhes da Conta', 'Documentos']
@@ -32,14 +34,18 @@ function getSteps() {
 export default function RegistarCliente() {
     const classes = useStyles()
 
-    // const [message, setMessage] = React.useState('')
+    // const [message, setMessage] = useState('')
     const [activeStep, setActiveStep] = useState(0)
     const [nacionalidades, setNacionalidades] = useState([])
     const [localidades, setLocalidades] = useState([])
     const [message, setMessage] = useState('')
     const [severidade, setSeveridade] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
+    const [openBackdrop, setOpenBackdrop] = useState(true)
 
+    const handleCloseBackdrop = () => {
+        setOpenBackdrop(false)
+    }
     const handleCloseAlert = (event, reason) => {
         if (reason === 'clickaway') {
             return
@@ -54,20 +60,19 @@ export default function RegistarCliente() {
     const handleReset = () => setActiveStep(0)
 
     useEffect(() => {
-        axios
-            .get(`${backendUrl}api/nacionalidades`/* , { headers: authHeader() } */)
+        getUrl('api/nacionalidades')
             .then((res) => {
                 if (res.data.success) {
                     setNacionalidades(res.data.data)
                 }
             })
-        axios
-            .get(`${backendUrl}api/localidades`/* , { headers: authHeader() } */)
+        getUrl('api/localidades')
             .then((res) => {
                 if (res.data.success) {
                     setLocalidades(res.data.data)
                 }
             })
+        setOpenBackdrop(false)
     }, [])
 
     const onFormikSubmit = (values, formikActions) => {
@@ -88,15 +93,16 @@ export default function RegistarCliente() {
                     formikActions.resetForm()
                     setMessage(data.data.message)
                     setSeveridade('success')
-                    setOpenAlert(true)
                 } else {
                     setMessage(data.data.message)
                     setSeveridade('error')
-                    setOpenAlert(true)
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
                 setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
                 setSeveridade('error')
+            })
+            .finally(() => {
                 setOpenAlert(true)
             })
     }
@@ -127,6 +133,9 @@ export default function RegistarCliente() {
 
     return (
         <>
+            <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className={classes.root}>
                 <Snackbar
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -141,14 +150,14 @@ export default function RegistarCliente() {
                 </Snackbar>
                 <Box mb={2} className={classes.container}>
                     <Box mb={1} pt={1}>
-                        <Typography variant="h4">
+                        <Typography variant="h5">
                             Registo de Cliente
                         </Typography>
                     </Box>
                     <Box mb={1} pt={1} className={classes.box}>
                         <Typography variant="h5">
                             <Breadcrumbs
-                                separator={<NavigateNext fontSize="small" />}
+                                separator="›"
                                 aria-label="breadcrumb"
                             >
                                 <Link color="inherit" component={RouterLink} to="/">
@@ -157,7 +166,7 @@ export default function RegistarCliente() {
                                 <Link
                                     color="textPrimary"
                                     component={RouterLink}
-                                    to="/Dashboard/RegistarCliente"
+                                    to="/Dashboard/Clientes/RegistarCliente"
                                     aria-current="page"
                                 >
                                     Registar Cliente

@@ -84,19 +84,28 @@ export const muiTheme = createMuiTheme({
                 backgroundColor: amber.A400,
             },
         },
+        MuiTableCell: {
+            root: {
+                paddingRight: '0px',
+            },
+        },
     },
 }, ptPT)
 
 export const useStyles = makeStyles((theme) => ({
     root: {
         'height': 180,
-        'width': '100%'
+        'width': '100%',
     },
     login: {
         flexGrow: 1,
     },
     dashboard: {
         display: 'flex',
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
+        color: '#fff',
     },
     button: {
         marginLeft: theme.spacing(2),
@@ -140,13 +149,48 @@ export const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
     },
+    container_header: {
+        [theme.breakpoints.down('sm')]: {
+            gridTemplateColumns: '1fr',
+            columnGap: 'unset',
+            gridTemplateAreas: '\"heading\" \"breadcrumbs\" \"filter\"',
+        },
+        [theme.breakpoints.only('md')]: {
+            gridTemplateColumns: '1fr 1fr',
+            columnGap: 'unset',
+            gridTemplateAreas: '\"heading breadcrumbs\" \"filter .\"',
+        },
+        display: 'grid',
+        gridTemplateAreas: '\"heading filter breadcrumbs\"',
+        gridTemplateColumns: 'max-content 1fr max-content',
+        justifyContent: 'space-between',
+        columnGap: '16px',
+        alignItems: 'center',
+    },
+    heading: {
+        gridArea: 'heading',
+    },
+    filter: {
+        [theme.breakpoints.down('md')]: {
+            width: '100%',
+        },
+        width: '50%',
+        gridArea: 'filter',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    breadcrumbs: {
+        gridArea: 'breadcrumbs',
+    },
+    empty: {
+        gridArea: 'empty',
+    },
     box: {
         display: 'flex',
         backgroundColor: '#E9ECEF',
         borderRadius: '0.25rem',
         flexWrap: 'wrap',
         padding: '0.75rem 1rem',
-        marginBottom: '1rem',
     },
     textField: {
         marginLeft: theme.spacing(1),
@@ -178,21 +222,14 @@ export const useStyles = makeStyles((theme) => ({
         backgroundColor: '#fff',
         boxShadow: '0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)',
     },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
+    /* appBarShift: {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
         }),
-    },
+    }, */
     menuButton2: {
         marginRight: 36,
     },
@@ -200,39 +237,40 @@ export const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-    },
-    drawerOpen: {
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerClose: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing(7) + 1,
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9) + 1,
+        [theme.breakpoints.up('md')]: {
+            width: drawerWidth,
+            flexShrink: 0,
         },
     },
-    toolbar: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
-        ...theme.mixins.toolbar,
+    appBar: {
+        [theme.breakpoints.up('md')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+        },
+    },
+    menuButton3: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
+    },
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth,
     },
     content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
+        display: 'flex',
+        flex: '1 1 auto',
+        flexDirection: 'column',
+        padding: theme.spacing(1),
+        marginTop: theme.spacing(7),
+        paddingTop: theme.spacing(2),
+        [theme.breakpoints.up('sm')]: {
+            padding: theme.spacing(2),
+        },
+        [theme.breakpoints.up('md')]: {
+            padding: theme.spacing(3),
+        },
     },
     icon: {
         color: theme.palette.text.secondary,
@@ -276,6 +314,18 @@ export const useStyles = makeStyles((theme) => ({
     inputPosition: {
         width: '100%',
         position: 'relative',
+    },
+
+    visuallyHidden: {
+        border: 0,
+        clip: 'rect(0 0 0 0)',
+        height: 1,
+        margin: -1,
+        overflow: 'hidden',
+        padding: 0,
+        position: 'absolute',
+        top: 20,
+        width: 1,
     },
 }))
 
