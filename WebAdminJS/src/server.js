@@ -3,6 +3,10 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import { checkToken, authorize, Role } from './middleware/jwt.js'
 import { enderecoIP } from './middleware/enderecoIP.js'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -30,6 +34,8 @@ import { estatisticasRouter } from './routes/estatisticasRoutes.js'
 import { apiRouter } from './routes/apiRoutes.js'
 import { firstRunRouter } from './routes/firstRunRoutes.js'
 
+
+
 app.use('/mail',
     checkToken,
     emailRouter
@@ -39,6 +45,9 @@ app.use('/public',
     checkToken,
     express.static('src/public')
 )
+app.use('/getapk', (req, res) => {
+    res.download(path.join(__dirname, 'public/aplicacao.apk'))
+})
 app.use('/user',
     enderecoIP,
     userRouter

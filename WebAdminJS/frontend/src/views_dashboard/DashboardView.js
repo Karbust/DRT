@@ -249,6 +249,8 @@ export default function DashboardView() {
             }
         })
 
+        console.log(motoristasObj)
+
         setViagensMotoristaMes({
             options: {
                 chart: {
@@ -414,6 +416,7 @@ export default function DashboardView() {
             }
             setLoading(false)
         }).catch((error) => {
+            console.log(error)
             setMessage(error.message)
             setSeveridade('error')
             setOpenAlert(true)

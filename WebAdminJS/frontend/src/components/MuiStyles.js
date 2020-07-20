@@ -29,11 +29,7 @@ export const microsite = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column',
     },
-    filho1: {
-        height: '5vh',
-    },
     filho2: {
-        height: '95vh',
         display: 'flex',
         marginTop: '100px',
         flexDirection: 'column',
