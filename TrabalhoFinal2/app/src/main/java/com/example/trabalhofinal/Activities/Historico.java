@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Destino;
@@ -25,7 +25,7 @@ import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.Utils.DialogCallback;
 import com.example.trabalhofinal.Utils.GlobalUtils;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapterHistorico;
+import com.example.trabalhofinal.Adapters.RecyclerViewAdapterHistorico;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
@@ -34,11 +34,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,22 +97,23 @@ public class Historico extends AppCompatActivity implements SwipeRefreshLayout.O
         spinner.setOnItemSelectedListener(this);
     }
 
-    public void avaliar(int rating){
+    public void avaliar(int rating,String coment){
         int nr_viagem = viagem_avaliada.getNrViagem().getNR_VIAGEM_PEDIDO();
         String key = sharedPrefManager.getToken();
         int nr_cliente = sharedPrefManager.getUser();
-        String comentario = null;
+        String comentario = coment;
 
-        Call<SuccessMessageResponses> call = RetrofitClient.getInstance().getApi().avaliacao(nr_viagem,nr_cliente,rating, null,key);
+        Call<SuccessMessageResponses> call = RetrofitClient.getInstance().getApi().avaliacao(nr_viagem,nr_cliente,rating, comentario,key);
         Log.i(TAG, "Request enqueue");
         call.enqueue(new Callback<SuccessMessageResponses>() {
             @Override
             public void onResponse(Call<SuccessMessageResponses> call, Response<SuccessMessageResponses> response) {
                 Log.i(TAG, "Request body" + response);
                 if (response.body() != null && response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "Viagens Avaliada! Obrigada", Toast.LENGTH_LONG).show();
 
                 } else {
-
+                    Toast.makeText(getApplicationContext(), "Nao foi possivel avaliar viagem!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -129,8 +128,8 @@ public class Historico extends AppCompatActivity implements SwipeRefreshLayout.O
     public void showDialog(View view){
         GlobalUtils.showDialog(this, new DialogCallback() {
             @Override
-            public void callback(int ratings) {
-                avaliar(ratings);
+            public void callback(int ratings,String coment) {
+                avaliar(ratings,coment);
             }
         });
     }
@@ -247,26 +246,38 @@ public class Historico extends AppCompatActivity implements SwipeRefreshLayout.O
                     var.setDATAHORA_VOLTA(parseDate(var.getDATAHORA_VOLTA(),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),new SimpleDateFormat("dd-MM-yyyy HH:mm")));
                     Destino destiny = new Destino(var.getOrigem().getLOCALIDADE(),var.getOrigem().getLATITUDE(),var.getOrigem().getLONGITUDE());
                     Origem origin = new Origem(var.getDestino().getLOCALIDADE(),var.getDestino().getLATITUDE(),var.getDestino().getLONGITUDE());
-                    NrViagem nrViagem = new NrViagem(var.getNR_VIAGEM_PEDIDO(),var.getDATAHORA_IDA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),origin,destiny);
-                    Viagem trip = new Viagem(var2.getESTADO(),nrViagem);
+                    NrViagem nrViagem = new NrViagem(var.getNR_VIAGEM_PEDIDO(),var.getESTADO(),var.getDATAHORA_IDA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),origin,destiny);
+                    Viagem trip = new Viagem(nrViagem);
                     viagens.add(trip);
                 }
             }
 
             ArrayList<Viagem> viagens2 = (ArrayList<Viagem>) viagens.clone();
 
-            for (Viagem var : viagens2){
-                NrViagem nrViagem = var.getNrViagem();
-                if(!date_filter.contains(nrViagem.getDATAHORA_IDA())){
-                    date_filter.add(parseDate(nrViagem.getDATAHORA_IDA(),new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+            for (int i=0 ; i < viagens2.size() ; i++){
+                NrViagem var = viagens2.get(i).getNrViagem();
+
+                String data_aux = var.getDATAHORA_IDA();
+                data_aux = (parseDate(data_aux,new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+
+                if(!date_filter.contains(data_aux)){
+                    date_filter.add(data_aux);
                 }
             }
+
+            Collections.sort(date_filter, (String o1, String o2) -> {
+                try {
+                    return -new SimpleDateFormat("dd-MM-yyyy").parse(o1).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(o2));
+                } catch (ParseException e) {
+                    return 0;
+                }
+            });
 
             Collections.sort(viagens, (o1, o2) -> {
                         NrViagem nrViagem = o1.getNrViagem();
                         NrViagem nrViagem1 = o2.getNrViagem();
                         try {
-                            return new SimpleDateFormat("dd-MM-yyyy").parse(nrViagem.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(nrViagem1.getDATAHORA_IDA()));
+                            return new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(nrViagem.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(nrViagem1.getDATAHORA_IDA()));
                         } catch (ParseException e) {
                             return 0;
                         }
@@ -281,6 +292,7 @@ public class Historico extends AppCompatActivity implements SwipeRefreshLayout.O
             if(refreshLayout.isRefreshing()){
                 refreshLayout.setRefreshing(false);
             }
+            recyclerViewAdapterHistorico.setViagens(result);
             spinner_adapter.addAll(date_filter);
             //spinner_adapter.notifyDataSetChanged();
             dialog.dismiss();

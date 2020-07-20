@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.Models.Domain;
+package com.example.trabalhofinal.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,13 +16,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
+import com.example.trabalhofinal.Models.Domain.Destino;
+import com.example.trabalhofinal.Models.Domain.NrViagem;
+import com.example.trabalhofinal.Models.Domain.Origem;
+import com.example.trabalhofinal.Models.Domain.Viagem;
+import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
 import com.example.trabalhofinal.Models.Responses.SuccessMessageResponses;
 import com.example.trabalhofinal.Models.Responses.ViagensResponseMotorista;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.Utils.DialogCallback;
 import com.example.trabalhofinal.Utils.GlobalUtils;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapterHistorico;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapterHistoricoMotorista;
+import com.example.trabalhofinal.Adapters.RecyclerViewAdapterHistoricoMotorista;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
@@ -93,13 +98,13 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
         spinner.setOnItemSelectedListener(this);
     }
 
-    public void avaliar(int rating){
+    public void avaliar(int rating, String coment){
         int nr_viagem = viagem_avaliada.getNR_VIAGEM_PEDIDO();
         String key = sharedPrefManager.getToken();
         int nr_cliente = sharedPrefManager.getUser();
-        String comentario = null;
+        String comentario = coment;
 
-        Call<SuccessMessageResponses> call = RetrofitClient.getInstance().getApi().avaliacao(nr_viagem,nr_cliente,rating, null,key);
+        Call<SuccessMessageResponses> call = RetrofitClient.getInstance().getApi().avaliacao(nr_viagem,nr_cliente,rating, comentario,key);
         Log.i(TAG, "Request enqueue");
         call.enqueue(new Callback<SuccessMessageResponses>() {
             @Override
@@ -123,8 +128,8 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
     public void showDialog(View view){
         GlobalUtils.showDialog(this, new DialogCallback() {
             @Override
-            public void callback(int ratings) {
-                avaliar(ratings);
+            public void callback(int ratings, String comentario) {
+                avaliar(ratings,comentario);
             }
         });
     }
@@ -140,6 +145,7 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
         }
         return outputDateString;
     }
+
 
     public ArrayList<ViagensMotorista> fetchviagens_historico_motorista() {
 
@@ -168,10 +174,12 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
         }
 
         return viagens;
+
     }
 
     @Override
     public void onRefresh() {
+
         Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
         dialog = ProgressDialog.show(HistoricoMotorista.this, "",
                 "Loading. Please wait...", true);
@@ -184,6 +192,7 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
 
         // This method performs the actual data-refresh operation.
         // The method calls setRefreshing(false) when it's finished.
+
     }
 
     @Override
@@ -210,8 +219,9 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
 
     @Override
     public void OnAvaliarClick(int position) {
-        viagem_avaliada = recyclerViewAdapterHistorico.getViagemByPosition(position);
-        showDialog(recyclerViewHistorico);
+        Intent intent = new Intent(HistoricoMotorista.this,Avaliacao_viagem.class);
+        intent.putExtra("VIAGEM",recyclerViewAdapterHistorico.getViagemByPosition(position));
+        startActivity(intent);
     }
 
 
@@ -239,22 +249,35 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
                     var.setDATAHORA_VOLTA(parseDate(var.getDATAHORA_VOLTA(),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),new SimpleDateFormat("dd-MM-yyyy HH:mm")));
                     Destino destiny = new Destino(var.getOrigem().getLOCALIDADE(),var.getOrigem().getLATITUDE(),var.getOrigem().getLONGITUDE());
                     Origem origin = new Origem(var.getDestino().getLOCALIDADE(),var.getDestino().getLATITUDE(),var.getDestino().getLONGITUDE());
-                    ViagensMotorista trip = new ViagensMotorista(var.getNR_VIAGEM_PEDIDO(),var.getDATAHORA_VOLTA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),var.getESTADO(),origin,destiny);
+                    ViagensMotorista trip = new ViagensMotorista(var.getNR_VIAGEM_PEDIDO(),var.getDATAHORA_VOLTA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),var.getESTADO(),origin,destiny,var.getViagemclientesviagem());
                     viagens.add(trip);
                 }
             }
 
             ArrayList<ViagensMotorista> viagens2 = (ArrayList<ViagensMotorista>) viagens.clone();
 
-            for (ViagensMotorista var : viagens2){
-                if(!date_filter.contains(var.getDATAHORA_IDA())){
-                    date_filter.add(parseDate(var.getDATAHORA_IDA(),new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+            for (int i=0 ; i < viagens2.size() ; i++){
+                ViagensMotorista var = viagens2.get(i);
+
+                String data_aux = var.getDATAHORA_IDA();
+                data_aux = (parseDate(data_aux,new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+
+                if(!date_filter.contains(data_aux)){
+                    date_filter.add(data_aux);
                 }
             }
 
+            Collections.sort(date_filter, (String o1, String o2) -> {
+                try {
+                    return -new SimpleDateFormat("dd-MM-yyyy").parse(o1).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(o2));
+                } catch (ParseException e) {
+                    return 0;
+                }
+            });
+
             Collections.sort(viagens, (ViagensMotorista o1, ViagensMotorista o2) -> {
                 try {
-                    return new SimpleDateFormat("dd-MM-yyyy").parse(o1.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(o2.getDATAHORA_IDA()));
+                    return new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(o1.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(o2.getDATAHORA_IDA()));
                 } catch (ParseException e) {
                     return 0;
                 }
@@ -266,6 +289,7 @@ public class HistoricoMotorista extends AppCompatActivity implements SwipeRefres
         @Override
         protected void onPostExecute(ArrayList<ViagensMotorista> result) {
             applicationContext.setViagensMotoristas(result);
+            applicationContext.setNrviagens(result.size());
             if(refreshLayout.isRefreshing()){
                 refreshLayout.setRefreshing(false);
             }

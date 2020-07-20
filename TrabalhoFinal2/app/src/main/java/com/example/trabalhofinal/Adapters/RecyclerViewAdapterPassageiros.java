@@ -1,19 +1,15 @@
-package com.example.trabalhofinal.Utils;
+package com.example.trabalhofinal.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trabalhofinal.Models.Domain.Viagem;
 import com.example.trabalhofinal.R;
-import com.example.trabalhofinal.storage.SharedPrefManager;
 
 import java.util.ArrayList;
 

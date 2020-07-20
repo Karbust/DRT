@@ -19,13 +19,11 @@ import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Destino;
 import com.example.trabalhofinal.Models.Domain.NrViagem;
 import com.example.trabalhofinal.Models.Domain.Origem;
-import com.example.trabalhofinal.Models.Domain.Viagem;
-import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponseMotorista;
 import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
 import com.example.trabalhofinal.R;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapter;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapterMotorista;
+import com.example.trabalhofinal.Adapters.RecyclerViewAdapter;
+import com.example.trabalhofinal.Adapters.RecyclerViewAdapterMotorista;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
@@ -84,6 +82,7 @@ public class ViagensMotoristaActivity extends AppCompatActivity implements Recyc
         dialog = ProgressDialog.show(ViagensMotoristaActivity.this, "",
                 "Loading. Please wait...", true);
 
+
         new Fetchviagens_Motorista().execute();
 
         spinner_adapter = new ArrayAdapter<String>(this,simple_spinner_item, new ArrayList<>() );
@@ -92,17 +91,6 @@ public class ViagensMotoristaActivity extends AppCompatActivity implements Recyc
 
         refreshLayout.setOnRefreshListener(this);
         spinner.setOnItemSelectedListener(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        origem_recycle.clear();
-        destino_recycle.clear();
-        datas_recycle.clear();
-        spinner_adapter.clear();
-        date_filter.clear();
-        new Fetchviagens_Motorista().execute();
     }
 
     public static String parseDate(String inputDateString, SimpleDateFormat inputDateFormat, SimpleDateFormat outputDateFormat) {
@@ -202,6 +190,7 @@ public class ViagensMotoristaActivity extends AppCompatActivity implements Recyc
             viagens=fetchviagens();
 
 
+
             if(viagens == null) return null;
 
             ArrayList<ViagensMotorista> viagens1 = (ArrayList<ViagensMotorista>) viagens.clone();
@@ -216,22 +205,35 @@ public class ViagensMotoristaActivity extends AppCompatActivity implements Recyc
                     var.setDATAHORA_VOLTA(parseDate(var.getDATAHORA_VOLTA(),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),new SimpleDateFormat("dd-MM-yyyy HH:mm")));
                     Destino destiny = new Destino(var.getOrigem().getLOCALIDADE(),var.getOrigem().getLATITUDE(),var.getOrigem().getLONGITUDE());
                     Origem origin = new Origem(var.getDestino().getLOCALIDADE(),var.getDestino().getLATITUDE(),var.getDestino().getLONGITUDE());
-                    ViagensMotorista trip = new ViagensMotorista(var.getNR_VIAGEM_PEDIDO(),var.getDATAHORA_VOLTA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),var.getESTADO(),origin,destiny);
+                    ViagensMotorista trip = new ViagensMotorista(var.getNR_VIAGEM_PEDIDO(),var.getDATAHORA_VOLTA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),var.getESTADO(),origin,destiny,var.getViagemclientesviagem());
                     viagens.add(trip);
                 }
             }
 
             ArrayList<ViagensMotorista> viagens2 = (ArrayList<ViagensMotorista>) viagens.clone();
 
-            for (ViagensMotorista var : viagens2){
-                if(!date_filter.contains(var.getDATAHORA_IDA())){
-                    date_filter.add(parseDate(var.getDATAHORA_IDA(),new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+            for (int i=0 ; i < viagens2.size() ; i++){
+                ViagensMotorista var = viagens2.get(i);
+
+                String data_aux = var.getDATAHORA_IDA();
+                data_aux = (parseDate(data_aux,new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+
+                if(!date_filter.contains(data_aux)){
+                    date_filter.add(data_aux);
                 }
             }
 
+            Collections.sort(date_filter, (String o1, String o2) -> {
+                try {
+                    return new SimpleDateFormat("dd-MM-yyyy").parse(o1).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(o2));
+                } catch (ParseException e) {
+                    return 0;
+                }
+            });
+
             Collections.sort(viagens, (ViagensMotorista o1, ViagensMotorista o2) -> {
                 try {
-                    return new SimpleDateFormat("dd-MM-yyyy").parse(o1.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(o2.getDATAHORA_IDA()));
+                    return new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(o1.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(o2.getDATAHORA_IDA()));
                 } catch (ParseException e) {
                     return 0;
                 }

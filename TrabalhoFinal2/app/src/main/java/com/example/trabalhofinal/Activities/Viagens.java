@@ -73,6 +73,7 @@ public class Viagens extends AppCompatActivity implements View.OnClickListener {
         float distances = viagem.getDISTANCIA()/1000;
         String distance=""+distances+"kms";
         String pessoas=""+viagem.getPASSAGEIROS();
+        String custo = viagem.getCUSTO()+"€";
 
 
         update.setVisibility(View.VISIBLE);
@@ -84,18 +85,28 @@ public class Viagens extends AppCompatActivity implements View.OnClickListener {
         tempo.setText(time);
         distancia.setText(distance);
         passageiros.setText(pessoas);
-        price.setText(viagem.getCUSTO());
+        price.setText(custo);
 
 
         update.setOnClickListener(this);
+        findViewById(R.id.passageiros_check_viage).setOnClickListener(this);
     }
 
     public void process(View view)
     {
         Intent intent=null , chooser=null;
 
-        if(view.getId()==R.id.viagem)
+        if((view.getId() == R.id.viagem && viagem.getESTADO().equals("PENDENTE")) || (viagem.getESTADO().equals("PENDENTE_VOLTA") && view.getId() == R.id.viagem))
         {
+            float lat=viagem.getOrigem().getLATITUDE();
+            float log=viagem.getOrigem().getLONGITUDE();
+            String latitude=String.valueOf(lat);
+            String longitude=String.valueOf(log);
+            Uri gmmIntentUri=Uri.parse("google.navigation:q="+latitude+","+longitude);
+            Intent mapIntent= new Intent(Intent.ACTION_VIEW,gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
+        }else{
             float lat=viagem.getDestino().getLATITUDE();
             float log=viagem.getDestino().getLONGITUDE();
             String latitude=String.valueOf(lat);
@@ -145,6 +156,7 @@ public class Viagens extends AppCompatActivity implements View.OnClickListener {
                 }else if(viagem.getESTADO().equals("DECORRER_IDA")){
                     update("PENDENTE_VOLTA");
                     Intent intent=new Intent(Viagens.this,ViagensMotoristaActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Viagem Finalizada!", Toast.LENGTH_LONG).show();
                 }else if(viagem.getESTADO().equals("PENDENTE_VOLTA")){
@@ -155,9 +167,15 @@ public class Viagens extends AppCompatActivity implements View.OnClickListener {
                 }else if(viagem.getESTADO().equals("DECORRER_VOLTA")){
                     update("CONCLUIDA");
                     Intent intent=new Intent(Viagens.this,ViagensMotoristaActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Viagem Finalizada!", Toast.LENGTH_LONG).show();
                 }
+                break;
+            case R.id.passageiros_check_viage:
+                Intent intent=new Intent(Viagens.this,Check_Passageiros.class);
+                intent.putExtra("VIAGEM_DETALHES", viagem );
+                startActivity(intent);
                 break;
         }
     }

@@ -1,6 +1,7 @@
 package com.example.trabalhofinal.Models.Domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ViagensMotorista implements Serializable {
 
@@ -14,8 +15,9 @@ public class ViagensMotorista implements Serializable {
     private String ESTADO;
     private Origem Origem;
     private Destino Destino;
+    private ArrayList<VIAGEMCLIENTESVIAGEM> VIAGEMCLIENTESVIAGEM;
 
-    public ViagensMotorista(int NR_VIAGEM_PEDIDO, String DATAHORA_IDA, int DISTANCIA, int DURACAO, int PASSAGEIROS, String DATAHORA_VOLTA, String CUSTO, String ESTADO, Origem origem,Destino destino) {
+    public ViagensMotorista(int NR_VIAGEM_PEDIDO, String DATAHORA_IDA, int DISTANCIA, int DURACAO, int PASSAGEIROS, String DATAHORA_VOLTA, String CUSTO, String ESTADO, com.example.trabalhofinal.Models.Domain.Origem origem, com.example.trabalhofinal.Models.Domain.Destino destino, ArrayList<VIAGEMCLIENTESVIAGEM> VIAGEMCLIENTESVIAGEM) {
         this.NR_VIAGEM_PEDIDO = NR_VIAGEM_PEDIDO;
         this.DATAHORA_IDA = DATAHORA_IDA;
         this.DISTANCIA = DISTANCIA;
@@ -26,6 +28,7 @@ public class ViagensMotorista implements Serializable {
         this.ESTADO = ESTADO;
         Origem = origem;
         Destino = destino;
+        this.VIAGEMCLIENTESVIAGEM = VIAGEMCLIENTESVIAGEM;
     }
 
     public String getESTADO() {
@@ -106,6 +109,14 @@ public class ViagensMotorista implements Serializable {
 
     public void setDestino(Destino destino) {
         Destino = destino;
+    }
+
+    public ArrayList<VIAGEMCLIENTESVIAGEM> getViagemclientesviagem() {
+        return VIAGEMCLIENTESVIAGEM;
+    }
+
+    public void setViagemclientesviagem(ArrayList<VIAGEMCLIENTESVIAGEM> VIAGEMCLIENTESVIAGEM) {
+        this.VIAGEMCLIENTESVIAGEM = VIAGEMCLIENTESVIAGEM;
     }
 
     @Override

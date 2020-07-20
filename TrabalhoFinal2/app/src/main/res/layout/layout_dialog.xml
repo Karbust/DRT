@@ -20,20 +20,29 @@
         android:id="@+id/smile_rating"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/avaliar_dialog"
         app:layout_constraintEnd_toEndOf="@+id/backgroud_dialog"
-        app:layout_constraintStart_toStartOf="@+id/backgroud_dialog" />
+        app:layout_constraintStart_toStartOf="@+id/backgroud_dialog"
+        app:layout_constraintTop_toTopOf="@+id/backgroud_dialog" />
 
     <Button
         android:id="@+id/avaliar_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:text="Avaliar"
         android:background="@drawable/botao_viagem"
         android:backgroundTint="@color/colorYellow"
+        android:text="Avaliar"
         android:textColor="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="@+id/backgroud_dialog"
         app:layout_constraintEnd_toEndOf="@+id/backgroud_dialog"
         app:layout_constraintStart_toStartOf="@+id/backgroud_dialog" />
+
+    <EditText
+        android:id="@+id/textView4"
+        android:layout_width="350dp"
+        android:layout_height="80dp"
+        android:hint="Comentario:"
+        android:gravity="start"
+        android:inputType="textMultiLine"
+        app:layout_constraintStart_toStartOf="@+id/smile_rating"
+        app:layout_constraintTop_toBottomOf="@+id/smile_rating" />
 </androidx.constraintlayout.widget.ConstraintLayout>

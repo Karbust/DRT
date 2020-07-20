@@ -3,7 +3,6 @@ package com.example.trabalhofinal.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -18,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Perfil extends AppCompatActivity implements View.OnClickListener {
+public class Perfil_cliente extends AppCompatActivity implements View.OnClickListener {
 
     private ApplicationContext applicationContext;
     private SharedPrefManager sharedPrefManager;
@@ -26,7 +25,8 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil);
+        setContentView(R.layout.activity_perfil_cliente);
+
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
 
@@ -34,11 +34,12 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
         TextView email=findViewById(R.id.email_perfil_text);
         TextView telemovel=findViewById(R.id.contacto_perfil_text);
         TextView user = findViewById(R.id.nr_utilizador_perfil);
+        TextView divida = findViewById(R.id.textView14);
+        TextView montante = findViewById(R.id.textView23);
         findViewById(R.id.imageView).setOnClickListener(this);
         TextView tipo_user = findViewById(R.id.textView22);
         findViewById(R.id.imageView16).setOnClickListener(this);
         findViewById(R.id.settings).setOnClickListener(this);
-        findViewById(R.id.imageView4).setOnClickListener(this);
 
         String aux=""+sharedPrefManager.getTelemovel();
         String aux1=""+sharedPrefManager.getUser();
@@ -58,6 +59,12 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
             var.setCreatedAt(parseDate(var.getCreatedAt(),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),new SimpleDateFormat("dd-MM-yyyy HH:mm")));
         }
 
+        if(applicationContext.getDividaResponse().getData().get(0).getMontante() > 0){
+            String dinheiro = applicationContext.getDividaResponse().getData().get(0).getMontante()+"€";
+            montante.setText(dinheiro);
+            montante.setVisibility(View.VISIBLE);
+            divida.setVisibility(View.VISIBLE);
+        }
     }
 
     public static String parseDate(String inputDateString, SimpleDateFormat inputDateFormat, SimpleDateFormat outputDateFormat) {
@@ -76,18 +83,13 @@ public class Perfil extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imageView:
-                startActivity(new Intent(Perfil.this,Estatistica.class));
+                startActivity(new Intent(Perfil_cliente.this,Avaliacao_viagem.class));
                 break;
             case R.id.imageView16:
-                startActivity(new Intent(Perfil.this,NotificacoesActivity.class));
+                startActivity(new Intent(Perfil_cliente.this,NotificacoesActivity.class));
                 break;
             case R.id.settings:
-                startActivity(new Intent(Perfil.this, defenicoes.class));
-                break;
-            case R.id.imageView4:
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:232427427"));
-                startActivity(intent);
+                startActivity(new Intent(Perfil_cliente.this, defenicoes.class));
                 break;
         }
     }

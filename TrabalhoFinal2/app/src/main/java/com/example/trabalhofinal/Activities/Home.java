@@ -5,14 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Notificacoes;
+import com.example.trabalhofinal.Models.Domain.Stats;
+import com.example.trabalhofinal.Models.Responses.DividaResponse;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.NotificacoesResponse;
+import com.example.trabalhofinal.Models.Responses.StatsResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
@@ -51,10 +55,46 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
 
         fetchLocations();
         fetch_notificacoes();
-
-
+        fetch_divida();
 
         name.setText(sharedPrefManager.getNome());
+    }
+
+
+    public void fetch_divida(){
+
+        int user = sharedPrefManager.getUser();
+        DividaResponse dividaResponse = applicationContext.getDividaResponse();
+        String key = sharedPrefManager.getToken();
+
+        if (dividaResponse == null) {
+            Call<DividaResponse> call = RetrofitClient.getInstance().getApi().divida(user,key);
+
+            call.enqueue(new Callback<DividaResponse>() {
+                @Override
+                public void onResponse(Call<DividaResponse> call, Response<DividaResponse> response) {
+                    DividaResponse dividaResponse1 = response.body();
+
+                    if (dividaResponse1 != null && dividaResponse1.isSuccess()) {
+
+                        Log.i(TAG, "Request success");
+
+                        applicationContext.setDividaResponse(dividaResponse1);
+
+
+                    } else {
+                        Log.i(TAG, "Request Failed");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<DividaResponse> call, Throwable t) {
+                    Log.i(TAG, "Request onFailure" + t);
+                }
+            });
+        }else{
+
+        }
     }
 
     public void fetch_notificacoes(){
@@ -154,13 +194,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.perfil:
-                startActivity(new Intent(Home.this,Perfil.class));
+                startActivity(new Intent(Home.this,Perfil_cliente.class));
                 break;
             case R.id.viagens:
                 startActivity(new Intent(Home.this,Historico.class));
                 break;
             case R.id.marcar:
-                startActivity(new Intent(Home.this,MarcarViagem.class));
+                if(applicationContext.getDividaResponse().getData().get(0).getMontante() > 0){
+                    Toast.makeText(getApplicationContext(), "Tem dividas pendentes! \n Contacte o callcenter!", Toast.LENGTH_LONG).show();
+                }else{
+                    startActivity(new Intent(Home.this,MarcarViagem.class));
+                }
                 break;
             case R.id.viagens_cliente:
                 startActivity(new Intent(Home.this,Viagens2.class));

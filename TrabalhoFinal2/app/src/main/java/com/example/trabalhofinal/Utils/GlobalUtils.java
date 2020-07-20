@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.trabalhofinal.R;
 import com.hsalf.smileyrating.SmileyRating;
@@ -24,6 +25,7 @@ public class GlobalUtils {
 
         Button btn_done = dialog.findViewById(R.id.avaliar_dialog);
         SmileyRating smileyRating = dialog.findViewById(R.id.smile_rating);
+        EditText coment = dialog.findViewById(R.id.textView4);
 
         smileyRating.setSmileySelectedListener(new SmileyRating.OnSmileySelectedListener() {
             @Override
@@ -41,8 +43,9 @@ public class GlobalUtils {
         btn_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String comentario = coment.getText().toString().trim();
                 if(dialogCallback != null)
-                    dialogCallback.callback(rating[0]);
+                    dialogCallback.callback(rating[0],comentario);
                 dialog.dismiss();
             }
         });

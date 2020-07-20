@@ -267,14 +267,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
             return;
         }
 
-
-        if(phone.isEmpty()){
-            telefone.setError("Em falta!");
-            telefone.requestFocus();
-            return;
-        }
-
-        if(phone.length() != 9){
+        if(phone.length() != 9 && !phone.isEmpty()){
             telefone.setError("Telefone invalido!");
             telefone.requestFocus();
             return;
@@ -358,7 +351,7 @@ public class Registo extends AppCompatActivity implements View.OnClickListener, 
 
                 } else {
                     Log.i(TAG, "Request Failed");
-                    Toast.makeText(getApplicationContext(), successMessageResponses.getMessage(), Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext(), successMessageResponses.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 

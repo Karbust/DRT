@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,18 +23,18 @@ import android.widget.Toast;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
 import com.example.trabalhofinal.Models.Domain.Location;
+import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
 import com.example.trabalhofinal.R;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapterHistorico;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapterPassageiros;
+import com.example.trabalhofinal.Adapters.RecyclerViewAdapterPassageiros;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
-import com.google.maps.model.Distance;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.DistanceMatrixElement;
 import com.google.maps.model.DistanceMatrixRow;
+import com.google.maps.model.Duration;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 
@@ -49,12 +48,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.TimeZone;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -241,9 +236,11 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
 
         GeoApiContext geoApiContext = new GeoApiContext.Builder().apiKey(key).build();
         distanceMatrixApiRequest = new DistanceMatrixApiRequest(geoApiContext);
+
         try {
             DistanceMatrix result = distanceMatrixApiRequest.origins(new LatLng(latitude_origem, longitude_origem)).destinations(new LatLng(latitude_destino, longitude_destino)).mode(TravelMode.DRIVING).await();
-            for (DistanceMatrixRow var : result.rows) {
+            for (DistanceMatrixRow var : result.rows)
+            {
                 for (DistanceMatrixElement val : var.elements) {
                     distancia = String.valueOf(val.distance.inMeters);
                     duracao = String.valueOf(val.duration.inSeconds);
@@ -252,6 +249,38 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
         } catch (ApiException | InterruptedException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean intime(String d1){
+        try {
+            // If you already have date objects then skip 1
+            Calendar calendar = Calendar.getInstance();
+            Date date = new Date();
+            Calendar  calendar1 = Calendar.getInstance();
+            //1
+            // Create 2 dates starts
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date1 = sdf.parse(d1);
+            calendar.setTime(date1);
+            int dia = calendar.get(Calendar.DAY_OF_MONTH);
+            calendar1.setTime(date);
+            int dia1 = calendar1.get(Calendar.DAY_OF_MONTH);
+            int hora = calendar1.get(Calendar.HOUR_OF_DAY);
+            dia1++;
+
+            Log.i(TAG, "Date1" + sdf.format(date1));
+
+            // Create 2 dates ends
+            //1
+            // Date object is having 3 methods namely after,before and equals for comparing
+            // after() will return true if and only if date1 is after date 2
+            if (hora > 17 && (dia1 == dia) ) {
+                return true;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     public boolean compareDates(String d1, String d2) {
@@ -298,25 +327,36 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
+
         getdados();
 
 
         String data_hora_ida = data_escolhida + " " + hora_escolhida;
-        String data_hora_volta = data_escolida_volta + " " + hora_escolida_volta;
+        String data_hora_volta = data_escolida_volta+" "+hora_escolida_volta;
         int nrcliente = sharedPrefManager.getUser();
         String obs = observacoes.getText().toString().trim();
         String key = sharedPrefManager.getToken();
 
-        JSONArray aux = new JSONArray();
+        ArrayList<String> aux = new ArrayList<>();
 
         for(String numero : nrs_passageiro){
-            JSONObject hashMap = new JSONObject();
-            try {
-                hashMap.put("NR_UTILZIADOR",numero);
-            } catch (JSONException e) {
-                e.printStackTrace();
+            aux.add(numero);
+        }
+
+        for (int i=0 ; i < nrs_passageiro.size() ; i++){
+            String var = nrs_passageiro.get(i);
+
+            String data_aux = var;
+
+            if(!aux.contains(data_aux)){
+                aux.add(data_aux);
             }
-            aux.put(hashMap);
+        }
+        
+        if(intime(data_hora_ida)){
+            data.setError("A data tem de ser antes das 17h do dia anteriror!");
+            data.requestFocus();
+            return;
         }
 
 
@@ -337,11 +377,13 @@ public class MarcarViagem extends AppCompatActivity implements AdapterView.OnIte
                 //SuccessMessageResponses successMessageResponses = response.body();
                 if (response.body() != null && response.isSuccessful()) {
                     Log.i(TAG, "Request success: " + response.body());
-                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(getApplicationContext(), "Viagem Criada!", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MarcarViagem.this, Home.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 } else {
                     Log.i(TAG, "Request Failed");
-                    Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Nao foi possivel criar viagem!", Toast.LENGTH_LONG).show();
                 }
             }
 

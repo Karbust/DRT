@@ -9,6 +9,7 @@ public class User {
     private int telemovel;
 
     public User(String nome, int tipoUser, String email, int telemovel,int nrUser) {
+        this.nrUser = nrUser;
         this.tipoUser = tipoUser;
         this.nome = nome;
         this.email = email;
@@ -53,5 +54,13 @@ public class User {
 
     public void setNrUser(int nrUser) {
         this.nrUser = nrUser;
+    }
+
+    public int getTipoUser() {
+        return tipoUser;
+    }
+
+    public void setTipoUser(int tipoUser) {
+        this.tipoUser = tipoUser;
     }
 }

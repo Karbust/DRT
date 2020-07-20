@@ -11,12 +11,14 @@ public class NrViagem implements Serializable {
     private String DATAHORA_VOLTA;
     private String CUSTO;
     private Origem Origem;
+    private String ESTADO;
     private Destino Destino;
 
-    public NrViagem(int NR_VIAGEM_PEDIDO, String DATAHORA_IDA, int DISTANCIA, int DURACAO, int PASSAGEIROS, String DATAHORA_VOLTA, String CUSTO, com.example.trabalhofinal.Models.Domain.Origem origem, com.example.trabalhofinal.Models.Domain.Destino destino) {
+    public NrViagem(int NR_VIAGEM_PEDIDO,String ESTADO ,String DATAHORA_IDA, int DISTANCIA, int DURACAO, int PASSAGEIROS, String DATAHORA_VOLTA, String CUSTO, com.example.trabalhofinal.Models.Domain.Origem origem, com.example.trabalhofinal.Models.Domain.Destino destino) {
         this.NR_VIAGEM_PEDIDO = NR_VIAGEM_PEDIDO;
         this.DATAHORA_IDA = DATAHORA_IDA;
         this.DISTANCIA = DISTANCIA;
+        this.ESTADO = ESTADO;
         this.DURACAO = DURACAO;
         this.PASSAGEIROS = PASSAGEIROS;
         this.DATAHORA_VOLTA = DATAHORA_VOLTA;
@@ -31,6 +33,14 @@ public class NrViagem implements Serializable {
 
     public void setNR_VIAGEM_PEDIDO(int NR_VIAGEM_PEDIDO) {
         this.NR_VIAGEM_PEDIDO = NR_VIAGEM_PEDIDO;
+    }
+
+    public String getESTADO() {
+        return ESTADO;
+    }
+
+    public void setESTADO(String ESTADO) {
+        this.ESTADO = ESTADO;
     }
 
     public String getDATAHORA_IDA() {

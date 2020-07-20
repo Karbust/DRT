@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.example.trabalhofinal.Models.Domain.Notificacoes;
-import com.example.trabalhofinal.Models.Domain.Viagem;
 import com.example.trabalhofinal.R;
-import com.example.trabalhofinal.Utils.RecycleViewAdapterNotificacoes;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapter;
+import com.example.trabalhofinal.Adapters.RecycleViewAdapterNotificacoes;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 

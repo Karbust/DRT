@@ -1,8 +1,11 @@
 package com.example.trabalhofinal.Api;
 
+import com.example.trabalhofinal.Models.Responses.AvaliacaoResponse;
+import com.example.trabalhofinal.Models.Responses.DividaResponse;
 import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.LoginResponse;
 import com.example.trabalhofinal.Models.Responses.NotificacoesResponse;
+import com.example.trabalhofinal.Models.Responses.RecuperarResponse;
 import com.example.trabalhofinal.Models.Responses.StatsResponse;
 import com.example.trabalhofinal.Models.Responses.SuccessMessageResponses;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
@@ -75,7 +78,7 @@ public interface Api {
             @Field("nrcliente") int nrcliente,
             @Field("datahora_ida") String datahora_ida,
             @Field("datahora_volta") String datahora_volta,
-            @Field("clientes") JSONArray nrclientes,
+            @Field("clientes") ArrayList<String> nrclientes,
             @Field("observacoes") String observacoes,
             @Field("distancia") String distancia,
             @Field("duracao") String duracao,
@@ -128,4 +131,64 @@ public interface Api {
             @Header("authorization") String key
     );
 
+    @FormUrlEncoded
+    @POST("/viagens/classificacoesviagensmotorista")
+    Call<AvaliacaoResponse> ratings(
+            @Field("nr_viagem") int nr_viagem,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/classificacoesviagenscliente")
+    Call<AvaliacaoResponse> ratings_history(
+            @Field("nr_cliente") int nr_cliente,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/user/resetutilizadorpassword")
+    Call<RecuperarResponse> reset(
+            @Field("email") String email,
+            @Field("login") String login
+    );
+
+    @FormUrlEncoded
+    @POST("/user/editarutilizadorpassword")
+    Call<RecuperarResponse> editarpass(
+            @Field("passwordAntiga") String passwordAntiga,
+            @Field("passwordNova") String passwordNova,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/atualizarestadoviagemcancelada")
+    Call<RecuperarResponse> atualizarestadocancelada(
+            @Field("nr_viagem") int nrviagem,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/verificardividacliente")
+    Call<DividaResponse> divida(
+            @Field("nr_utilizador") int nrviagem,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/atualizarestadoclienteviagem")
+    Call<RecuperarResponse> atualizarestadocliente(
+            @Field("nr_viagem") int nr_viagem,
+            @Field("nr_cliente") int nr_cliente,
+            @Field("estado") String estado,
+            @Header("authorization") String key
+    );
+
+    @FormUrlEncoded
+    @POST("/viagens/atualizarestadopagamentoviagem")
+    Call<RecuperarResponse> atualizarestadopagamento(
+            @Field("nr_viagem") int nr_viagem,
+            @Field("nr_cliente") int nr_cliente,
+            @Field("estado") String estado,
+            @Header("authorization") String key
+    );
 }

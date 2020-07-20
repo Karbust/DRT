@@ -10,14 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.trabalhofinal.Api.RetrofitClient;
-import com.example.trabalhofinal.Models.Domain.HistoricoMotorista;
-import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Notificacoes;
 import com.example.trabalhofinal.Models.Domain.Stats;
-import com.example.trabalhofinal.Models.Responses.LocationsResponse;
 import com.example.trabalhofinal.Models.Responses.NotificacoesResponse;
 import com.example.trabalhofinal.Models.Responses.StatsResponse;
-import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.R;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
@@ -33,14 +29,14 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "Home_Motorista";
     private ApplicationContext applicationContext;
     private SharedPrefManager sharedPrefManager;
-    private EditText nome;
+    private TextView nome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home__motorista);
 
-        nome=findViewById(R.id.nome);
+        nome = findViewById(R.id.Nome);
 
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
@@ -53,6 +49,9 @@ public class Home_Motorista extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.terminar).setOnClickListener(this);
         findViewById(R.id.perfil).setOnClickListener(this);
 
+        String name = sharedPrefManager.getNome();
+
+        nome.setText(name);
     }
 
     public void fetch_stats(){

@@ -3,6 +3,7 @@ package com.example.trabalhofinal.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.example.trabalhofinal.Models.Domain.Stats;
 import com.example.trabalhofinal.Models.Domain.Viagem;
@@ -27,6 +28,7 @@ import java.util.Collections;
 public class Estatistica extends AppCompatActivity {
 
     BarChart barChart;
+    TextView number;
     private ApplicationContext applicationContext;
     private SharedPrefManager sharedPrefManager;
 
@@ -38,9 +40,11 @@ public class Estatistica extends AppCompatActivity {
         applicationContext = (ApplicationContext) getApplicationContext();
         sharedPrefManager=  SharedPrefManager.getInstance(applicationContext);
 
+        number = findViewById(R.id.editTextNumber);
         barChart = findViewById(R.id.barchart);
 
         ArrayList<BarEntry> barEntries = new ArrayList<>();
+        String trips = ""+applicationContext.getNrviagens();
 
         ArrayList<Stats> stats = applicationContext.getStats();
         float aux=0;
@@ -85,5 +89,6 @@ public class Estatistica extends AppCompatActivity {
         barChart.invalidate();
 
         barChart.setData(theData);
+        number.setText(trips);
     }
 }

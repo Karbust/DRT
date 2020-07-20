@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Activities.Perfil">
+    tools:context=".Activities.Perfil_cliente">
 
     <ImageView
         android:id="@+id/imageView20"
@@ -32,8 +32,9 @@
         android:id="@+id/imageView23"
         android:layout_width="414dp"
         android:layout_height="550dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="180dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/backgound_viagens" />
@@ -77,11 +78,10 @@
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/informacao_text"
-        app:layout_constraintEnd_toStartOf="@+id/imageView16"
-        app:layout_constraintHorizontal_bias="0.484"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView17"
+        app:layout_constraintStart_toStartOf="@+id/imageView17"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@drawable/info" />
 
     <TextView
@@ -89,60 +89,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="24dp"
         android:text="Notificações"
         android:textColor="#ff000000"
         android:textSize="13sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider_perfil"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView27"
+        app:layout_constraintEnd_toEndOf="@+id/imageView16"
+        app:layout_constraintHorizontal_bias="0.275"
+        app:layout_constraintStart_toStartOf="@+id/imageView16"
+        app:layout_constraintTop_toTopOf="@+id/textView27" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="264dp"
-        android:layout_marginRight="264dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView17"
-        app:layout_constraintTop_toTopOf="@+id/imageView17"
-        app:srcCompat="@drawable/estatistic" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView27"
+        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:srcCompat="@drawable/star" />
 
     <TextView
         android:id="@+id/textView27"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="24dp"
-        android:text="Estatisticas"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:singleLine="false"
+        android:text="Historico \n Avaliacoes"
         android:textColor="#ff000000"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/divider_perfil"
-        app:layout_constraintStart_toStartOf="@+id/imageView17" />
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toStartOf="@+id/imageView" />
 
     <ImageView
         android:id="@+id/imageView16"
         android:layout_width="53dp"
         android:layout_height="51dp"
-        android:layout_marginStart="260dp"
-        android:layout_marginLeft="260dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView29"
-        app:layout_constraintStart_toStartOf="@+id/imageView17"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView17"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@drawable/notificacao" />
 
     <TextView
         android:id="@+id/informacao_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         android:text="Informação"
         android:textColor="#ff000000"
         android:textSize="13sp"
-        app:layout_constraintBottom_toTopOf="@+id/divider_perfil"
-        app:layout_constraintEnd_toStartOf="@+id/textView29"
-        app:layout_constraintStart_toEndOf="@+id/textView27" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView27"
+        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+        app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/textView27" />
 
     <ImageView
         android:id="@+id/divider_perfil"
@@ -252,6 +254,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView21"
         app:srcCompat="@drawable/gear" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="Divida:"
+        android:visibility="invisible"
+        style="@style/email"
+        android:textColor="@color/colorRed"
+        app:layout_constraintBottom_toTopOf="@+id/email_perfil"
+        app:layout_constraintStart_toStartOf="@+id/email_perfil" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="valor a pagar"
+        android:visibility="invisible"
+        android:textColor="@color/colorRed"
+        style="@style/email"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

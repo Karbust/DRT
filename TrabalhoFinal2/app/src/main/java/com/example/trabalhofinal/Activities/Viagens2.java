@@ -24,7 +24,7 @@ import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
 import com.example.trabalhofinal.Models.Responses.ViagensResponse;
 import com.example.trabalhofinal.Models.Responses.ViagensResponseMotorista;
 import com.example.trabalhofinal.R;
-import com.example.trabalhofinal.Utils.RecyclerViewAdapter;
+import com.example.trabalhofinal.Adapters.RecyclerViewAdapter;
 import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
@@ -104,37 +104,8 @@ public class Viagens2 extends AppCompatActivity implements  SwipeRefreshLayout.O
         }
         return outputDateString;
     }
-    
-    public ArrayList<ViagensMotorista> fetchviagens() {
 
-        int user = sharedPrefManager.getUser();
-        String key = sharedPrefManager.getToken();
-
-        ArrayList<ViagensMotorista> viagens;
-
-        Call<ViagensResponseMotorista> call = RetrofitClient.getInstance().getApi().viagens(user, key);
-        try {
-            Response<ViagensResponseMotorista> viagensResponseMotoristaResponse = call.execute();
-            if (viagensResponseMotoristaResponse.body() != null && viagensResponseMotoristaResponse.isSuccessful()) {
-
-                Log.i(TAG, "Request Successful");
-                viagens = viagensResponseMotoristaResponse.body().getViagens();
-            } else {
-                Log.i(TAG, "Request Failed");
-                dialog.dismiss();
-                viagens=null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i(TAG, "Request erro");
-            Log.i(TAG, "Request failure");
-            viagens=null;
-        }
-
-        return viagens;
-    }
-
-    public ArrayList<Viagem> fetchviagen_historico() {
+    public ArrayList<Viagem> fetchviagens() {
 
         int user = sharedPrefManager.getUser();
         String key = sharedPrefManager.getToken();
@@ -216,11 +187,9 @@ public class Viagens2 extends AppCompatActivity implements  SwipeRefreshLayout.O
         @Override
         protected ArrayList<Viagem> doInBackground(Void... params) {
 
-            int user = sharedPrefManager.getTipoutilizador();
             ArrayList<Viagem> viagens = new ArrayList<>();
-            ArrayList<ViagensMotorista> viagens_motorista = new ArrayList<>();
 
-            viagens=fetchviagen_historico();
+            viagens=fetchviagens();
 
 
             if(viagens == null) return null;
@@ -238,10 +207,10 @@ public class Viagens2 extends AppCompatActivity implements  SwipeRefreshLayout.O
                     var.setDATAHORA_VOLTA(parseDate(var.getDATAHORA_VOLTA(),new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"),new SimpleDateFormat("dd-MM-yyyy HH:mm")));
                     Destino destiny = new Destino(var.getOrigem().getLOCALIDADE(),var.getOrigem().getLATITUDE(),var.getOrigem().getLONGITUDE());
                     Origem origin = new Origem(var.getDestino().getLOCALIDADE(),var.getDestino().getLATITUDE(),var.getDestino().getLONGITUDE());
-                    NrViagem nrViagem = new NrViagem(var.getNR_VIAGEM_PEDIDO(),var.getDATAHORA_IDA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),origin,destiny);
-                    Viagem trip = new Viagem(var2.getESTADO(),nrViagem);
+                    NrViagem nrViagem = new NrViagem(var.getNR_VIAGEM_PEDIDO(),var2.getNrViagem().getESTADO(),var.getDATAHORA_IDA(),var.getDISTANCIA(),var.getDURACAO(),var.getPASSAGEIROS(),null,var.getCUSTO(),origin,destiny);
+                    Viagem trip = new Viagem(nrViagem);
                     viagens.add(trip);
-                    if(var2.getESTADO().equals("PENDENTE_VOLTA")){
+                    if(var2.getNrViagem().getESTADO().equals("PENDENTE_VOLTA")){
                         viagens.remove(i);
                     }
                 }
@@ -249,18 +218,30 @@ public class Viagens2 extends AppCompatActivity implements  SwipeRefreshLayout.O
 
             ArrayList<Viagem> viagens2 = (ArrayList<Viagem>) viagens.clone();
 
-            for (Viagem var : viagens2){
-                NrViagem nrViagem = var.getNrViagem();
-                if(!date_filter.contains(nrViagem.getDATAHORA_IDA())){
-                    date_filter.add(parseDate(nrViagem.getDATAHORA_IDA(),new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+            for (int i=0 ; i < viagens2.size() ; i++){
+                NrViagem var = viagens2.get(i).getNrViagem();
+
+                String data_aux = var.getDATAHORA_IDA();
+                data_aux = (parseDate(data_aux,new SimpleDateFormat("dd-MM-yyyy HH:mm"),new SimpleDateFormat("dd-MM-yyyy")));
+
+                if(!date_filter.contains(data_aux)){
+                    date_filter.add(data_aux);
                 }
             }
+
+            Collections.sort(date_filter, (String o1, String o2) -> {
+                try {
+                    return -new SimpleDateFormat("dd-MM-yyyy").parse(o1).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(o2));
+                } catch (ParseException e) {
+                    return 0;
+                }
+            });
 
             Collections.sort(viagens, (Viagem o1, Viagem o2) -> {
                 NrViagem nrViagem = o1.getNrViagem();
                 NrViagem nrViagem1 = o2.getNrViagem();
                 try {
-                    return new SimpleDateFormat("dd-MM-yyyy").parse(nrViagem.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy").parse(nrViagem1.getDATAHORA_IDA()));
+                    return new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(nrViagem.getDATAHORA_IDA()).compareTo(new SimpleDateFormat("dd-MM-yyyy HH:mm").parse(nrViagem1.getDATAHORA_IDA()));
                 }catch (ParseException e){
                     return 0;
                 }

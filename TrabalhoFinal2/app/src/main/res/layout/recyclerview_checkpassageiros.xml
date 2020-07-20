@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/nome_passageiro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/falta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/botao_viagem"
+        android:text="Falta"
+        android:textColor="@color/colorYellow"
+        app:layout_constraintEnd_toStartOf="@+id/nome_passageiro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nome_passageiro" />
+
+    <Button
+        android:id="@+id/presente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/botao_viagem"
+        android:text="Presente"
+        android:textColor="@color/colorYellow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/nome_passageiro"
+        app:layout_constraintTop_toTopOf="@+id/falta" />
+
+    <Button
+        android:id="@+id/pagou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/botao_sub"
+        android:text="Pagou"
+        android:textColor="@color/colorYellow"
+        app:layout_constraintEnd_toEndOf="@+id/presente"
+        app:layout_constraintStart_toStartOf="@+id/falta"
+        app:layout_constraintTop_toBottomOf="@+id/presente" />
+</androidx.constraintlayout.widget.ConstraintLayout>

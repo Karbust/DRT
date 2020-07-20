@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.Utils;
+package com.example.trabalhofinal.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,27 +10,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trabalhofinal.Models.Domain.Viagem;
+import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
 import com.example.trabalhofinal.R;
-import com.example.trabalhofinal.storage.ApplicationContext;
 import com.example.trabalhofinal.storage.SharedPrefManager;
 
 import java.util.ArrayList;
 
-public class RecyclerViewAdapterHistorico extends RecyclerView.Adapter {
-
+public class RecyclerViewAdapterHistoricoMotorista extends RecyclerView.Adapter{
 
     public interface OnAvaliarListener{
         void OnAvaliarClick(int position);
     }
 
     private static final String TAG = "RecyclerViewAdapterHistorico";
-    private ArrayList<Viagem> viagens = new ArrayList<>();
+    private ArrayList<ViagensMotorista> viagens = new ArrayList<>();
     private Context context;
-    RecyclerViewAdapterHistorico.OnAvaliarListener onAvaliarListener;
+    RecyclerViewAdapterHistoricoMotorista.OnAvaliarListener onAvaliarListener;
     SharedPrefManager sharedPrefManager;
 
-    public RecyclerViewAdapterHistorico( RecyclerViewAdapterHistorico.OnAvaliarListener onAvaliarListener,Context context) {
+        public RecyclerViewAdapterHistoricoMotorista( RecyclerViewAdapterHistoricoMotorista.OnAvaliarListener onAvaliarListener,Context context) {
         this.onAvaliarListener = onAvaliarListener;
         this.context = context;
         sharedPrefManager = SharedPrefManager.getInstance(context);
@@ -40,15 +38,15 @@ public class RecyclerViewAdapterHistorico extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_viagens_historico,parent,false);
-        RecyclerView.ViewHolder viewHolder_historico = new ViewHolder_Historico(view ,onAvaliarListener);
+        RecyclerView.ViewHolder viewHolder_historico = new RecyclerViewAdapterHistoricoMotorista.ViewHolder_Historico_Motorista(view ,onAvaliarListener);
         return viewHolder_historico;
     }
 
-    public void setViagens(ArrayList<Viagem> viagens) {
+    public void setViagens(ArrayList<ViagensMotorista> viagens) {
         this.viagens = viagens;
     }
 
-    public Viagem getViagemByPosition(int position) {
+    public ViagensMotorista getViagemByPosition(int position) {
         return viagens.get(position);
     }
 
@@ -59,23 +57,23 @@ public class RecyclerViewAdapterHistorico extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof RecyclerViewAdapter.ViewHolder){
-            ((RecyclerViewAdapter.ViewHolder) holder).origem.setText(viagens.get(position).getNrViagem().getOrigem().getLOCALIDADE());
-            ((RecyclerViewAdapter.ViewHolder) holder).destino.setText(viagens.get(position).getNrViagem().getDestino().getLOCALIDADE());
-            ((RecyclerViewAdapter.ViewHolder) holder).data.setText(viagens.get(position).getNrViagem().getDATAHORA_IDA());
+        if(holder instanceof RecyclerViewAdapterHistoricoMotorista.ViewHolder_Historico_Motorista){
+            ((RecyclerViewAdapterHistoricoMotorista.ViewHolder_Historico_Motorista) holder).origem.setText(viagens.get(position).getOrigem().getLOCALIDADE());
+            ((RecyclerViewAdapterHistoricoMotorista.ViewHolder_Historico_Motorista) holder).destino.setText(viagens.get(position).getDestino().getLOCALIDADE());
+            ((RecyclerViewAdapterHistoricoMotorista.ViewHolder_Historico_Motorista) holder).data.setText(viagens.get(position).getDATAHORA_IDA());
         }
     }
 
 
-    public class ViewHolder_Historico extends RecyclerView.ViewHolder{
+    public class ViewHolder_Historico_Motorista extends RecyclerView.ViewHolder{
 
         TextView data;
         TextView origem;
         TextView destino;
         Button avaliar;
-        RecyclerViewAdapterHistorico.OnAvaliarListener onAvaliarListener;
+        RecyclerViewAdapterHistoricoMotorista.OnAvaliarListener onAvaliarListener;
 
-        public ViewHolder_Historico(@NonNull View itemView, RecyclerViewAdapterHistorico.OnAvaliarListener onAvaliarListener) {
+        public ViewHolder_Historico_Motorista(@NonNull View itemView, RecyclerViewAdapterHistoricoMotorista.OnAvaliarListener onAvaliarListener) {
 
             super(itemView);
             this.onAvaliarListener = onAvaliarListener;
@@ -83,10 +81,6 @@ public class RecyclerViewAdapterHistorico extends RecyclerView.Adapter {
             origem = itemView.findViewById(R.id.calde_historico);
             destino = itemView.findViewById(R.id.hospital_historico);
             avaliar = itemView.findViewById(R.id.avaliar);
-
-            if(sharedPrefManager.getTipoutilizador() == 7){
-                avaliar.setVisibility(View.VISIBLE);
-            }
 
             View.OnClickListener AvaliarClick = new View.OnClickListener() {
                 @Override
@@ -97,5 +91,4 @@ public class RecyclerViewAdapterHistorico extends RecyclerView.Adapter {
             avaliar.setOnClickListener(AvaliarClick);
         }
     }
-
 }

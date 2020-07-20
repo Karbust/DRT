@@ -13,9 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="17dp"
-        android:layout_marginEnd="236dp"
         android:text="José Morais"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bemvindo"
         app:layout_constraintTop_toBottomOf="@+id/bemvindo" />
 
     <ImageView
@@ -60,13 +59,13 @@
         style="@style/perfil1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="123dp"
-        android:layout_marginEnd="52dp"
         android:background="@drawable/active"
         android:gravity="center"
         android:text="Home"
         android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintStart_toEndOf="@+id/imageView11"
         app:layout_constraintTop_toBottomOf="@+id/Nome" />
 
     <ImageView
@@ -129,6 +128,7 @@
         android:layout_marginTop="136dp"
         android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toStartOf="@+id/textView10"
+        app:layout_constraintStart_toStartOf="@+id/imageView8"
         app:layout_constraintTop_toBottomOf="@+id/Nome"
         app:srcCompat="@drawable/home" />
 

@@ -98,8 +98,7 @@
         android:layout_marginEnd="52dp"
         android:background="@drawable/botao_viagem"
         android:backgroundTint="@color/colorYellow"
-        android:text="Avaliar"
-        android:visibility="invisible"
+        android:text="Avaliaçao"
         android:textColor="@color/colorBlack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/holder_historico" />

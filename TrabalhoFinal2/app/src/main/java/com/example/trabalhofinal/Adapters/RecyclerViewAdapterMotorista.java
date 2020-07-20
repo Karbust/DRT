@@ -1,4 +1,4 @@
-package com.example.trabalhofinal.Utils;
+package com.example.trabalhofinal.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.trabalhofinal.Models.Domain.Viagem;
 import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
 import com.example.trabalhofinal.R;
 

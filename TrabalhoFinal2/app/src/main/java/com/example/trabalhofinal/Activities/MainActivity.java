@@ -3,8 +3,11 @@ package com.example.trabalhofinal.Activities;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private EditText username;
     private EditText password;
+    private CheckBox checkBox;
     private ApplicationContext applicationContext;
     private SharedPrefManager sharedPrefManager;
 
@@ -37,9 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         username=findViewById(R.id.Utilizador);
         password=findViewById(R.id.passe);
+        checkBox = findViewById(R.id.checkBox);
 
         findViewById(R.id.iniciar_sessao).setOnClickListener(this);
         findViewById(R.id.registe_se_aqui).setOnClickListener(this);
+        findViewById(R.id.esqueceu_palavra_passe).setOnClickListener(this);
+        checkBox.setOnClickListener(this);
     }
 
     @Override
@@ -82,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LoginResponse loginResponse = response.body();
 
                 Log.i(TAG, "Request body" + response);
-                Log.i(TAG, "Request body" + response.body().toString());
+                //Log.i(TAG, "Request body" + response.body().toString());
 
                 if (loginResponse != null && loginResponse.isSuccess()) {
 
@@ -102,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                   Toast.makeText(getApplicationContext(), loginResponse.getMessage(), Toast.LENGTH_LONG).show();
                     Log.i(TAG, "Request Failed");
 
                 }
@@ -124,6 +131,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.registe_se_aqui:
                 startActivity(new Intent(MainActivity.this, Registo.class));
+                break;
+            case R.id.esqueceu_palavra_passe:
+                startActivity(new Intent(MainActivity.this, recuperar_passe.class));
+                break;
+            case R.id.checkBox:
+                if(checkBox.isChecked()){
+                    password.setTransformationMethod(null);
+                }else{
+                    password.setTransformationMethod(new PasswordTransformationMethod());
+                }
                 break;
         }
     }

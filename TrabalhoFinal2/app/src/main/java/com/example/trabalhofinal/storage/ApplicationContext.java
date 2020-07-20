@@ -2,11 +2,14 @@ package com.example.trabalhofinal.storage;
 
 import android.app.Application;
 
+import com.example.trabalhofinal.Models.Domain.Avaliacao;
+import com.example.trabalhofinal.Models.Domain.Divida;
 import com.example.trabalhofinal.Models.Domain.Location;
 import com.example.trabalhofinal.Models.Domain.Notificacoes;
 import com.example.trabalhofinal.Models.Domain.Stats;
 import com.example.trabalhofinal.Models.Domain.Viagem;
 import com.example.trabalhofinal.Models.Domain.ViagensMotorista;
+import com.example.trabalhofinal.Models.Responses.DividaResponse;
 
 import java.util.ArrayList;
 
@@ -16,6 +19,9 @@ public class ApplicationContext extends Application {
     private ArrayList<Stats> stats;
     private ArrayList<ViagensMotorista> viagensMotoristas;
     private ArrayList<Notificacoes> notificacoes;
+    private ArrayList<Avaliacao> avaliacaos;
+    private DividaResponse dividaResponse;
+    private int nrviagens;
 
 
     @Override
@@ -26,6 +32,9 @@ public class ApplicationContext extends Application {
         stats=null;
         viagensMotoristas=null;
         notificacoes=null;
+        avaliacaos=null;
+        dividaResponse=null;
+        nrviagens = 0;
     }
 
     public ArrayList<Location> getLocations() { return locations; }
@@ -63,6 +72,31 @@ public class ApplicationContext extends Application {
     public void setNotificacoes(ArrayList<Notificacoes> notificacoes) {
         this.notificacoes = notificacoes;
     }
+
+    public ArrayList<Avaliacao> getAvaliacaos() {
+        return avaliacaos;
+    }
+
+    public void setAvaliacaos(ArrayList<Avaliacao> avaliacaos) {
+        this.avaliacaos = avaliacaos;
+    }
+
+    public int getNrviagens() {
+        return nrviagens;
+    }
+
+    public void setNrviagens(int nrviagens) {
+        this.nrviagens = nrviagens;
+    }
+
+    public DividaResponse getDividaResponse() {
+        return dividaResponse;
+    }
+
+    public void setDividaResponse(DividaResponse dividaResponse) {
+        this.dividaResponse = dividaResponse;
+    }
+
 
     //    private static final int CACHE_SIZE = 4*1024*1024;
 //    private Cache cache;
