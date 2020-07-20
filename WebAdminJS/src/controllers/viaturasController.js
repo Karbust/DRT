@@ -2,6 +2,7 @@ import Sequelize from 'sequelize'
 import {
     Cores, Marcas, Modelos, Seguradoras, Viaturas
 } from '../models/Viaturas.js'
+import { validateBodyFields } from '../functions.js'
 
 Modelos.belongsTo(Marcas, { foreignKey: 'NR_MARCA', as: 'Marca' })
 Viaturas.belongsTo(Modelos, { foreignKey: 'NR_MODELO', as: 'Modelo' })
@@ -35,12 +36,11 @@ viaturasController.listaViaturas = async (req, res) => {
             as: 'Seguradora'
         }],
     }).then((data) => {
-        res.json({
+        return res.json({
             success:true,
             data: data
         })
-    }).catch((error) => {
-        console.log(error)
+    }).catch(() => {
         return res.json({
             success: false,
             message: 'Ocorreu um erro ao pedir a lista de viaturas.'
@@ -57,10 +57,14 @@ viaturasController.listaModelos = async (req, res) => {
             as: 'Marca'
         }]
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 viaturasController.listaMarcas = async (req, res) => {
@@ -69,10 +73,14 @@ viaturasController.listaMarcas = async (req, res) => {
             ['NR_MARCA', 'ASC']
         ],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 viaturasController.listaSeguradoras = async (req, res) => {
@@ -81,10 +89,14 @@ viaturasController.listaSeguradoras = async (req, res) => {
             ['NR_SEGURADORA', 'ASC']
         ],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 viaturasController.listaCores = async (req, res) => {
@@ -93,10 +105,14 @@ viaturasController.listaCores = async (req, res) => {
             ['NR_COR', 'ASC']
         ],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 
@@ -104,6 +120,13 @@ viaturasController.adicionarViatura = async (req, res) => {
     let {
         matricula, ano, modelo, cor, capacidade, apolice, seguradora
     } = req.body
+
+    if(!validateBodyFields(req.body, ['matricula', 'ano', 'modelo', 'cor', 'capacidade', 'apolice', 'seguradora'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
 
     await Viaturas.create({
         MATRICULA: matricula,
@@ -132,8 +155,17 @@ viaturasController.adicionarViatura = async (req, res) => {
     })
 }
 viaturasController.adicionarMarca = async (req, res) => {
+    const { nome_marca } = req.body
+
+    if(!validateBodyFields(req.body, ['nome_marca'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Nome da marca em falta.',
+        })
+    }
+
     await Marcas.create({
-        NOME_MARCA: req.body.nome_marca,
+        NOME_MARCA: nome_marca,
     }).then((data) => {
         return res.json({
             success: true,
@@ -153,17 +185,25 @@ viaturasController.adicionarMarca = async (req, res) => {
     })
 }
 viaturasController.adicionarModelo = async (req, res) => {
+    const { marca, nome_modelo } = req.body
+
+    if(!validateBodyFields(req.body, ['marca', 'nome_modelo'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Marca e/ou nome do modelo em falta.',
+        })
+    }
+
     await Modelos.create({
-        NR_MARCA: req.body.marca,
-        NOME_MODELO: req.body.nome_modelo,
+        NR_MARCA: marca,
+        NOME_MODELO: nome_modelo,
     }).then((data) => {
-        return res.json({
+        return res.status(200).status(200).json({
             success: true,
             data: data,
             message: 'Cor adicionada com sucesso.',
         })
-    }).catch((error) => {
-        console.log(error)
+    }).catch(() => {
         return res.json({
             success: false,
             message: 'Ocorreu um erro ao adicionar o modelo.',
@@ -171,8 +211,17 @@ viaturasController.adicionarModelo = async (req, res) => {
     })
 }
 viaturasController.adicionarCor = async (req, res) => {
+    const { nome_cor } = req.body
+
+    if(!validateBodyFields(req.body, ['nome_cor'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Nome da cor em falta.',
+        })
+    }
+
     await Cores.create({
-        NOME_COR: req.body.nome_cor,
+        NOME_COR: nome_cor,
     }).then((data) => {
         return res.json({
             success: true,
@@ -192,8 +241,17 @@ viaturasController.adicionarCor = async (req, res) => {
     })
 }
 viaturasController.adicionarSeguradora = async (req, res) => {
+    const { nome_seguradora } = req.body
+
+    if(!validateBodyFields(req.body, ['nome_seguradora'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de cliente em falta.',
+        })
+    }
+
     await Seguradoras.create({
-        NOME_SEGURADORA: req.body.nome_seguradora,
+        NOME_SEGURADORA: nome_seguradora,
     }).then((data) => {
         return res.json({
             success: true,

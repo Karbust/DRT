@@ -3,6 +3,8 @@ import { Utilizadores } from '../models/Utilizadores.js'
 import { Localidades } from '../models/Localidades.js'
 import { sequelize } from '../config/database.js'
 import {
+    AlteracoesEstadosClientes,
+    AlteracoesEstadosPagamento,
     AlteracoesViagem,
     ClassificacaoViagem,
     ClientesViagem,
@@ -11,6 +13,7 @@ import {
 import { Notificacoes } from '../models/Notificacoes.js'
 import { Viaturas } from '../models/Viaturas.js'
 import moment from 'moment'
+import { validateBodyFields } from '../functions.js'
 
 PedidoViagem.belongsTo(Localidades, { foreignKey: 'ORIGEM', as: 'Origem' })
 PedidoViagem.belongsTo(Localidades, { foreignKey: 'DESTINO', as: 'Destino' })
@@ -41,6 +44,21 @@ AlteracoesViagem.belongsTo(PedidoViagem, { foreignKey: 'NR_VIAGEM', as: 'NrViage
 AlteracoesViagem.belongsTo(Utilizadores, { foreignKey: 'NR_ALTERADOR', as: 'NrUtilizadorAlteracao' })
 PedidoViagem.hasMany(AlteracoesViagem, { foreignKey: 'NR_VIAGEM', as: 'VIAGEMALTERACAOVIAGEM' })
 Utilizadores.hasMany(AlteracoesViagem, { foreignKey: 'NR_ALTERADOR', as: 'UTILIZADORALTERACAOVIAGEM' })
+
+AlteracoesEstadosPagamento.belongsTo(PedidoViagem, { foreignKey: 'NR_VIAGEM', as: 'NrViagemAlteracaoPagamento' })
+AlteracoesEstadosPagamento.belongsTo(Utilizadores, { foreignKey: 'NR_ALTERADOR', as: 'NrUtilizadorAlteradorAlteracaoPagamento' })
+AlteracoesEstadosPagamento.belongsTo(Utilizadores, { foreignKey: 'NR_ALTERADO', as: 'NrUtilizadorAlteradoAlteracaoPagamento' })
+PedidoViagem.hasMany(AlteracoesEstadosPagamento, { foreignKey: 'NR_VIAGEM', as: 'VIAGEMALTERACAOPAGAMENTO' })
+Utilizadores.hasMany(AlteracoesEstadosPagamento, { foreignKey: 'NR_ALTERADOR', as: 'UTILIZADORALTERADORALTERACAOPAGAMENTO' })
+Utilizadores.hasMany(AlteracoesEstadosPagamento, { foreignKey: 'NR_ALTERADO', as: 'UTILIZADORALTERADOALTERACAOPAGAMENTO' })
+
+AlteracoesEstadosClientes.belongsTo(PedidoViagem, { foreignKey: 'NR_VIAGEM', as: 'NrViagemAlteracaoCliente' })
+AlteracoesEstadosClientes.belongsTo(Utilizadores, { foreignKey: 'NR_ALTERADOR', as: 'NrUtilizadorAlteradorAlteracaoCliente' })
+AlteracoesEstadosClientes.belongsTo(Utilizadores, { foreignKey: 'NR_ALTERADO', as: 'NrUtilizadorAlteradoAlteracaoCliente' })
+PedidoViagem.hasMany(AlteracoesEstadosClientes, { foreignKey: 'NR_VIAGEM', as: 'VIAGEMALTERACAOCLIENTE' })
+Utilizadores.hasMany(AlteracoesEstadosClientes, { foreignKey: 'NR_ALTERADOR', as: 'UTILIZADORALTERADORALTERACAOCLIENTE' })
+Utilizadores.hasMany(AlteracoesEstadosClientes, { foreignKey: 'NR_ALTERADO', as: 'UTILIZADORALTERADOALTERACAOCLIENTE' })
+
 
 const op = Sequelize.Op
 
@@ -94,10 +112,14 @@ viagensController.historicoViagens = async (req, res) => {
             ],
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 viagensController.registoPedidoViagem = async (req, res) => {
@@ -105,6 +127,16 @@ viagensController.registoPedidoViagem = async (req, res) => {
         origem, destino, motivo, datahora_ida, datahora_volta, nrcliente, clientes, observacoes, distancia, duracao
     } = req.body
     const { nr_user } = req.decoded
+
+    if(!validateBodyFields(req.body,
+        ['origem', 'destino', 'motivo', 'datahora_ida',
+            'nrcliente', 'clientes', 'distancia', 'duracao'
+        ])){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
 
     await ClientesViagem.findAll({
         attributes: [
@@ -136,10 +168,10 @@ viagensController.registoPedidoViagem = async (req, res) => {
                 let pedido = await PedidoViagem.create({
                     ORIGEM: origem,
                     DESTINO: destino,
-                    PASSAGEIROS: clientes.lenght,
+                    PASSAGEIROS: clientes.length,
                     MOTIVO: motivo,
                     DATAHORA_IDA: moment(datahora_ida).format('YYYY-MM-DD HH:mm'),
-                    DATAHORA_VOLTA: moment(datahora_volta).format('YYYY-MM-DD HH:mm'),
+                    DATAHORA_VOLTA: datahora_volta ? moment(datahora_volta).format('YYYY-MM-DD HH:mm') : null,
                     NR_CLIENTE_PEDIDO: nrcliente,
                     OBSERVACOES: observacoes,
                     DISTANCIA: distancia,
@@ -174,7 +206,7 @@ viagensController.registoPedidoViagem = async (req, res) => {
                 let mensagem = 'Viagem de ' +
                     localidade[0].LOCALIDADE +
                     ' para ' + localidade[1].LOCALIDADE +
-                    ' marcada com para ' + datahora_ida + volta +
+                    ' marcada para ' + datahora_ida + volta +
                     'Assim que for validada pelo operador irá receber outra notificação.'
 
                 for (const cliente of clientes) {
@@ -240,7 +272,7 @@ viagensController.pedidoViagem = async (req, res) => {
             ],
         }],
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data
         })
@@ -255,6 +287,18 @@ viagensController.editarViagem = async (req, res) => {
         origem, destino, passageiros, motivo, datahora_ida, datahora_volta, distancia, duracao, custo, comparticipacao, motorista, viatura
     } = req.body.values
     const { nr_viagem } = req.body
+
+    if(!validateBodyFields(req.body.values,
+        ['origem', 'destino', 'passageiros', 'motivo', 'datahora_ida',
+            'distancia', 'duracao', 'custo', 'comparticipacao',
+            'motorista', 'viatura'
+        ]) || !nr_viagem){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
+
     await sequelize.transaction(async (t) => {
         let promises = []
         promises.push(
@@ -294,6 +338,7 @@ viagensController.editarViagem = async (req, res) => {
                     NR_ALTERADOR: req.decoded.nr_user,
                     ESTADO_ANTERIOR: data.ESTADO,
                     ESTADO_NOVO: 'PENDENTE',
+                    IP: req.ip_address
                 }, {
                     transaction: t,
                 })
@@ -302,15 +347,27 @@ viagensController.editarViagem = async (req, res) => {
 
         return Promise.all(promises)
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true
+        })
     }).catch((err) => {
         console.log(err)
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
 
-
 viagensController.pedidosViagemMotorista = async (req, res) => {
+    const { motorista } = req.body
+
+    if(!validateBodyFields(req.body, ['motorista'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await PedidoViagem.findAll({
         attributes: [
             'NR_VIAGEM_PEDIDO',
@@ -324,7 +381,7 @@ viagensController.pedidosViagemMotorista = async (req, res) => {
             'ESTADO',
         ],
         where: {
-            MOTORISTA: req.body.motorista,
+            MOTORISTA: motorista,
             ESTADO: {
                 [op.or]: ['PENDENTE', 'PENDENTE_VOLTA', 'DECORRER_IDA', 'DECORRER_VOLTA']
             }
@@ -348,12 +405,31 @@ viagensController.pedidosViagemMotorista = async (req, res) => {
                 'LATITUDE',
                 'LONGITUDE',
             ],
+        }, {
+            model: ClientesViagem,
+            as: 'VIAGEMCLIENTESVIAGEM',
+            attributes: [
+                'NR_CLIENTE_VIAGEM'
+            ],
+            include: {
+                model: Utilizadores,
+                as: 'ClienteViagem',
+                attributes: [
+                    'NR_UTILIZADOR',
+                    'NOME_UTILIZADOR'
+                ]
+            }
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
+        return res.json({
+            success:true,
+            data: data
+        })
     }).catch((error) => {
         console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
 /*viagensController.pedidosViagemDetalhes = async (req, res) => {
@@ -385,14 +461,26 @@ viagensController.pedidosViagemMotorista = async (req, res) => {
             ],
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }*/
 viagensController.historicoViagensUtilizador = async (req, res) => {
     const { nr_utilizador } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_utilizador'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await ClientesViagem.findAll({
         attributes: [
             'MONTANTE',
@@ -446,14 +534,25 @@ viagensController.historicoViagensUtilizador = async (req, res) => {
             }]
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 viagensController.historicoViagensMotorista = async (req, res) => {
     const { nr_utilizador } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_utilizador'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
 
     await PedidoViagem.findAll({
         attributes: [
@@ -500,19 +599,32 @@ viagensController.historicoViagensMotorista = async (req, res) => {
             ],
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 viagensController.pedidosViagemCliente = async (req, res) => {
+    const { cliente } = req.body
+
+    if(!validateBodyFields(req.body, ['cliente'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await ClientesViagem.findAll({
         attributes: [
             'ESTADO_PAGAMENTO'
         ],
         where: {
-            NR_CLIENTE: req.body.cliente,
+            NR_CLIENTE: cliente,
         },
         include: [{
             model: PedidoViagem,
@@ -550,19 +662,30 @@ viagensController.pedidosViagemCliente = async (req, res) => {
             }]
         }],
     }).then((data) => {
-        res.json({ success:true, data: data })
+        return res.json({
+            success:true,
+            data: data
+        })
     }).catch((error) => {
         console.log(error)
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
 viagensController.verificarDividaCliente = async (req, res) => {
     const { nr_utilizador } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_utilizador'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await ClientesViagem.findAll({
         attributes: [
-            'NR_VIAGEM',
-            'MONTANTE',
-            'ESTADO_PAGAMENTO'
+            [sequelize.fn('sum', sequelize.col('MONTANTE')), 'montante'],
         ],
         where: {
             NR_CLIENTE: nr_utilizador,
@@ -573,24 +696,65 @@ viagensController.verificarDividaCliente = async (req, res) => {
         }
     }).then((data) => {
         if(data.length !== 0) {
-            res.json({
+            return res.json({
                 success: true,
                 dividas: true,
                 data: data
             })
         } else {
-            res.json({
+            return res.json({
                 success: true,
                 dividas: false
             })
         }
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
+    })
+}
+viagensController.listaDividas = async (req, res) => {
+    ClientesViagem.findAll({
+        where: {
+            ESTADO_CLIENTE: {
+                [op.in]: ['PRESENTE', 'FALTOU']
+            },
+            ESTADO_PAGAMENTO: {
+                [op.in]: ['PENDENTE', 'RECEBIDO']
+            },
+        },
+        include: {
+            model: Utilizadores,
+            as: 'ClienteViagem',
+            attributes: [
+                'NOME_UTILIZADOR',
+                'N_TELEMOVEL',
+                'MORADA_UTILIZADOR',
+                'COD_POSTAL',
+                'FREGUESIA',
+            ],
+        }
+    }).then((data) => {
+        return res.json({
+            success: true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success: true,
+            message: 'Ocorreu um erro ao obter a lista de dívidas.'
+        })
     })
 }
 viagensController.atualizarEstadoViagem = async (req, res) => {
     const { nr_viagem, estado } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_viagem', 'estado'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de viagem e/ou estado em falta.',
+        })
+    }
 
     await sequelize.transaction(async (t) => {
         let promises = []
@@ -630,19 +794,30 @@ viagensController.atualizarEstadoViagem = async (req, res) => {
 
         return Promise.all(promises)
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true
+        })
     }).catch(() => {
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
-viagensController.atualizarEstadoPagamentoViagem = async (req, res) => {
-    const { nr_viagem, estado } = req.body
+viagensController.atualizarEstadoViagemCancelada = async (req, res) => {
+    const { nr_viagem } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_viagem'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de viagem em falta.',
+        })
+    }
 
     await sequelize.transaction(async (t) => {
         let promises = []
         promises.push(
             PedidoViagem.update({
-                ESTADO: estado
+                ESTADO: 'CANCELADA'
             }, {
                 where: {
                     NR_VIAGEM_PEDIDO: nr_viagem,
@@ -654,7 +829,7 @@ viagensController.atualizarEstadoPagamentoViagem = async (req, res) => {
         )
 
         promises.push(
-            PedidoViagem.upsert({
+            PedidoViagem.findOne({
                 attributes: ['ESTADO'],
                 where: {
                     NR_VIAGEM_PEDIDO: nr_viagem,
@@ -666,6 +841,68 @@ viagensController.atualizarEstadoPagamentoViagem = async (req, res) => {
                     NR_VIAGEM: nr_viagem,
                     NR_ALTERADOR: req.decoded.nr_user,
                     ESTADO_ANTERIOR: data.ESTADO,
+                    ESTADO_NOVO: 'CANCELADA',
+                    IP: req.ip_address
+                }, {
+                    transaction: t,
+                })
+            }),
+        )
+
+        return Promise.all(promises)
+    }).then(() => {
+        return res.json({
+            success: true,
+            message: 'Viagem cancelada com sucesso.'
+        })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao cancelar a viagem.'
+        })
+    })
+}
+viagensController.atualizarEstadoPagamentoViagem = async (req, res) => {
+    const { nr_viagem, nr_cliente, estado } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_viagem', 'nr_cliente', 'estado'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
+
+    await sequelize.transaction(async (t) => {
+        let promises = []
+        promises.push(
+            ClientesViagem.update({
+                ESTADO_PAGAMENTO: estado
+            }, {
+                where: {
+                    NR_VIAGEM: nr_viagem,
+                    NR_CLIENTE: nr_cliente,
+                },
+                returning: true,
+                plain: true,
+                transaction: t,
+            }),
+        )
+
+        promises.push(
+            ClientesViagem.findOne({
+                attributes: ['ESTADO_PAGAMENTO'],
+                where: {
+                    NR_VIAGEM: nr_viagem,
+                    NR_CLIENTE: nr_cliente,
+                },
+            }, {
+                transaction: t,
+            }).then((data) => {
+                AlteracoesEstadosPagamento.create({
+                    NR_VIAGEM: nr_viagem,
+                    NR_ALTERADOR: req.decoded.nr_user,
+                    NR_ALTERADO: nr_cliente,
+                    ESTADO_ANTERIOR: data.ESTADO_PAGAMENTO,
                     ESTADO_NOVO: estado,
                     IP: req.ip_address
                 }, {
@@ -676,13 +913,89 @@ viagensController.atualizarEstadoPagamentoViagem = async (req, res) => {
 
         return Promise.all(promises)
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true,
+            message: 'Estado do pagamento atualizado com sucesso.'
+        })
+    }).catch((err) => {
+        console.log(err)
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao atualizar o estado do pagamento.'
+        })
+    })
+}
+viagensController.atualizarEstadoClienteViagem = async (req, res) => {
+    const { nr_viagem, nr_cliente, estado } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_viagem', 'nr_cliente', 'estado'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
+
+    await sequelize.transaction(async (t) => {
+        let promises = []
+        promises.push(
+            ClientesViagem.update({
+                ESTADO_CLIENTE: estado
+            }, {
+                where: {
+                    NR_VIAGEM: nr_viagem,
+                    NR_CLIENTE: nr_cliente,
+                },
+                returning: true,
+                plain: true,
+                transaction: t,
+            }),
+        )
+
+        promises.push(
+            ClientesViagem.findOne({
+                attributes: ['ESTADO_CLIENTE'],
+                where: {
+                    NR_VIAGEM: nr_viagem,
+                    NR_CLIENTE: nr_cliente,
+                },
+            }, {
+                transaction: t,
+            }).then((data) => {
+                AlteracoesEstadosClientes.create({
+                    NR_VIAGEM: nr_viagem,
+                    NR_ALTERADOR: req.decoded.nr_user,
+                    NR_ALTERADO: nr_cliente,
+                    ESTADO_ANTERIOR: data.ESTADO_CLIENTE,
+                    ESTADO_NOVO: estado,
+                    IP: req.ip_address
+                }, {
+                    transaction: t,
+                })
+            }),
+        )
+
+        return Promise.all(promises)
+    }).then(() => {
+        return res.json({
+            success: true,
+            message: 'Estado atualizado com sucesso.'
+        })
     }).catch(() => {
-        return res.json({ success: false })
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao atualizar o estado.'
+        })
     })
 }
 viagensController.classificacaoViagem = async (req, res) => {
     const { nr_viagem, nr_cliente, classificacao, comentario } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_viagem', 'nr_cliente', 'classificacao'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
 
     ClassificacaoViagem.create({
         NR_VIAGEM: nr_viagem,
@@ -691,19 +1004,163 @@ viagensController.classificacaoViagem = async (req, res) => {
         COMENTARIO: comentario,
         IP: req.ip_address
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true
+        })
     }).catch(() => {
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
-viagensController.classificacoesViagens = async (req, res) => {
-    /*setTimeout(function() {
-        console.log(req.body)
-        res.json({ success: true })
-    }, 3000);*/
+viagensController.classificacoes = async (req, res) => {
+    ClassificacaoViagem.findAll({
+        include: [{
+            model: Utilizadores,
+            as: 'NrCliente',
+            attributes: [
+                'NOME_UTILIZADOR'
+            ]
+        }, {
+            model: PedidoViagem,
+            as: 'Viagem',
+            attributes: [
+                'DATAHORA_IDA',
+                'DATAHORA_VOLTA'
+            ],
+            include: [{
+                model: Localidades,
+                as: 'Origem',
+                attributes: [
+                    'LOCALIDADE',
+                ],
+            }, {
+                model: Localidades,
+                as: 'Destino',
+                attributes: [
+                    'LOCALIDADE',
+                ],
+            },{
+                model: Utilizadores,
+                as: 'Motorista',
+                attributes: [
+                    'NOME_UTILIZADOR',
+                ],
+            }]
+        }]
+    }).then((data) => {
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch((err) => {
+        console.log(err)
+        return res.json({
+            success:false
+        })
+    })
+}
+viagensController.classificacoesViagemMotorista = async (req, res) => {
+    const { nr_viagem } = req.body
 
-    /*console.log(req.body);*/
-    res.json({ success:true })
+    if(!validateBodyFields(req.body, ['nr_viagem'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de viagem em falta.',
+        })
+    }
+
+    ClassificacaoViagem.findAll({
+        attributes: [
+            'CLASSIFICACAO',
+            'COMENTARIO',
+            'createdAt'
+        ],
+        where: {
+            NR_VIAGEM: nr_viagem
+        },
+        include: {
+            model: PedidoViagem,
+            as: 'Viagem',
+            attributes: [
+                'DATAHORA_IDA',
+                'DATAHORA_VOLTA'
+            ],
+            include: [{
+                model: Localidades,
+                as: 'Origem',
+                attributes: [
+                    'LOCALIDADE',
+                ],
+            }, {
+                model: Localidades,
+                as: 'Destino',
+                attributes: [
+                    'LOCALIDADE',
+                ],
+            }]
+        }
+    }).then((data) => {
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success:false
+        })
+    })
+}
+viagensController.classificacoesViagensCliente = async (req, res) => {
+    const { nr_cliente } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_cliente'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de cliente em falta.',
+        })
+    }
+
+    ClassificacaoViagem.findAll({
+        attributes: [
+            'CLASSIFICACAO',
+            'COMENTARIO',
+            'createdAt'
+        ],
+        where: {
+            NR_CLIENTE: nr_cliente
+        },
+        include: {
+            model: PedidoViagem,
+            as: 'Viagem',
+            attributes: [
+                'DATAHORA_IDA',
+                'DATAHORA_VOLTA'
+            ],
+            include: [{
+                model: Localidades,
+                as: 'Origem',
+                attributes: [
+                    'LOCALIDADE',
+                ],
+            }, {
+                model: Localidades,
+                as: 'Destino',
+                attributes: [
+                    'LOCALIDADE',
+                ],
+            }]
+        }
+    }).then((data) => {
+        return res.json({
+            success:true,
+            data: data
+        })
+    }).catch(() => {
+        return res.json({
+            success:false
+        })
+    })
 }
 
 export { viagensController }

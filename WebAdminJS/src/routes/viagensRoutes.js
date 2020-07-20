@@ -6,11 +6,11 @@ const viagensRouter = express.Router()
 import { viagensController } from '../controllers/viagensController.js'
 
 viagensRouter.get('/historicoviagens',
-    authorize([Role.Administrador, Role.AdministradorOperador]),
+    authorize([Role.Administrador, Role.Administrativo, Role.AdministradorOperador, Role.AdministrativoOperador]),
     viagensController.historicoViagens
 )
 viagensRouter.post('/registopedidoviagem',
-    authorize([Role.Administrador, Role.AdministradorOperador, Role.Telefonista]),
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Telefonista, Role.Utilizador]),
     viagensController.registoPedidoViagem
 )
 viagensRouter.get('/pedidosviagem',
@@ -49,20 +49,41 @@ viagensRouter.post('/verificardividacliente',
     authorize([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador, Role.Utilizador]),
     viagensController.verificarDividaCliente
 )
+viagensRouter.get('/listadividas',
+    authorize([Role.Administrador, Role.Administrativo]),
+    viagensController.listaDividas
+)
 viagensRouter.post('/atualizarestadoviagem',
     authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
     viagensController.atualizarEstadoViagem
+)
+viagensRouter.post('/atualizarestadoviagemcancelada',
+    authorize([Role.Administrador, Role.Administrativo, Role.Utilizador]),
+    viagensController.atualizarEstadoViagemCancelada
 )
 viagensRouter.post('/atualizarestadopagamentoviagem',
     authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
     viagensController.atualizarEstadoPagamentoViagem
 )
+viagensRouter.post('/atualizarestadoclienteviagem',
+    authorize([Role.Administrador, Role.AdministradorOperador, Role.Motorista, Role.AdministrativoOperador]),
+    viagensController.atualizarEstadoClienteViagem
+)
+viagensRouter.get('/classificacoes',
+    authorize([Role.Administrador, Role.Administrativo, Role.AdministradorOperador, Role.AdministrativoOperador]),
+    viagensController.classificacoes
+)
 viagensRouter.post('/classificacaoviagem',
     authorize([Role.Administrador, Role.AdministradorOperador, Role.Utilizador]),
     viagensController.classificacaoViagem
 )
-viagensRouter.get('/classificacoesviagens',
-    viagensController.classificacoesViagens
+viagensRouter.post('/classificacoesviagensmotorista',
+    authorize([Role.Administrador, Role.Motorista]),
+    viagensController.classificacoesViagemMotorista
+)
+viagensRouter.post('/classificacoesviagenscliente',
+    authorize([Role.Administrador, Role.Utilizador]),
+    viagensController.classificacoesViagensCliente
 )
 
 export { viagensRouter }

@@ -49,7 +49,7 @@ export default function ValidarRegistos() {
     const confirm = useConfirm()
 
     const [utilizadores, setUtilizadores] = useState([])
-    const [currentUtilizador, setCurrentUtilizador] = useState({ user: [], key: null })
+    const [currentUtilizador, setCurrentUtilizador] = useState({})
     const [isSubmittingApprove, setIsSubmittingApprove] = useState(false)
     const [isSubmittingDisapprove, setIsSubmittingDisapprove] = useState(false)
     const [isVerifying, setIsVerifying] = useState(false)
@@ -103,16 +103,16 @@ export default function ValidarRegistos() {
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
     const handleClickOpen = (key) => {
-        setCurrentUtilizador({ user: utilizadores[key], key })
+        setCurrentUtilizador(utilizadores.find(x => x.NR_UTILIZADOR === key))
         setSrcSlotImg1(null)
         setSrcSlotImg2(null)
-        axios.get(`${backendUrl}public/documentos/${utilizadores[key].MORADA_COMPROVATIVO}`, { headers: authHeader(), responseType: 'arraybuffer' })
+        axios.get(`${backendUrl}public/documentos/${utilizadores.find(x => x.NR_UTILIZADOR === key).MORADA_COMPROVATIVO}`, { headers: authHeader(), responseType: 'arraybuffer' })
             .then((res) => {
                 const blob = new Blob([res.data])
                 const url = URL.createObjectURL(blob)
                 setSrcSlotImg1(url)
             })
-        axios.get(`${backendUrl}public/documentos/${utilizadores[key].N_CC_COMPROVATIVO}`, { headers: authHeader(), responseType: 'arraybuffer' })
+        axios.get(`${backendUrl}public/documentos/${utilizadores.find(x => x.NR_UTILIZADOR === key).N_CC_COMPROVATIVO}`, { headers: authHeader(), responseType: 'arraybuffer' })
             .then((res) => {
                 const blob = new Blob([res.data])
                 const url = URL.createObjectURL(blob)
@@ -122,7 +122,7 @@ export default function ValidarRegistos() {
     }
 
     const handleClose = () => {
-        setCurrentUtilizador({ user: [], key: null })
+        setCurrentUtilizador({})
         setOpen(false)
     }
     const handleDisapprove = () => {
@@ -141,7 +141,7 @@ export default function ValidarRegistos() {
             },
         }).then(() => {
             axios
-                .post(`${backendUrl}user/validacaoconta`, { user: currentUtilizador.user.NR_UTILIZADOR, aprovar: false }, { headers: authHeader() })
+                .post(`${backendUrl}user/validacaoconta`, { user: currentUtilizador.NR_UTILIZADOR, aprovar: false }, { headers: authHeader() })
                 .then((res) => {
                     if (res.data.success) {
                         setIsSubmittingDisapprove(false)
@@ -170,7 +170,7 @@ export default function ValidarRegistos() {
     const handleApprove = () => {
         setIsSubmittingApprove(true)
         axios
-            .post(`${backendUrl}user/validacaoconta`, { user: currentUtilizador.user.NR_UTILIZADOR, aprovar: true }, { headers: authHeader() })
+            .post(`${backendUrl}user/validacaoconta`, { user: currentUtilizador.NR_UTILIZADOR, aprovar: true }, { headers: authHeader() })
             .then((res) => {
                 if (res.data.success) {
                     setIsSubmittingApprove(false)
@@ -195,7 +195,7 @@ export default function ValidarRegistos() {
     }
 
     const handleClickVerificar = (key) => {
-        setCurrentUtilizador({ user: utilizadores[key], key })
+        setCurrentUtilizador(utilizadores.find(x => x.NR_UTILIZADOR === key))
         setIsVerifying(true)
         confirm({
             title: 'Verificação',
@@ -211,7 +211,7 @@ export default function ValidarRegistos() {
         })
             .then(() => {
                 axios
-                    .post(`${backendUrl}user/verificarconta`, { user: utilizadores[key].NR_UTILIZADOR }, { headers: authHeader() })
+                    .post(`${backendUrl}user/verificarconta`, { user: utilizadores.find(x => x.NR_UTILIZADOR === key).NR_UTILIZADOR }, { headers: authHeader() })
                     .then((res) => {
                         if (res.data.success) {
                             utilizadores[key].VERIFICADO = true
@@ -239,7 +239,7 @@ export default function ValidarRegistos() {
     }
 
     const handleResendEmail = (key) => {
-        setCurrentUtilizador({ user: utilizadores[key], key })
+        setCurrentUtilizador(utilizadores.find(x => x.NR_UTILIZADOR === key))
         setIsResendingEmail(true)
         confirm({
             title: 'Verificação',
@@ -255,7 +255,7 @@ export default function ValidarRegistos() {
         })
             .then(() => {
                 axios
-                    .post(`${backendUrl}user/verificarcontaenvioemail`, { user: utilizadores[key].NR_UTILIZADOR, email: utilizadores[key].EMAIL }, { headers: authHeader() })
+                    .post(`${backendUrl}user/verificarcontaenvioemail`, { user: utilizadores.find(x => x.NR_UTILIZADOR === key).NR_UTILIZADOR, email: utilizadores[key].EMAIL }, { headers: authHeader() })
                     .then((res) => {
                         if (res.data.success) {
                             setIsResendingEmail(false)
@@ -384,7 +384,7 @@ export default function ValidarRegistos() {
                                     label="Nome"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.NOME_UTILIZADOR}
+                                    value={currentUtilizador.NOME_UTILIZADOR}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -394,7 +394,7 @@ export default function ValidarRegistos() {
                                     label="Data de Nascimento"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={moment(currentUtilizador.user.DATA_NASCIMENTO).format('YYYY-MM-DD')}
+                                    value={moment(currentUtilizador.DATA_NASCIMENTO).format('YYYY-MM-DD')}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -404,7 +404,7 @@ export default function ValidarRegistos() {
                                     label="Género"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={handleGenero(currentUtilizador.user.GENERO)}
+                                    value={handleGenero(currentUtilizador.GENERO)}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -414,7 +414,7 @@ export default function ValidarRegistos() {
                                     label="Número Cartão de Cidadão"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.N_CC}
+                                    value={currentUtilizador.N_CC}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -424,7 +424,7 @@ export default function ValidarRegistos() {
                                     label="Número Segurança Social"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.N_SEGSOCIAL}
+                                    value={currentUtilizador.N_SEGSOCIAL}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -434,7 +434,7 @@ export default function ValidarRegistos() {
                                     label="Número Identificação Fiscal"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.NIF}
+                                    value={currentUtilizador.NIF}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -446,7 +446,7 @@ export default function ValidarRegistos() {
                                     label="Número de Telemóvel"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.N_TELEMOVEL}
+                                    value={currentUtilizador.N_TELEMOVEL}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -456,7 +456,7 @@ export default function ValidarRegistos() {
                                     label="Número de Telefone"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.N_TELEFONE ? currentUtilizador.user.N_TELEFONE : ''}
+                                    value={currentUtilizador.N_TELEFONE ? currentUtilizador.N_TELEFONE : ''}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -466,7 +466,7 @@ export default function ValidarRegistos() {
                                     label="Morada"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.MORADA_UTILIZADOR}
+                                    value={currentUtilizador.MORADA_UTILIZADOR}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -476,7 +476,7 @@ export default function ValidarRegistos() {
                                     label="Código Postal"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.COD_POSTAL}
+                                    value={currentUtilizador.COD_POSTAL}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -486,7 +486,7 @@ export default function ValidarRegistos() {
                                     label="Freguesia"
                                     variant="outlined"
                                     className={classes.textField}
-                                    value={currentUtilizador.user.FREGUESIA}
+                                    value={currentUtilizador.FREGUESIA}
                                     InputProps={{
                                         readOnly: true,
                                     }}
@@ -632,7 +632,7 @@ export default function ValidarRegistos() {
                                                             variant="contained"
                                                             color="primary"
                                                             disableElevation
-                                                            onClick={() => handleClickOpen(key)}
+                                                            onClick={() => handleClickOpen(row.NR_UTILIZADOR)}
                                                             style={{ marginRight: theme.spacing(3) }}
                                                         >
                                                             Validar
@@ -645,7 +645,7 @@ export default function ValidarRegistos() {
                                                                         variant="contained"
                                                                         color="primary"
                                                                         disableElevation
-                                                                        onClick={() => handleClickVerificar(key)}
+                                                                        onClick={() => handleClickVerificar(row.NR_UTILIZADOR)}
                                                                         disabled={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') < 30 || (isVerifying && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR)}
                                                                         style={{
                                                                             marginRight: theme.spacing(3),
@@ -664,7 +664,7 @@ export default function ValidarRegistos() {
                                                                         variant="contained"
                                                                         color="primary"
                                                                         disableElevation
-                                                                        onClick={() => handleResendEmail(key)}
+                                                                        onClick={() => handleResendEmail(row.NR_UTILIZADOR)}
                                                                         disabled={moment().diff(row.DATA_ENVIO_MAIL, 'minutes') < 30 || (isResendingEmail && currentUtilizador.user.NR_UTILIZADOR === row.NR_UTILIZADOR)}
                                                                         style={{
                                                                             width: '148px',

@@ -7,7 +7,7 @@ import {
     Tooltip,
     Typography,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import Alert from '@material-ui/lab/Alert'
 import clsx from 'clsx'
 import { Link as RouterLink } from 'react-router-dom'
 import React from 'react'
@@ -22,7 +22,11 @@ export const TabelasPaginasHeader = (props) => {
     } = props
     return (
         <>
-            <Backdrop className={classes.backdrop} open={openBackdrop} onClick={handleCloseBackdrop}>
+            <Backdrop
+                className={classes.backdrop}
+                open={openBackdrop}
+                onClick={handleCloseBackdrop}
+            >
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Snackbar
@@ -36,7 +40,7 @@ export const TabelasPaginasHeader = (props) => {
                     {message}
                 </Alert>
             </Snackbar>
-            <Box mb={2} className={classes.container_header}>
+            <Box mb={2} className={classes.container_header_tabelas}>
                 <Box mb={1} pt={1} className={classes.heading}>
                     <Typography variant="h5">
                         {titulo}

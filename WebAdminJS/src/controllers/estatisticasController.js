@@ -122,13 +122,16 @@ estatisticasController.origemDestinoDia = async (req, res) => {
             ") datas \n" +
             "LEFT OUTER JOIN (\n" +
             "SELECT to_char(date_trunc('day', DATE(\"DATAHORA_IDA\")), 'YYYY-MM-DD') as data, COUNT(\"DATAHORA_IDA\") as count FROM \"VIAGEM_PEDIDO\" \n" +
-            "WHERE \"DATAHORA_IDA\" > NOW() - \"interval\"('1 MONTH') AND \"ORIGEM\" = "+ req.params.localidade +"\n" +
+            "WHERE \"DATAHORA_IDA\" > NOW() - \"interval\"('1 MONTH') AND \"ORIGEM\" = :localidade\n" +
             "GROUP BY DATE(\"DATAHORA_IDA\")\n" +
             "ORDER BY data ASC\n" +
             ") viagem\n" +
             "ON datas.datas = to_char(date_trunc('day', viagem.data::TIMESTAMP), 'YYYY-MM-DD')\n" +
             "GROUP BY datas.datas, viagem.count\n" +
             "ORDER BY datas.datas ASC", {
+            replacements: {
+                localidade: req.params.localidade
+            },
             type: sequelize.QueryTypes.SELECT
         }).then((data) => {
             origemDia = data
@@ -141,13 +144,16 @@ estatisticasController.origemDestinoDia = async (req, res) => {
             ") datas \n" +
             "LEFT OUTER JOIN (\n" +
             "SELECT to_char(date_trunc('day', DATE(\"DATAHORA_IDA\")), 'YYYY-MM-DD') as data, COUNT(\"DATAHORA_IDA\") as count FROM \"VIAGEM_PEDIDO\" \n" +
-            "WHERE \"DATAHORA_IDA\" > NOW() - \"interval\"('1 MONTH') AND \"DESTINO\" = "+ req.params.localidade +"\n" +
+            "WHERE \"DATAHORA_IDA\" > NOW() - \"interval\"('1 MONTH') AND \"DESTINO\" = :localidade\n" +
             "GROUP BY DATE(\"DATAHORA_IDA\")\n" +
             "ORDER BY data ASC\n" +
             ") viagem\n" +
             "ON datas.datas = to_char(date_trunc('day', viagem.data::TIMESTAMP), 'YYYY-MM-DD')\n" +
             "GROUP BY datas.datas, viagem.count\n" +
             "ORDER BY datas.datas ASC", {
+            replacements: {
+                localidade: req.params.localidade
+            },
             type: sequelize.QueryTypes.SELECT
         }).then((data) => {
             destinoDia = data
@@ -159,10 +165,11 @@ estatisticasController.origemDestinoDia = async (req, res) => {
             success: true,
             data: data
         })
-    }).catch(() => {
+    }).catch((err) => {
+        console.log(err)
         return res.json({
             success: false,
-            message: 'Ocorreu um erro ao obter as estatisticas.'
+            message: 'Ocorreu um erro ao obter as estatisticas da oridem/destino dia.'
         })
     })
 }
@@ -173,13 +180,16 @@ estatisticasController.contadorViagensMotoristaMes = async (req, res) => {
         ") datas \n" +
         "LEFT OUTER JOIN (\n" +
         "SELECT to_char(date_trunc('month', \"DATAHORA_IDA\"), 'YYYY-MM-DD') as data, COUNT(\"DATAHORA_IDA\") as count FROM \"VIAGEM_PEDIDO\" \n" +
-        "WHERE \"DATAHORA_IDA\" > NOW() - \"interval\"('1 year') AND \"MOTORISTA\" = "+ req.params.motorista +"\n" +
+        "WHERE \"DATAHORA_IDA\" > NOW() - \"interval\"('1 year') AND \"MOTORISTA\" = :motorista\n" +
         "GROUP BY data\n" +
         "ORDER BY data ASC\n" +
         ") viagem\n" +
         "ON datas.datas = to_char(date_trunc('month', viagem.data::TIMESTAMP), 'YYYY-MM')\n" +
         "GROUP BY datas.datas, viagem.count\n" +
         "ORDER BY datas.datas ASC", {
+        replacements: {
+            motorista: req.params.motorista
+        },
         type: sequelize.QueryTypes.SELECT
     }).then((data) => {
         return res.json({

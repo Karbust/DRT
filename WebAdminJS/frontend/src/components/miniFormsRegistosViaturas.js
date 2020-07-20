@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core'
 import { Field, Formik } from 'formik'
 import axios from 'axios'
-import { Autocomplete } from '@material-ui/lab'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 
 import { backendUrl } from '../configs'
 

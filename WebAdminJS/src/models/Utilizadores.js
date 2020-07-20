@@ -152,7 +152,6 @@ var Utilizadores = sequelize.define('UTILIZADORES', {
                 })
         },
         beforeUpdate: (user) => {
-            console.log(user.dataValues.PASSWORD !== user._previousDataValues.PASSWORD)
             if (user.dataValues.PASSWORD !== user._previousDataValues.PASSWORD) {
                 return bcrypt.hash(user.dataValues.PASSWORD, 10)
                     .then(hash => {

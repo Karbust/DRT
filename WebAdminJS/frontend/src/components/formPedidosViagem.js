@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core'
 import { Field, useFormikContext } from 'formik'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { Autocomplete } from '@material-ui/lab'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment'
 import clsx from 'clsx'
@@ -36,8 +36,8 @@ export const FormPedidosViagem = ({
     const [viaturas, setViaturas] = useState([])
     const [idaVoltaSwitch, setIdaVoltaSwitch] = useState(!values.datahora_ida)
     const [idaVolta, setIdaVolta] = useState(!!values.datahora_volta)
-    const [origem, setOrigem] = useState(currentViagem.viagem.Origem)
-    const [destino, setDestino] = useState(currentViagem.viagem.Destino)
+    const [origem, setOrigem] = useState(currentViagem.Origem)
+    const [destino, setDestino] = useState(currentViagem.Destino)
     const [response, setResponse] = useState(null)
     const [recalcular, setRecalcular] = useState(false)
     const [distDur, setDistDur] = useState({
@@ -149,7 +149,7 @@ export const FormPedidosViagem = ({
                                         }
                                         return option.LOCALIDADE
                                     }}
-                                    defaultValue={currentViagem.viagem.Origem}
+                                    defaultValue={currentViagem.Origem}
                                     getOptionDisabled={(option) => option.NR_LOCALIDADE === values.destino}
                                     renderInput={(params) => (
                                         <TextField
@@ -193,7 +193,7 @@ export const FormPedidosViagem = ({
                                         }
                                         return option.LOCALIDADE
                                     }}
-                                    defaultValue={currentViagem.viagem.Destino}
+                                    defaultValue={currentViagem.Destino}
                                     getOptionDisabled={(option) => option.NR_LOCALIDADE === values.destino}
                                     renderInput={(params) => (
                                         <TextField
@@ -324,7 +324,7 @@ export const FormPedidosViagem = ({
                                                 } else if (moment(values.datahora_volta).diff(value.format('YYYY-MM-DD HH:mm'), 'minutes') < 30) {
                                                     errors.datahora_volta = 'Hora inválida (+30 minutos diferença)'
                                                 } else {
-                                                    errors.datahora_volta = undefined
+                                                    delete errors.datahora_volta
                                                 }
                                             }
                                         }}
@@ -386,7 +386,7 @@ export const FormPedidosViagem = ({
                                             } else if (value && moment(value).diff(values.datahora_ida, 'minutes') < 30) {
                                                 errors.datahora_ida = 'Hora inválida (30 minutos diferença)'
                                             } else {
-                                                errors.datahora_ida = undefined
+                                                delete errors.datahora_ida
                                             }
                                         }}
                                         className={clsx(classes.textField, {

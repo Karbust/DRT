@@ -15,7 +15,7 @@ import { compararListas, getComparator, getUrl, sortFilter } from '../components
 import { TabelasFooter } from '../components/tabelasFooter'
 import { TabelasPaginasHeader } from '../components/tabelasPaginasHeader'
 
-export default function ValidarRegistos() {
+export default function ListaViaturas() {
     const classes = useStyles()
 
     const [viaturas, setViaturas] = useState([])

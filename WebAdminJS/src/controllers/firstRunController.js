@@ -76,7 +76,7 @@ firstRunController.firstRun = async (req, res) => {
 
     sequelize.sync()
 
-    res.json({
+    return res.json({
         success: true,
     })
 }

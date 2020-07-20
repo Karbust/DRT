@@ -105,6 +105,9 @@ export default function ListaClientes() {
                 setOpen={setOpen}
                 currentUtilizador={currentUtilizador}
                 setCurrentUtilizador={setCurrentUtilizador}
+                setMessage={setMessage}
+                setOpenAlert={setOpenAlert}
+                setSeverity={setSeverity}
             />
             <Box mb={2}>
                 <TableContainer component={Paper}>

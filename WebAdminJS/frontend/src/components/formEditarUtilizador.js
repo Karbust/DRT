@@ -20,7 +20,7 @@ import authHeader from './auth-header'
 import { StyledButton, Transition, useStyles } from './MuiStyles'
 
 export const FormEditarUtilizador = ({
-    open, setOpen, currentUtilizador, setCurrentUtilizador,
+    open, setOpen, currentUtilizador, setCurrentUtilizador, setMessage, setSeverity, setOpenAlert
 }) => {
     const classes = useStyles()
     const theme = useTheme()
@@ -53,14 +53,22 @@ export const FormEditarUtilizador = ({
             .post(`${backendUrl}user/editarutilizador`, { values, nr_user: currentUtilizador.NR_UTILIZADOR }, { headers: authHeader() })
             .then((data) => {
                 if (data.data.success) {
+                    setMessage(data.data.message)
+                    setSeverity('success')
                     handleClose()
                 } else {
-                    handleClose()
+                    setMessage(data.data.message)
+                    setSeverity('error')
                 }
             })
-            .catch(() => {
-                handleClose()
+            .catch((error) => {
+                console.log(error)
+                setMessage(error.message)
+                setSeverity('error')
             })
+            .finally(() => {{
+                setOpenAlert(true)
+            }})
     }
 
     const handleGenero = (genero) => {
@@ -166,24 +174,16 @@ export const FormEditarUtilizador = ({
                                         <Box mb={2}>
                                             <Grid container spacing={1}>
                                                 <Grid item md={6} sm={6} xs={12}>
-                                                    <Field
-                                                        name="nome"
-                                                        validate={(nome) => (nome.length >= 5 ? undefined : 'Nome inválido')}
-                                                    >
-                                                        {({ field, form: { errors } }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                required
-                                                                fullWidth
-                                                                label="Nome"
-                                                                variant="outlined"
-                                                                className={classes.textField}
-                                                                error={Boolean(errors.nome)}
-                                                                helperText={errors.nome}
-                                                                onBlur={(event) => validateField(event.currentTarget.name)}
-                                                            />
-                                                        )}
-                                                    </Field>
+                                                    <TextField
+                                                        fullWidth
+                                                        label="Nome"
+                                                        variant="outlined"
+                                                        className={classes.textField}
+                                                        value={currentUtilizador.NOME_UTILIZADOR}
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                    />
                                                     <TextField
                                                         fullWidth
                                                         label="Data de Nascimento"
@@ -234,20 +234,16 @@ export const FormEditarUtilizador = ({
                                                             readOnly: true,
                                                         }}
                                                     />
-                                                    <Field
-                                                        name="utilizador"
-                                                    >
-                                                        {({ field, form: { errors } }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                required
-                                                                fullWidth
-                                                                label="Utilizador"
-                                                                variant="outlined"
-                                                                className={classes.textField}
-                                                            />
-                                                        )}
-                                                    </Field>
+                                                    <TextField
+                                                        fullWidth
+                                                        label="Utilizador"
+                                                        variant="outlined"
+                                                        value={currentUtilizador.LOGIN_USER}
+                                                        className={classes.textField}
+                                                        InputProps={{
+                                                            readOnly: true,
+                                                        }}
+                                                    />
                                                 </Grid>
                                                 <Grid item md={6} sm={6} xs={12}>
                                                     <Field
@@ -270,7 +266,7 @@ export const FormEditarUtilizador = ({
                                                     </Field>
                                                     <Field
                                                         name="telefone"
-                                                        validate={(telefone) => (telefone.length === 9 ? undefined : 'Telefone inválido')}
+                                                        validate={(telefone) => ((telefone.length === 0 || telefone.length === 9) ? undefined : 'Telefone inválido')}
                                                     >
                                                         {({ field, form: { errors } }) => (
                                                             <TextField

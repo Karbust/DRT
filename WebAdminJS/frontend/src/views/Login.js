@@ -11,7 +11,7 @@ import {
     FormControlLabel,
     Box,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import Alert from '@material-ui/lab/Alert'
 import { Link as RouterLink } from 'react-router-dom'
 import 'typeface-roboto'
 import CircularProgress from '@material-ui/core/CircularProgress'

@@ -26,7 +26,8 @@ export default function DashboardView() {
     const [localidades, setLocalidades] = useState({})
     const [localidade, setLocalidade] = useState(9)
     const [motoristas, setMotoristas] = useState({})
-    const [motorista, setMotorista] = useState(7)
+    //const [motorista, setMotorista] = useState(7)
+    const [motorista, setMotorista] = useState(2)
     const [top10localidades, setTop10localidades] = useState({
         options: {},
         series: [],

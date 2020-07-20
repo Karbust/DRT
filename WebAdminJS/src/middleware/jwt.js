@@ -10,6 +10,18 @@ let Role = {
     AdministrativoOperador: 6,
     Utilizador: 7
 }
+let RolesAllowed = {
+    1: [Role.Administrador],
+    2: [Role.Administrador],
+    3: [Role.Administrador],
+    4: [Role.Administrador, Role.AdministradorOperador],
+    5: [Role.Administrador, Role.AdministradorOperador],
+    6: [Role.Administrador, Role.AdministradorOperador],
+    7: [Role.Administrador, Role.Administrador, Role.Administrativo]
+}
+let checkRole = (roles = [], tipoUser) => {
+    return (roles && roles.includes(tipoUser))
+}
 let checkToken = (req, res, next) => {
     let token = req.headers['x-access-token'] ||
         req.headers['authorization']
@@ -42,7 +54,7 @@ function authorize(roles = []) {
 
     return [
         (req, res, next) => {
-            if (roles.length && !roles.includes(req.decoded.tipo_utilizador)) {
+            if (!checkRole(roles, req.decoded.tipo_utilizador)){
                 return res.status(401).json({
                     success: false,
                     message: 'Unauthorized'
@@ -54,4 +66,18 @@ function authorize(roles = []) {
     ]
 }
 
-export { checkToken, authorize, Role }
+let authorizeTypeUser = (req, res, next) => {
+    /*console.log(req.body)
+    console.log(req.file)
+    console.log(req.files)*/
+    if (!checkRole(RolesAllowed[req.body.tipo_utilizador], req.decoded.tipo_utilizador)) {
+        return res.status(401).json({
+            success: false,
+            message: 'Unauthorized1'
+        })
+    }
+
+    next()
+}
+
+export { checkToken, authorize, Role, authorizeTypeUser }

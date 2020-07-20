@@ -7,10 +7,16 @@ import {
 import { Notificacoes } from '../models/Notificacoes.js'
 import { sequelize } from '../config/database.js'
 import { url, jwt as jwtSecret } from '../config/config.js'
-import { password as passwordGen, sendEmail } from '../functions.js'
+import { password as passwordGen, sendEmail, validateBodyFields } from '../functions.js'
 import moment from 'moment'
 import NodeCache from 'node-cache'
 import { v4 as uuidv4 } from 'uuid'
+import fs from 'fs'
+import { dirname } from "path"
+import { fileURLToPath } from "url"
+import { ClientesViagem } from '../models/Viagens.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 Utilizadores.belongsTo(TiposUtilizadores, { foreignKey: 'TIPO_UTILIZADOR', as: 'TipoUser' })
 TiposUtilizadores.hasMany(Utilizadores, { foreignKey: 'TIPO_UTILIZADOR', as: 'UTILIZADORTIPOUTILIZADOR' })
@@ -38,12 +44,12 @@ userController.listaAdministradores = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de administradores.",
         })
@@ -57,12 +63,12 @@ userController.listaAdministrativos = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de administrativos.",
         })
@@ -76,12 +82,12 @@ userController.ListaAdministradoresOperador = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de administradores do operador.",
         })
@@ -95,12 +101,12 @@ userController.listaTelefonistas = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de telefonistas.",
         })
@@ -114,12 +120,12 @@ userController.listaMotoristas = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de motoristas.",
         })
@@ -133,12 +139,12 @@ userController.listaAdministrativosOperador = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de administrativos do operador.",
         })
@@ -152,12 +158,12 @@ userController.listaClientes = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de utilizadores.",
         })
@@ -172,12 +178,12 @@ userController.listaClientesReduzido = async (req, res) => {
             VERIFICADO: true
         },
     }).then((data) => {
-        res.json({
+        return res.json({
             success: true,
             data: data,
         })
     }).catch(() => {
-        res.json({
+        return res.json({
             success: false,
             data: "Ocorreu um erro ao obter a lista de utilizadores.",
         })
@@ -185,29 +191,131 @@ userController.listaClientesReduzido = async (req, res) => {
 }
 userController.editarUtilizador = async (req, res) => {
     let {
-        nome, telemovel, telefone, morada, codpostal, localidade, email, utilizador, password
+        telemovel, telefone, morada, codpostal, localidade, email, password
     } = req.body.values
+    const { nr_user } = req.body
+
+    if(!validateBodyFields(req.body.values, ['telemovel', 'morada', 'codpostal', 'localidade', 'email']) || !nr_user){
+        console.log(req.body)
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
 
     Utilizadores.update({
-        NOME_UTILIZADOR: nome,
         N_TELEMOVEL: telemovel,
-        N_TELEFONE: telefone,
+        N_TELEFONE: telefone || null,
         MORADA_UTILIZADOR: morada,
         COD_POSTAL: codpostal,
         FREGUESIA: localidade,
         EMAIL: email,
-        LOGIN_USER: utilizador,
         PASSWORD: password
     }, {
         where: {
-            NR_UTILIZADOR: req.body.nr_user,
+            NR_UTILIZADOR: nr_user,
         },
         individualHooks: true
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true,
+            message: 'Dados atualizados com sucesso.'
+        })
     }).catch((err) => {
         console.log(err)
-        return res.json({ success: false })
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao atualizar os dados.'
+        })
+    })
+}
+userController.editarUtilizadorPassword = async (req, res) => {
+    let { passwordAntiga, passwordNova } = req.body
+    const { nr_user } = req.decoded
+
+    if(!validateBodyFields(req.body, ['passwordAntiga', 'passwordNova']) || !nr_user){
+        return res.status(400).json({
+            success: false,
+            message: 'Dados em falta.',
+        })
+    }
+    await Utilizadores.findOne({
+        attributes: [
+            'PASSWORD',
+        ],
+        where: {
+            NR_UTILIZADOR: nr_user,
+        },
+    }).then((data) => {
+        if (!data || !bcrypt.compareSync(passwordAntiga, data.PASSWORD)) {
+            return res.json({
+                success: false,
+                message: 'Password antiga inválida.',
+            })
+        }
+
+        Utilizadores.update({
+            PASSWORD: passwordNova
+        }, {
+            where: {
+                NR_UTILIZADOR: nr_user,
+            },
+            individualHooks: true
+        }).then(() => {
+            return res.json({
+                success: true,
+                message: 'Password alterada com sucesso.'
+            })
+        }).catch(() => {
+            return res.json({
+                success: false,
+                message: 'Ocorreu um erro ao alterar a password.'
+            })
+        })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Utilizador não encontrado'
+        })
+    })
+}
+userController.resetUtilizadorPassword = async (req, res) => {
+    let { email, login } = req.body
+
+    if(!validateBodyFields(req.body, ['email', 'login'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Email em falta.',
+        })
+    }
+
+    let password = passwordGen(8)
+
+    Utilizadores.update({
+        PASSWORD: password
+    }, {
+        where: {
+            EMAIL: email,
+            LOGIN_USER: login,
+            TIPO_UTILIZADOR: {
+                [op.in]: [5, 7],
+            },
+        },
+        individualHooks: true
+    }).then(async () => {
+        await sendEmail(email,
+            'DRT - Nova Password',
+            'Olá<br><br>A sua password é: ' + password)
+
+        return res.json({
+            success: true,
+            message: 'Password nova enviada por email.'
+        })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao alterar a password.'
+        })
     })
 }
 userController.listarMotoristas = async (req, res) => {
@@ -241,8 +349,16 @@ userController.listarMotoristas = async (req, res) => {
 }
 
 userController.validacaoConta = async (req, res) => {
+    let { user, aprovar } = req.body
+
+    if(!validateBodyFields(req.body, ['user'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await sequelize.transaction(async (t) => {
-        let { user, aprovar } = req.body
         let { nr_user } = req.decoded
 
         let promises = []
@@ -291,61 +407,83 @@ userController.validacaoConta = async (req, res) => {
 
         return Promise.all(promises)
     }).then(() => {
-        return res.json({ success: true })
-    }).catch((err) => {
-        console.log(err)
-        return res.json({ success: false })
+        return res.json({
+            success: true
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }
 userController.verificarContaLink = async (req, res) => {
     let { token } = req.body
-    if(token !== '1' && token !== '' && token !== null && token !== undefined) {
-        await sequelize.transaction(async (t) => {
-            let promises = []
-            promises.push(
-                Utilizadores.update({
-                    VERIFICADO: true,
-                    TOKEN: '1',
-                }, {
-                    where: {
-                        TOKEN: token,
-                        VERIFICADO: false,
-                    },
-                    transaction: t,
-                }),
-            )
 
-            promises.push(
-                Utilizadores.findOne({
-                    attributes: ['NR_UTILIZADOR'],
-                    where: {
-                        TOKEN: token,
-                    },
-                }, {
-                    transaction: t,
-                }).then((data) => {
-                    Verificacoes.create({
-                        NR_VERIFICADO: data.NR_UTILIZADOR,
-                        TOKEN: token,
-                        DATA_HORA_VERIFICACAO: moment().format('YYYY-MM-DD HH:mm:ss'),
-                        VALIDADO: 'EMAIL',
-                    }, {
-                        transaction: t,
-                    })
-                }),
-            )
-
-            return Promise.all(promises)
-        }).then(() => {
-            return res.json({ success: true })
-        }).catch(() => {
-            return res.json({ success: false })
+    if(token !== '1' && !validateBodyFields(req.body, ['token'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Token inválida.',
         })
-    } else {
-        return res.json({ success: false })
     }
+
+    await sequelize.transaction(async (t) => {
+        let promises = []
+        promises.push(
+            Utilizadores.update({
+                VERIFICADO: true,
+                TOKEN: '1',
+            }, {
+                where: {
+                    TOKEN: token,
+                    VERIFICADO: false,
+                },
+                transaction: t,
+            }),
+        )
+
+        promises.push(
+            Utilizadores.findOne({
+                attributes: ['NR_UTILIZADOR'],
+                where: {
+                    TOKEN: token,
+                },
+            }, {
+                transaction: t,
+            }).then((data) => {
+                Verificacoes.create({
+                    NR_VERIFICADO: data.NR_UTILIZADOR,
+                    TOKEN: token,
+                    DATA_HORA_VERIFICACAO: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    VALIDADO: 'EMAIL',
+                }, {
+                    transaction: t,
+                })
+            }),
+        )
+
+        return Promise.all(promises)
+    }).then(() => {
+        return res.json({
+            success: true,
+            message: 'Email verificado com sucesso.'
+        })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro durante a verificação.'
+        })
+    })
 }
 userController.verificarConta = async (req, res) => {
+    const { user } = req.body
+
+    if(!validateBodyFields(req.body, ['user'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await sequelize.transaction(async (t) => {
         let promises = []
         promises.push(
@@ -353,7 +491,7 @@ userController.verificarConta = async (req, res) => {
                 VERIFICADO: true,
             }, {
                 where: {
-                    NR_UTILIZADOR: req.body.user,
+                    NR_UTILIZADOR: user,
                 },
                 transaction: t,
             }),
@@ -373,27 +511,68 @@ userController.verificarConta = async (req, res) => {
 
         return Promise.all(promises)
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true
+        })
     }).catch(() => {
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
 userController.verificarContaEnvioEmail = async (req, res) => {
+    const { user, email } = req.body
+
+    if(!validateBodyFields(req.body, ['user', 'email'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador e/ou email em falta.',
+        })
+    }
+
     let token = uuidv4()
 
-    //sendEmail(req.body.email.toString(), 'Conta criada no DRT', 'Token: ' + token)
+    await sequelize.transaction(async (t) => {
+        await Utilizadores.update({
+            TOKEN: token,
+            DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
+        }, {
+            where: {
+                NR_UTILIZADOR: user,
+            },
+            transaction: t
+        })
 
-    Utilizadores.update({
-        TOKEN: token,
-        DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
-    }, {
-        where: {
-            NR_UTILIZADOR: req.body.user,
-        },
+        let data = await Utilizadores.findOne({
+            attributes: [
+                'NOME_UTILIZADOR'
+            ]
+        }, {
+            where: {
+                NR_UTILIZADOR: user,
+            },
+            transaction: t
+        })
+
+        await sendEmail(email.toString(),
+            'Conta criada no DRT - Segunda Via',
+            'Olá ' + data.NOME_UTILIZADOR + '<br><br>O seu link de ativação da conta: ' + url + 'Ativacao/' + token)
+            .then(() => {
+                console.log('Sucesso')
+            })
+            .catch((err) => {
+                console.log(err)
+                throw new Error()
+            })
+
     }).then(() => {
-        return res.json({ success: true })
+        return res.json({
+            success: true
+        })
     }).catch(() => {
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
 
@@ -432,7 +611,9 @@ userController.listaUtilizadoresNaoValidados = async (req, res) => {
             data: data,
         })
     }).catch(() => {
-        return res.json({ success: false })
+        return res.json({
+            success: false
+        })
     })
 }
 
@@ -472,9 +653,11 @@ userController.listaRegistosNaoValidados = async (req, res) => {
             success: true,
             data: data,
         })
-    }).catch((error) => {
-        console.log(error)
-        return res.json({ success: false, message: error })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Não foi possível obter a lista de registos não validados'
+        })
     })
 }
 /*userController.apagarRegistoNaoValidado = async (req, res) => {
@@ -503,22 +686,34 @@ userController.listaRegistosNaoValidados = async (req, res) => {
         )
 
         return Promise.all(promises)
-    }).then(function() {
-        return res.json({ success: true })
-    }).catch(function(err) {
-        console.log(err)
-        return res.json({ success: false })
+    }).then(() => {
+        return res.json({
+            success: true
+        })
+    }).catch(() => {
+        return res.json({
+            success: false
+        })
     })
 }*/
 
 userController.getNotificacoes = async (req, res) => {
+    const { nr_user } = req.body
+
+    if(!validateBodyFields(req.body, ['nr_user'])){
+        return res.status(400).json({
+            success: false,
+            message: 'Número de utilizador em falta.',
+        })
+    }
+
     await Notificacoes.findAll({
         attributes: [
             'CONTEUDO',
             'createdAt'
         ],
         where: {
-            NR_UTILIZADOR: req.body.nr_user //req.decoded.nrUser
+            NR_UTILIZADOR: nr_user
         },
         order: [['createdAt', 'DESC']],
         limit: 10
@@ -539,13 +734,32 @@ userController.registar = async (req, res) => {
     let {
         nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, tipo_utilizador
     } = req.body
-    if(req.files === undefined){
-        return res.json({
+
+    if(!req.files){
+        return res.status(400).json({
             success: false,
             message: 'Erro ao efetuar o upload dos ficheiros.',
         })
     }
-    let imagens = req.files.map((file) => file.filename)
+
+    if(!validateBodyFields(req.body,
+        ['nome', 'datanascimento', 'genero', 'ncc', 'nss', 'nif', 'telemovel', 'nacionalidade',
+            'morada', 'codpostal', 'localidade', 'email', 'utilizador', 'tipo_utilizador'
+        ])){
+        return res.status(400).json({
+            success: false,
+            message: 'Campos em Branco.',
+        })
+    }
+
+    req.files.files.map((file) => {
+        let newName = uuidv4() + '-' + file.originalFilename
+        file.newName = newName
+        //fs.renameSync(__dirname + '\\..\\..\\' + file.path, 'src\\public\\documentos\\' + newName)
+        fs.renameSync(__dirname + '/../../' + file.path, 'src/public/documentos/' + newName)
+    })
+
+    let imagens = req.files.files.map((file) => file.newName)
     let password = passwordGen(8)
     let token = uuidv4()
 
@@ -557,7 +771,7 @@ userController.registar = async (req, res) => {
         N_SEGSOCIAL: nss,
         NIF: nif,
         N_TELEMOVEL: telemovel,
-        N_TELEFONE: telefone,
+        N_TELEFONE: telefone || null,
         GENERO: genero,
         MORADA_UTILIZADOR: morada,
         COD_POSTAL: codpostal,
@@ -569,16 +783,16 @@ userController.registar = async (req, res) => {
         EMAIL: email,
         LOGIN_USER: utilizador,
         PASSWORD: password,
-        VALIDADO: tipo_utilizador !== 7,
+        VALIDADO: tipo_utilizador === 7,
         VERIFICADO: false,
         TOKEN: token,
         DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss'),
         IP_REGISTO: req.ip_address
-    }).then((data) => {
-        sendEmail(data.EMAIL,
+    }).then(async (data) => {
+        /*await sendEmail(data.EMAIL,
             'Conta criada no DRT',
-            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'ativacao/' + token)
-
+            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'Ativacao/' + token)
+*/
         return res.json({
             success: true,
             data: data,
@@ -589,18 +803,36 @@ userController.registar = async (req, res) => {
             success: false,
             message: 'Email ou Utilizador já registado',
         })
+    }).catch((err) => {
+        console.log(err)
+        return res.json({
+            success: false,
+            message: 'Ocorreu um erro ao inserir o utilizador na base de dados.',
+        })
     })
 }
 userController.registarApp = async (req, res) => {
     let {
         nome, datanascimento, genero, ncc, nss, nif, telemovel, telefone, nacionalidade, morada, codpostal, localidade, email, utilizador, password
     } = req.body
+
     if(req.files === undefined){
         return res.json({
             success: false,
             message: 'Erro ao efetuar o upload dos ficheiros.',
         })
     }
+
+    if(!validateBodyFields(req.body,
+        ['nome', 'datanascimento', 'genero', 'ncc', 'nss', 'nif', 'telemovel', 'nacionalidade',
+            'morada', 'codpostal', 'localidade', 'email', 'utilizador', 'password'
+        ])){
+        return res.status(400).json({
+            success: false,
+            message: 'Campos em Branco.',
+        })
+    }
+
     let imagens = req.files.map((file) => file.filename)
     let token = uuidv4()
 
@@ -627,11 +859,12 @@ userController.registarApp = async (req, res) => {
         VALIDADO: false,
         VERIFICADO: false,
         TOKEN: token,
-        DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss')
-    }).then((data) => {
-        /*sendEmail(data.EMAIL,
+        DATA_ENVIO_MAIL: moment().format('YYYY-MM-DD HH:mm:ss'),
+        IP_REGISTO: req.ip_address
+    }).then(async (data) => {
+        await sendEmail(data.EMAIL,
             'Conta criada no DRT',
-            'Olá ' + nome + '<br><br>A sua password é: ' + password + '<br><br>O seu link de ativação da conta: ' + url + 'ativacao/' + token)*/
+            'Olá ' + nome + '<br><br>O seu link de ativação da conta: ' + url + 'Ativacao/' + token)
 
         return res.json({
             success: true,
@@ -653,173 +886,193 @@ userController.registarApp = async (req, res) => {
 }
 
 userController.login = async (req, res) => {
-    if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
-        return res.status(403).json({
+    const { username, password } = req.body
+
+    if(!validateBodyFields(req.body, ['username', 'password'])){
+        return res.status(400).json({
             success: false,
-            message: 'Campos em Branco',
-        })
-    } else if (req.body.username && req.body.password) {
-        var username = req.body.username
-        var password = req.body.password
-
-        await Utilizadores.findOne({
-            attributes: [
-                'NR_UTILIZADOR',
-                'NOME_UTILIZADOR',
-                'TIPO_UTILIZADOR',
-                'PASSWORD',
-                'VALIDADO',
-                'VERIFICADO',
-            ],
-            where: {
-                EMAIL: username,
-                TIPO_UTILIZADOR: {
-                    [op.in]: [1, 2, 3, 4, 6],
-                },
-            },
-        }).then((data) => {
-            if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
-                return res.json({
-                    success: false,
-                    message: 'Dados de autenticação inválidos.',
-                })
-            }
-
-            if (!data.VALIDADO) {
-                return res.json({
-                    success: false,
-                    message: 'Conta não validada.',
-                })
-            }
-
-            if (!data.VERIFICADO) {
-                return res.json({
-                    success: false,
-                    message: 'Conta não verificada.',
-                })
-            }
-
-            Utilizadores.update({
-                IP_ULTIMO_LOGIN: req.ip_address,
-            }, {
-                where: {
-                    NR_UTILIZADOR: data.NR_UTILIZADOR,
-                }
-            })
-
-            let token
-            if (req.body.remember) {
-                token = jwt.sign({
-                    nr_user: data.NR_UTILIZADOR,
-                    email: username,
-                    tipo_utilizador: data.TIPO_UTILIZADOR
-                }, jwtSecret, {})
-            } else {
-                token = jwt.sign({
-                    nr_user: data.NR_UTILIZADOR,
-                    email: username,
-                    tipo_utilizador: data.TIPO_UTILIZADOR
-                }, jwtSecret, { expiresIn: '1h' })
-            }
-
-            return res.json({
-                success: true,
-                message: 'Autenticação realizada com sucesso!',
-                token: token,
-                tipoUser: data.TIPO_UTILIZADOR,
-                validado: data.VALIDADO,
-                verificado: data.VERIFICADO,
-                nome: data.NOME_UTILIZADOR
-            })
-        }).catch(() => {
-            return res.json({
-                success: false,
-                message: 'Erro no processo de autenticação. Tente de novo mais tarde.',
-            })
+            message: 'Campos em Branco.',
         })
     }
+
+    await Utilizadores.findOne({
+        attributes: [
+            'NR_UTILIZADOR',
+            'NOME_UTILIZADOR',
+            'TIPO_UTILIZADOR',
+            'PASSWORD',
+            'VALIDADO',
+            'VERIFICADO',
+        ],
+        where: {
+            EMAIL: username,
+            TIPO_UTILIZADOR: {
+                [op.in]: [1, 2, 3, 4, 6],
+            },
+        },
+    }).then((data) => {
+        if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
+            return res.json({
+                success: false,
+                message: 'Dados de autenticação inválidos.',
+            })
+        }
+
+        if (!data.VALIDADO) {
+            return res.json({
+                success: false,
+                message: 'Conta não validada.',
+            })
+        }
+
+        if (!data.VERIFICADO) {
+            return res.json({
+                success: false,
+                message: 'Conta não verificada.',
+            })
+        }
+
+        Utilizadores.update({
+            IP_ULTIMO_LOGIN: req.ip_address,
+        }, {
+            where: {
+                NR_UTILIZADOR: data.NR_UTILIZADOR,
+            }
+        })
+
+        let token
+        if (req.body.remember) {
+            token = jwt.sign({
+                nr_user: data.NR_UTILIZADOR,
+                email: username,
+                tipo_utilizador: data.TIPO_UTILIZADOR
+            }, jwtSecret, {})
+        } else {
+            token = jwt.sign({
+                nr_user: data.NR_UTILIZADOR,
+                email: username,
+                tipo_utilizador: data.TIPO_UTILIZADOR
+            }, jwtSecret, { expiresIn: '1h' })
+        }
+
+        return res.json({
+            success: true,
+            message: 'Autenticação realizada com sucesso!',
+            token: token,
+            tipoUser: data.TIPO_UTILIZADOR,
+            validado: data.VALIDADO,
+            verificado: data.VERIFICADO,
+            nome: data.NOME_UTILIZADOR
+        })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Erro no processo de autenticação. Tente de novo mais tarde.',
+        })
+    })
 }
 userController.loginApp = async (req, res) => {
-    if (req.body.username === '' || req.body.username === null || req.body.username === 'undefined' || req.body.password === '' || req.body.password === null || typeof req.body.password === 'undefined') {
-        return res.status(403).json({
+    const { username, password } = req.body
+
+    if(!validateBodyFields(req.body, ['username', 'password'])){
+        return res.status(400).json({
             success: false,
-            message: 'Campos em Branco',
-        })
-    } else if (req.body.username && req.body.password) {
-        var username = req.body.username
-        var password = req.body.password
-
-        await Utilizadores.findOne({
-            where: {
-                EMAIL: username,
-                TIPO_UTILIZADOR: {
-                    [op.in]: [5, 7],
-                },
-            },
-        }).then((data) => {
-            if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
-                return res.json({
-                    success: false,
-                    message: 'Dados de autenticação inválidos.',
-                })
-            }
-
-            if (!data.VALIDADO) {
-                return res.json({
-                    success: false,
-                    message: 'Conta não validada.',
-                })
-            }
-
-            if (!data.VERIFICADO) {
-                return res.json({
-                    success: false,
-                    message: 'Conta não verificada.',
-                })
-            }
-
-            Utilizadores.update({
-                IP_ULTIMO_LOGIN: req.ip_address,
-            }, {
-                where: {
-                    NR_UTILIZADOR: data.NR_UTILIZADOR,
-                }
-            })
-
-            let token
-            if (req.body.remember) {
-                token = jwt.sign({
-                    nr_user: data.NR_UTILIZADOR,
-                    email: username,
-                    tipo_utilizador: data.TIPO_UTILIZADOR
-                }, jwtSecret, {})
-            } else {
-                token = jwt.sign({
-                    nr_user: data.NR_UTILIZADOR,
-                    email: username,
-                    tipo_utilizador: data.TIPO_UTILIZADOR
-                }, jwtSecret, { expiresIn: '1h' })
-            }
-
-            return res.json({
-                success: true,
-                message: 'Autenticação realizada com sucesso!',
-                token: token,
-                data: {
-                    nrUser: data.NR_UTILIZADOR,
-                    tipoUser: data.TIPO_UTILIZADOR,
-                    nome: data.NOME_UTILIZADOR,
-                    email: data.EMAIL,
-                    telemovel: data.N_TELEMOVEL
-                }
-            })
-        }).catch(() => {
-            return res.json({
-                success: false,
-                message: 'Erro no processo de autenticação. Tente de novo mais tarde.',
-            })
+            message: 'Campos em Branco.',
         })
     }
+
+    await Utilizadores.findOne({
+        where: {
+            EMAIL: username,
+            TIPO_UTILIZADOR: {
+                [op.in]: [5, 7],
+            },
+        },
+    }).then(async (data) => {
+        if (!data || !bcrypt.compareSync(password, data.PASSWORD)) {
+            return res.json({
+                success: false,
+                message: 'Dados de autenticação inválidos.',
+            })
+        }
+
+        if (!data.VALIDADO) {
+            return res.json({
+                success: false,
+                message: 'Conta não validada.',
+            })
+        }
+
+        if (!data.VERIFICADO) {
+            return res.json({
+                success: false,
+                message: 'Conta não verificada.',
+            })
+        }
+
+        Utilizadores.update({
+            IP_ULTIMO_LOGIN: req.ip_address,
+        }, {
+            where: {
+                NR_UTILIZADOR: data.NR_UTILIZADOR,
+            }
+        })
+
+        let dividas = false, montante = 0
+
+        await ClientesViagem.findOne({
+            attributes: [
+                [sequelize.fn('sum', sequelize.col('MONTANTE')), 'montante'],
+            ],
+            where: {
+                NR_CLIENTE: data.NR_UTILIZADOR,
+                ESTADO_CLIENTE: {
+                    [op.in]: ['PRESENTE', 'FALTOU']
+                },
+                ESTADO_PAGAMENTO: 'PENDENTE'
+            }
+        }).then((data1) => {
+            if (data1.length !== 0) {
+                dividas = true
+                montante = data1.dataValues.montante
+            }
+        })
+
+        let token
+        if (req.body.remember) {
+            token = jwt.sign({
+                nr_user: data.NR_UTILIZADOR,
+                email: username,
+                tipo_utilizador: data.TIPO_UTILIZADOR
+            }, jwtSecret, {})
+        } else {
+            token = jwt.sign({
+                nr_user: data.NR_UTILIZADOR,
+                email: username,
+                tipo_utilizador: data.TIPO_UTILIZADOR
+            }, jwtSecret, { expiresIn: '1h' })
+        }
+
+        return res.json({
+            success: true,
+            message: 'Autenticação realizada com sucesso!',
+            token: token,
+            data: {
+                nrUser: data.NR_UTILIZADOR,
+                tipoUser: data.TIPO_UTILIZADOR,
+                nome: data.NOME_UTILIZADOR,
+                email: data.EMAIL,
+                telemovel: data.N_TELEMOVEL,
+                divida: dividas,
+                montante: montante
+            }
+        })
+    }).catch(() => {
+        return res.json({
+            success: false,
+            message: 'Erro no processo de autenticação. Tente de novo mais tarde.',
+        })
+    })
 }
 
 userController.verificar_login = async (req, res) => {

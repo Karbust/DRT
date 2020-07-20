@@ -1,19 +1,17 @@
 import express from 'express'
-import AWS from 'aws-sdk'
 
 const emailRouter = express.Router()
 
-import { aws } from '../config/config.js'
 import { sendEmail } from '../functions.js'
-
-AWS.config.update({
-    accessKeyId: aws.key,
-    secretAccessKey: aws.secret,
-    region: aws.ses.region
-})
 
 emailRouter.get('/test', (req, res) => {
     sendEmail('charparodar@gmail.com', "Hey! Welcome", "This is the body of email<br>Teste")
+        .then(() => {
+            console.log("sucesso")
+        })
+        .catch(() => {
+            console.log("erro")
+        })
 
     res.send('Email is sent!')
 })

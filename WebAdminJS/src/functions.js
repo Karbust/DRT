@@ -10,12 +10,16 @@ function password (length) {
     }
     return result
 }
-function sendEmail(to, subject, message, from) {
+let sendEmail = async (to, subject, message, from) => {
     AWS.config.update({
         accessKeyId: aws.key,
         secretAccessKey: aws.secret,
         region: aws.ses.region
     })
+
+    if (typeof Promise === 'undefined') {
+        AWS.config.setPromisesDependency(require('bluebird'));
+    }
 
     const ses = new AWS.SES()
 
@@ -45,12 +49,9 @@ function sendEmail(to, subject, message, from) {
         Source: from ? from : aws.ses.fromAddress,
     }
 
-    ses.sendEmail(params, (err, data) => {
-        if (err) {
-            return console.log(err, err.stack)
-        } else {
-            console.log("Email sent.", data)
-        }
-    })
+    await ses.sendEmail(params).promise()
 }
-export { password, sendEmail }
+function validateBodyFields(body, keys) {
+    return keys.every(key => body[key])
+}
+export { password, sendEmail, validateBodyFields }

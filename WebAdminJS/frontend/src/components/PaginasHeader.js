@@ -6,12 +6,13 @@ import {
     Snackbar,
     Typography,
 } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import Alert from '@material-ui/lab/Alert'
 import { Link as RouterLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React from 'react'
 
 import { useStyles } from './MuiStyles'
+import clsx from 'clsx'
 
 export const PaginasHeader = (props) => {
     const classes = useStyles()
@@ -38,19 +39,24 @@ export const PaginasHeader = (props) => {
                     {message}
                 </Alert>
             </Snackbar>
-            <Box mb={2} className={classes.container}>
-                <Box mb={1} pt={1}>
+            <Box mb={2} className={classes.container_header}>
+                <Box mb={1} pt={1} className={classes.heading}>
                     <Typography variant="h5">
                         {titulo}
                     </Typography>
                 </Box>
-                <Box mb={1} pt={1} className={classes.box}>
+
+                <Box className={clsx(classes.box, classes.breadcrumbs)}>
                     <Typography variant="h5">
                         <Breadcrumbs
                             separator="›"
                             aria-label="breadcrumb"
                         >
-                            <Link color="inherit" component={RouterLink} to="/">
+                            <Link
+                                color="inherit"
+                                component={RouterLink}
+                                to="/"
+                            >
                                 Início
                             </Link>
                             <Link

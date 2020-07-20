@@ -112,9 +112,17 @@ export const muiTheme = createMuiTheme({
                     'scrollbar-width': 'thin',
                 },
                 '*::-webkit-scrollbar': {
-                    width: '0px',
-                    height: '0px',
+                    width: '0.4em'
                 },
+                '*::-webkit-scrollbar-track': {
+                    '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+                    '-webkit-border-radius': '100000px'
+                },
+                '*::-webkit-scrollbar-thumb': {
+                    borderRadius: '100000px',
+                    backgroundColor: 'rgba(0,0,0,.1)',
+                    outline: '1px solid slategrey',
+                }
             },
         },
         MuiListItem: {
@@ -200,6 +208,19 @@ export const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             gridTemplateColumns: '1fr',
             columnGap: 'unset',
+            gridTemplateAreas: '\"heading\" \"breadcrumbs\"',
+        },
+        display: 'grid',
+        gridTemplateAreas: '\"heading breadcrumbs\"',
+        gridTemplateColumns: 'max-content max-content',
+        justifyContent: 'space-between',
+        columnGap: '16px',
+        alignItems: 'center',
+    },
+    container_header_tabelas: {
+        [theme.breakpoints.down('sm')]: {
+            gridTemplateColumns: '1fr',
+            columnGap: 'unset',
             gridTemplateAreas: '\"heading\" \"breadcrumbs\" \"filter\"',
         },
         [theme.breakpoints.only('md')]: {
@@ -240,8 +261,6 @@ export const useStyles = makeStyles((theme) => ({
         padding: '0.75rem 1rem',
     },
     textField: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
         marginBottom: theme.spacing(2),
         marginTop: theme.spacing(0),
     },

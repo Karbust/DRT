@@ -189,6 +189,100 @@ var ClientesViagem = sequelize.define('VIAGEM_CLIENTES', {
     timestamps: false
 })
 
+var AlteracoesEstadosPagamento = sequelize.define('VIAGEM_ALTERACOES_PAGAMENTOS', {
+    NR_ALTERACAO_PAGAMENTO: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    NR_VIAGEM: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: PedidoViagem,
+            key: 'NR_VIAGEM_PEDIDO'
+        }
+    },
+    NR_ALTERADOR: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    NR_ALTERADO: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    ESTADO_ANTERIOR: {
+        type: Sequelize.ENUM('PENDENTE', 'RECEBIDO', 'CONFIRMADO'),
+        allowNull: false
+    },
+    ESTADO_NOVO: {
+        type: Sequelize.ENUM('PENDENTE', 'RECEBIDO', 'CONFIRMADO'),
+        allowNull: false
+    },
+    IP: {
+        type: Sequelize.INET,
+        allowNull: false
+    }
+}, {
+    freezeTableName: true,
+    timestamps: true
+})
+
+var AlteracoesEstadosClientes = sequelize.define('VIAGEM_ALTERACOES_CLIENTES', {
+    NR_ALTERACAO_CLIENTE: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    NR_VIAGEM: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: PedidoViagem,
+            key: 'NR_VIAGEM_PEDIDO'
+        }
+    },
+    NR_ALTERADOR: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    NR_ALTERADO: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: Utilizadores,
+            key: 'NR_UTILIZADOR'
+        }
+    },
+    ESTADO_ANTERIOR: {
+        type: Sequelize.ENUM('PENDENTE', 'CONFIRMADO', 'PRESENTE', 'FALTOU'),
+        allowNull: false
+    },
+    ESTADO_NOVO: {
+        type: Sequelize.ENUM('PENDENTE', 'CONFIRMADO', 'PRESENTE', 'FALTOU'),
+        allowNull: false
+    },
+    IP: {
+        type: Sequelize.INET,
+        allowNull: false
+    }
+}, {
+    freezeTableName: true,
+    timestamps: true
+})
+
 var AlteracoesViagem = sequelize.define('VIAGEM_ALTERACOES', {
     NR_ALTERACAO_VIAGEM: {
         type: Sequelize.INTEGER,
@@ -228,4 +322,4 @@ var AlteracoesViagem = sequelize.define('VIAGEM_ALTERACOES', {
     timestamps: true
 })
 
-export { PedidoViagem, ClassificacaoViagem, ClientesViagem, AlteracoesViagem }
+export { PedidoViagem, ClassificacaoViagem, ClientesViagem, AlteracoesEstadosPagamento, AlteracoesEstadosClientes, AlteracoesViagem }

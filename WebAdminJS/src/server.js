@@ -1,6 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import bodyParser from 'body-parser'
 import { checkToken, authorize, Role } from './middleware/jwt.js'
 import { enderecoIP } from './middleware/enderecoIP.js'
 import path, { dirname } from 'path'
@@ -9,10 +8,10 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5100
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
+app.use(express.json())
+app.use(express.urlencoded({
     extended: false
 }))
 
@@ -33,7 +32,6 @@ import { emailRouter } from './routes/emailRoutes.js'
 import { estatisticasRouter } from './routes/estatisticasRoutes.js'
 import { apiRouter } from './routes/apiRoutes.js'
 import { firstRunRouter } from './routes/firstRunRoutes.js'
-
 
 
 app.use('/mail',

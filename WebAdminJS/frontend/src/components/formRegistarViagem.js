@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core'
 import { Field, useFormikContext } from 'formik'
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { Autocomplete } from '@material-ui/lab'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import moment from 'moment'
 import MomentUtils from '@date-io/moment'
 import clsx from 'clsx'

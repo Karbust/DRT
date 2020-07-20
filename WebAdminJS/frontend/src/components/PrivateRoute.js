@@ -1,23 +1,23 @@
 import { Redirect, Route } from 'react-router-dom'
 import React from 'react'
 
-export const PrivateRoute = ({
-    component: Component, roles, ...rest
-}) => (
-    <Route
-        {...rest}
-        render={(props) => {
-            const currentUser = JSON.parse(localStorage.getItem('user'))
+export const PrivateRoute = (props) => {
+    const currentUser = JSON.parse(localStorage.getItem('user'))
 
-            if (!currentUser) {
-                return <Redirect to={{ pathname: '/Login', state: { from: props.location } }} />
-            }
+    const { roles, ...remaining_props } = props
 
-            if (roles && roles.indexOf(currentUser.tipoUser) === -1) {
-                return <Redirect to={{ pathname: '/' }} />
-            }
+    if (!currentUser) {
+        return <Redirect to={{
+            pathname: '/Login',
+            state: { from: props.location }
+        }}/>
+    }
 
-            return <Component {...props} />
-        }}
-    />
-)
+    if (roles && roles.indexOf(currentUser.tipoUser) === -1) {
+        return <Redirect to={{ pathname: '/' }}/>
+    }
+
+    return (
+        <Route {...remaining_props}/>
+    )
+}

@@ -37,10 +37,10 @@ export function descendingComparator(a, b, orderBy, order) {
     if ((a !== null && b === null) && order === 'desc') {
         return -1
     }
-    if (b < a) {
+    if (String(b).toUpperCase() < String(a).toUpperCase()) {
         return -1
     }
-    if (b > a) {
+    if (String(b).toUpperCase() > String(a).toUpperCase()) {
         return 1
     }
     return 0
@@ -140,10 +140,6 @@ export const validateNCC = (ncc) => {
 
     for (let i = ncc.length - 1; i >= 0; --i) {
         let valor = charToNumberMap[ncc[i]]
-
-        if (!valor) {
-            return false
-        }
 
         if (secondDigit) {
             valor *= 2

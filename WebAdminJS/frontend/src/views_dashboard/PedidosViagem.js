@@ -23,6 +23,7 @@ import {
 } from '@material-ui/core'
 import moment from 'moment'
 import { Formik } from 'formik'
+import { useConfirm } from 'material-ui-confirm'
 
 import { StyledButton, useStyles, Transition } from '../components/MuiStyles'
 import authHeader from '../components/auth-header'
@@ -35,15 +36,18 @@ import { TabelasFooter } from '../components/tabelasFooter'
 export default function PedidosViagem() {
     const classes = useStyles()
     const theme = useTheme()
+    const confirm = useConfirm()
 
     const [viagens, setViagens] = useState([])
-    const [currentViagem, setCurrentViagem] = useState({ viagem: [], key: null })
+    //const [currentViagem, setCurrentViagem] = useState({ viagem: [], key: null })
+    const [currentViagem, setCurrentViagem] = useState({})
     const [update, setUpdate] = useState(false)
     const [open, setOpen] = useState(false)
     const [message, setMessage] = useState('')
     const [severity, setSeverity] = useState('')
     const [openAlert, setOpenAlert] = useState(false)
     const [openBackdrop, setOpenBackdrop] = useState(true)
+    const [isCanceling, setIsCanceling] = useState(false)
 
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -60,8 +64,48 @@ export default function PedidosViagem() {
     }
 
     const handleClickOpen = (key) => {
-        setCurrentViagem({ viagem: viagens[key], key })
+        setCurrentViagem(viagens.find(x => x.NR_VIAGEM_PEDIDO === key))
         setOpen(true)
+    }
+    const handleClickCancelar = (key) => {
+        setIsCanceling(true)
+        confirm({
+            title: 'Cancelar Viagem',
+            description: 'Deseja cancelar a viagem?',
+            confirmationText: 'Sim',
+            confirmationButtonProps: {
+                variant: 'outlined',
+            },
+            cancellationText: 'Não',
+            cancellationButtonProps: {
+                variant: 'outlined',
+            },
+        })
+            .then(() => {
+                axios
+                    .post(`${backendUrl}viagens/atualizarestadoviagemcancelada`, { nr_viagem: viagens.find(x => x.NR_VIAGEM_PEDIDO === key).NR_VIAGEM_PEDIDO }, { headers: authHeader() })
+                    .then((res) => {
+                        if (res.data.success) {
+                            setIsCanceling(false)
+                            setMessage('Viagem cancelada com sucesso.')
+                            setSeverity('success')
+                        } else {
+                            setIsCanceling(false)
+                            setMessage('Ocorreu um erro ao cancelar a viagem.')
+                            setSeverity('error')
+                        }
+                    })
+                    .catch(() => {
+                        setIsCanceling(false)
+                        setMessage('Ocorreu um erro ao enviar o pedido para o servidor.')
+                        setSeverity('error')
+                    })
+                    .finally(() => {
+                        setOpenAlert(true)
+                    })
+            }).catch(() => {
+                setIsCanceling(false)
+            })
     }
 
     const handleClose = () => {
@@ -93,10 +137,9 @@ export default function PedidosViagem() {
     const onFormikSubmit = (values, formikActions) => {
         formikActions.setSubmitting(true)
         axios
-            .post(`${backendUrl}viagens/editarviagem`, { values, nr_viagem: currentViagem.viagem.NR_VIAGEM_PEDIDO }, { headers: authHeader() })
+            .post(`${backendUrl}viagens/editarviagem`, { values, nr_viagem: currentViagem.NR_VIAGEM_PEDIDO }, { headers: authHeader() })
             .then((res) => {
                 if (res.data.success) {
-                    viagens[currentViagem.key].ESTADO = 'PENDENTE'
                     setMessage('Viagem editada com sucesso')
                     setSeverity('success')
                     setOpen(false)
@@ -168,20 +211,20 @@ export default function PedidosViagem() {
                     validateOnBlur={false}
                     validateOnChange={false}
                     initialValues={{
-                        origem: currentViagem.viagem.ORIGEM,
-                        destino: currentViagem.viagem.DESTINO,
-                        passageiros: currentViagem.viagem.PASSAGEIROS,
-                        motivo: currentViagem.viagem.MOTIVO,
-                        datahora_ida: currentViagem.viagem.DATAHORA_IDA,
-                        datahora_volta: currentViagem.viagem.DATAHORA_VOLTA,
-                        nrcliente: currentViagem.viagem.NR_CLIENTE_PEDIDO,
-                        observacoes: currentViagem.viagem.OBSERVACOES || '',
-                        distancia: currentViagem.viagem.DISTANCIA,
-                        duracao: currentViagem.viagem.DURACAO,
-                        custo: currentViagem.viagem.CUSTO || '',
-                        comparticipacao: currentViagem.viagem.CUSTO || '',
-                        motorista: currentViagem.viagem.MOTORISTA || 0,
-                        viatura: currentViagem.viagem.VIATURA || 0,
+                        origem: currentViagem.ORIGEM,
+                        destino: currentViagem.DESTINO,
+                        passageiros: currentViagem.PASSAGEIROS,
+                        motivo: currentViagem.MOTIVO,
+                        datahora_ida: currentViagem.DATAHORA_IDA,
+                        datahora_volta: currentViagem.DATAHORA_VOLTA,
+                        nrcliente: currentViagem.NR_CLIENTE_PEDIDO,
+                        observacoes: currentViagem.OBSERVACOES || '',
+                        distancia: currentViagem.DISTANCIA,
+                        duracao: currentViagem.DURACAO,
+                        custo: currentViagem.CUSTO || '',
+                        comparticipacao: currentViagem.CUSTO || '',
+                        motorista: currentViagem.MOTORISTA || 0,
+                        viatura: currentViagem.VIATURA || 0,
                     }}
                 >
                     {({
@@ -436,10 +479,19 @@ export default function PedidosViagem() {
                                                     variant="contained"
                                                     color="primary"
                                                     disableElevation
-                                                    onClick={() => handleClickOpen(key)}
+                                                    onClick={() => handleClickOpen(row.NR_VIAGEM_PEDIDO)}
                                                     style={{ marginRight: theme.spacing(3) }}
                                                 >
                                                     EDITAR
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    disableElevation
+                                                    onClick={() => handleClickCancelar(row.NR_VIAGEM_PEDIDO)}
+                                                    style={{ marginRight: theme.spacing(3) }}
+                                                >
+                                                    CANCELAR
                                                 </Button>
                                             </TableCell>
 

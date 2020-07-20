@@ -1,11 +1,21 @@
 import express from 'express'
-import { checkToken, authorize, Role } from '../middleware/jwt.js'
+import { checkToken, authorize, Role, authorizeTypeUser } from '../middleware/jwt.js'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
+import multipart from 'connect-multiparty'
 
 const userRouter = express.Router()
 
 const DIR = './src/public/documentos/'
+
+var multipartMiddleware = multipart({
+    uploadDir: DIR,
+    rename: (filename, callback) => {
+        let name = filename.toLowerCase().split(' ').join('-');
+        console.log(name)
+        callback(uuidv4() + '-' + name);
+    }
+})
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -13,6 +23,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const fileName = file.originalname.toLowerCase().split(' ').join('-')
+        console.log(fileName)
         cb(null, uuidv4() + '-' + fileName)
     }
 })
@@ -76,6 +87,16 @@ userRouter.post('/editarutilizador',
     authorize([Role.Administrador, Role.Administrativo]),
     userController.editarUtilizador,
 )
+userRouter.post('/editarutilizadorpassword',
+    checkToken,
+    authorize([Role.Administrador, Role.Motorista, Role.Utilizador]),
+    userController.editarUtilizadorPassword,
+)
+userRouter.post('/resetutilizadorpassword',
+    checkToken,
+    authorize([Role.Administrador, Role.Motorista, Role.Utilizador]),
+    userController.resetUtilizadorPassword,
+)
 userRouter.get('/motoristas',
     checkToken,
     authorize([Role.Administrador, Role.AdministradorOperador, Role.AdministrativoOperador]),
@@ -121,8 +142,9 @@ userRouter.post('/notificacoes',
 )
 userRouter.post('/registar',
     checkToken,
-    authorize([Role.Administrador, Role.Administrativo]),
-    upload.array('files', 2),
+    authorize([Role.Administrador, Role.Administrativo, Role.AdministradorOperador]),
+    multipartMiddleware,
+    authorizeTypeUser,
     userController.registar
 )
 userRouter.post('/registarapp',

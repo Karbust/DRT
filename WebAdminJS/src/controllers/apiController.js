@@ -53,7 +53,9 @@ apiController.nacionalidades = async (req, res) => {
                 data: data,
             })
         }).catch(() => {
-            return res.json({ success: false })
+            return res.json({
+                success: false
+            })
         })
     } else {
         return res.json({

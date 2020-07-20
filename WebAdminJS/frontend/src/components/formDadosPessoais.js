@@ -13,7 +13,7 @@ import {
 import moment from 'moment'
 import MomentUtils from '@date-io/moment'
 import validator from 'validator'
-import { Autocomplete } from '@material-ui/lab'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 
 import { validateNCC, validateNSS, validateNIF } from './functions'
 
@@ -209,7 +209,7 @@ export const FormDadosPessoais = ({
                 <Grid item lg={4} md={5} sm={6} xs={12}>
                     <Field
                         name="telefone"
-                        validate={(telefone) => (telefone.length === 9 ? undefined : 'Telefone inválido')}
+                        validate={(telefone) => ((telefone.length === 0 || telefone.length === 9) ? undefined : 'Telefone inválido')}
                     >
                         {({ field, form: { errors } }) => (
                             <TextField

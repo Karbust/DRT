@@ -3,7 +3,7 @@ import {
     TextField,
 } from '@material-ui/core'
 import { Field, useFormikContext } from 'formik'
-import { Autocomplete } from '@material-ui/lab'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import validator from 'validator'
 import React from 'react'
 

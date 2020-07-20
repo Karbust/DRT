@@ -98,6 +98,7 @@ export default function RegistarViagem() {
 
     const onFormikSubmit = (values, formikActions) => {
         values.clientes = values.clientes.map((cliente) => cliente.NR_UTILIZADOR)
+        values.clientes.push(Number(values.nrcliente))
         return axios
             .post(`${backendUrl}viagens/registopedidoviagem`, values, { headers: authHeader() })
             .then((res) => {
